@@ -180,7 +180,7 @@ html.solo main{padding:10px!important;gap:0!important}
 html.solo main > *:not(.solo-tieni){display:none!important}
 html.solo .solo-tieni{grid-template-columns:1fr!important}
 html.solo .solo-tieni > *{grid-column:1 / -1!important}
-.ciondolo:hover{background:var(--acw)!important;border-color:#0891B2!important}
+.ciondolo:hover{background:#0E9AC0!important}.ciondolo:active{transform:scale(.96)}
 html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </style>
 </helmet>
@@ -329,7 +329,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 <span style="width: 10px; height: 10px; border-radius: 50%; background: {{r.pallino}};"></span>
 <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0;"><span style="font-size: 13.5px; font-weight: 600; text-decoration: {{r.barra}}; background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 2px 6px 3px 5px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.testo}}</span><span style="font-size: 12.5px; color: var(--ink2); background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 3px 5px 2px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.sub}}</span></div>
 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px;">{{r.val}}</span>
-<sc-if value="{{r.spunta}}" hint-placeholder-val="{{false}}"><span style="width: 104px; display: flex; justify-content: center;"><button onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--ln); background: var(--sf); color: #0891B2; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button></span></sc-if><sc-if value="{{r.testo2}}" hint-placeholder-val="{{true}}"><button onClick="{{r.fai}}" style="font: 700 13.5px Manrope, sans-serif; border: 1px solid {{r.bd}}; border-radius: 10px; height: 40px; width: 104px; background: {{r.bg}}; color: {{r.fg}}; cursor: pointer;">{{r.az}}</button></sc-if>
+<sc-if value="{{r.spunta}}" hint-placeholder-val="{{false}}"><span style="width: 104px; display: flex; justify-content: center;"><button onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 38px; height: 38px; border-radius: 50%; border: 0; background: #0891B2; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(8, 145, 178, .30);"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button></span></sc-if><sc-if value="{{r.testo2}}" hint-placeholder-val="{{true}}"><button onClick="{{r.fai}}" style="font: 700 13.5px Manrope, sans-serif; border: 1px solid {{r.bd}}; border-radius: 10px; height: 40px; width: 104px; background: {{r.bg}}; color: {{r.fg}}; cursor: pointer;">{{r.az}}</button></sc-if>
 </div>
 </sc-for>
 <sc-if value="{{w.vuoto}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: var(--ink3); padding: 10px 0;">Niente qui per questa persona.</span></sc-if>

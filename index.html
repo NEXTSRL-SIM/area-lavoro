@@ -512,7 +512,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </div>
 </sc-if>
 
-<div style="font-size: 14px; line-height: 1.65; color: var(--ink); display: flex; flex-direction: column; gap: 10px; padding: 8px 0 4px; border-top: 1px solid var(--ln);"><sc-if value="{{intera.finta}}"><span style="padding-top: 8px;">Buongiorno,</span><span>{{intera.testo}}</span><span>Cordiali saluti</span><span style="font-size: 12.5px; color: var(--ink2); white-space: pre-line;"></span></sc-if><sc-if value="{{intera.vera}}"><span style="padding-top: 8px; white-space: pre-line; overflow-wrap: anywhere;"><sc-for list="{{intera.pezzi}}" as="g"><sc-if value="{{g.testo}}">{{g.t}}</sc-if><sc-if value="{{g.link}}"><a href="{{g.url}}" target="_blank" rel="noopener" title="{{g.url}}" style="color: #0891B2; font-weight: 600; text-decoration: underline; overflow-wrap: anywhere;">{{g.t}}</a></sc-if></sc-for></span></sc-if></div>
+<div style="font-size: 14px; line-height: 1.65; color: var(--ink); display: flex; flex-direction: column; gap: 10px; padding: 8px 0 4px; border-top: 1px solid var(--ln);"><sc-if value="{{intera.finta}}"><span style="padding-top: 8px;">Buongiorno,</span><span>{{intera.testo}}</span><span>Cordiali saluti</span><span style="font-size: 12.5px; color: var(--ink2); white-space: pre-line;"></span></sc-if><sc-if value="{{intera.haHtml}}"><iframe title="Testo della mail" sandbox="allow-popups allow-popups-to-escape-sandbox" srcdoc="{{intera.htmlDoc}}" style="width: 100%; border: 1px solid var(--ln); border-radius: 10px; background: #FFFFFF; height: 64vh; margin-top: 8px;"></iframe></sc-if><sc-if value="{{intera.noHtml}}"><span style="padding-top: 8px; white-space: pre-line; overflow-wrap: anywhere;"><sc-for list="{{intera.pezzi}}" as="g"><sc-if value="{{g.testo}}">{{g.t}}</sc-if><sc-if value="{{g.link}}"><a href="{{g.url}}" target="_blank" rel="noopener" title="{{g.url}}" style="color: #0891B2; font-weight: 600; text-decoration: underline; overflow-wrap: anywhere;">{{g.t}}</a></sc-if></sc-for></span></sc-if></div>
 </div>
 
 <sc-if value="{{inRisposta}}" hint-placeholder-val="{{false}}">
@@ -681,7 +681,7 @@ const risposta = (x, r) => {
 const scheda = (m) => {
   const allegati = /preventivo|fattura|ddt|ordine|estratti|foto/i.test(m.oggetto) ? [{ est: 'PDF', fascia: '#E5322D', fs: '7.5', url: '#', nome: m.oggetto }] : [];
   return { ...m, daNome: m.chi, daMail: mailDi(m.chi), iniziali: iniziali(m.chi), a: 'Next S.r.l. <' + m.ind + '>', haCc: false, cc: '',
-    data: 'mer 28/10/2026 ' + m.ora, allegati, haAllegati: allegati.length > 0, finta: true, vera: false, testo: 'Vi scrivo per: ' + m.oggetto.toLowerCase() + '.',
+    data: 'mer 28/10/2026 ' + m.ora, allegati, haAllegati: allegati.length > 0, finta: true, vera: false, haHtml: false, noHtml: false, testo: 'Vi scrivo per: ' + m.oggetto.toLowerCase() + '.',
     sistema: SISTEMA[m.id][0], az: SISTEMA[m.id][1] };
 };
 const WA = [
@@ -1060,10 +1060,11 @@ const pvVoce = (m, casella, verso) => {
     testo: '', sistema: '', az: '' };
 };
 /* legge tutte le caselle; risponde con { per: { idPagina: { in, out, errore } }, alle } oppure null */
-async function pvLeggiTutto() {
+async function pvLeggiTutto(cerca) {
   const pass = pvPass();
   if (!pass) return null;
-  const r = await fetch(PV_API + '?posta=1&t=' + encodeURIComponent(pass));
+  /* senza ricerca: gli ultimi 30 giorni; con la ricerca: mittente, destinatario o oggetto nell'ultimo anno */
+  const r = await fetch(PV_API + '?posta=1&t=' + encodeURIComponent(pass) + (cerca ? '&cerca=' + encodeURIComponent(cerca) : ''));
   const j = await r.json();
   if (!j || !j.ok) return null;
   const per = {};
@@ -1073,7 +1074,7 @@ async function pvLeggiTutto() {
     /* la pubblicità non si mostra (decisione di Sante, 29/10): resta solo nella casella di posta */
     per[id] = { in: (x.in || []).filter((m) => m.chi_tipo !== 'pubblicita').map((m) => pvVoce(m, c, 'in')), out: (x.out || []).map((m) => pvVoce(m, c, 'out')), errore: x.errore || null };
   }
-  return { per, alle: j.letto_alle };
+  return { per, alle: j.letto_alle, giorni: j.giorni, cerca: j.cerca || null };
 }
 /* una mail per intero, con i documenti */
 const PV_TESTI = {};
@@ -1083,10 +1084,11 @@ async function pvLeggiMail(v) {
   if (!pass) return null;
   PV_TESTI[v.chiave] = { carica: true };
   try {
-    const j = await (await fetch(PV_API + '?leggi=1&t=' + encodeURIComponent(pass) + '&casella=' + encodeURIComponent(v.casella) + '&cartella=' + encodeURIComponent(v.cartella) + '&uid=' + v.uid)).json();
+    const qs = '&t=' + encodeURIComponent(pass) + '&casella=' + encodeURIComponent(v.casella) + '&cartella=' + encodeURIComponent(v.cartella) + '&uid=' + v.uid;
+    const [j, jh] = await Promise.all([(await fetch(PV_API + '?leggi=1&t=' + encodeURIComponent(pass) + '&casella=' + encodeURIComponent(v.casella) + '&cartella=' + encodeURIComponent(v.cartella) + '&uid=' + v.uid)).json(), fetch(PV_API + '?html=1' + qs).then((r) => r.json()).catch(() => null)]);
     if (!j || !j.ok) { PV_TESTI[v.chiave] = { errore: (j && j.errore) || 'non leggibile' }; return PV_TESTI[v.chiave]; }
     const testo = String(j.testo || '').replace(/\n{3,}/g, '\n\n').trim();
-    PV_TESTI[v.chiave] = { testo: testo + (j.tagliato ? '\n\n[…il resto della mail è più lungo: aprila nella casella]' : ''), a: j.a || '', da: j.da || v.da, nome: j.nome || '', data: j.data,
+    PV_TESTI[v.chiave] = { html: jh && jh.ok && !jh.da_testo ? jh.html : '', testo: testo + (j.tagliato ? '\n\n[…il resto della mail è più lungo: aprila nella casella]' : ''), a: j.a || '', da: j.da || v.da, nome: j.nome || '', data: j.data,
       docs: (j.allegati || []).filter((n) => !/^(smime\.p7s|daticert\.xml|postacert\.eml)$/i.test(n)).map((n) => pvDoc(n, v.casella, v.cartella, v.uid)) };
   } catch (e) { PV_TESTI[v.chiave] = { errore: 'non leggibile adesso' }; }
   return PV_TESTI[v.chiave];
@@ -1104,6 +1106,8 @@ const pvPezzi = (testo) => {
   if (ultimo < t.length) fuori.push({ t: t.slice(ultimo), testo: true, link: false });
   return fuori;
 };
+/* la mail impaginata come in Outlook, dentro una cornice chiusa (niente script), link in una scheda nuova */
+const pvDocHtml = (html) => '<!doctype html><html><head><meta charset="utf-8"><base target="_blank"><style>body{margin:0;padding:10px 6px;background:#fff;color:#0F172A;font:14px/1.5 -apple-system,Segoe UI,Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{max-width:100%}</style></head><body>' + html + '</body></html>';
 /* la scheda per la finestra "mail intera" */
 const pvScheda = (v, indirizzoCasella, nomeCasella, col) => {
   const t = PV_TESTI[v.chiave] || {};
@@ -1116,6 +1120,7 @@ const pvScheda = (v, indirizzoCasella, nomeCasella, col) => {
     allegati: docs, haAllegati: docs.length > 0,
     testo: t.carica ? 'Sto aprendo la mail…' : (t.errore ? 'Non riesco ad aprirla: ' + t.errore + '.' : (t.testo || '(mail senza testo)')),
     firma: '', tc: '#0891B2', tb: 'var(--acw)', tag: inArr ? 'Posta in arrivo' : 'Posta inviata',
+    haHtml: !!t.html, noHtml: !t.html, htmlDoc: t.html ? pvDocHtml(t.html) : '',
     pezzi: pvPezzi(t.carica ? 'Sto aprendo la mail…' : (t.errore ? 'Non riesco ad aprirla: ' + t.errore + '.' : (t.testo || '(mail senza testo)'))) };
 };
 /* — pagina Area di lavoro: la fascia della posta con le mail vere, il lampo quando ne arriva una nuova — */

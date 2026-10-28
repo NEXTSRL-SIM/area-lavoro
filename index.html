@@ -945,7 +945,7 @@ function sdiAllarme(v) {
   if (scartate.length) parti.push(scartate.length === 1 ? 'una nota è stata scartata dallo SDI e va rimandata' : scartate.length + ' documenti sono stati scartati dallo SDI');
   const testo = parti.join('; ').replace(/^./, (c) => c.toUpperCase()) + '.';
   const primo = scartate[0] || scadute[0] || p;
-  return { c: true, titolo: 'Fatture allo SDI · ' + (da.length + scartate.length) + ' da sistemare', testo, nota: 'Dati letti da Odoo ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' · si aggiornano da soli ogni 10 minuti',
+  return { c: true, titolo: 'Fatture allo SDI · ' + (da.length + scartate.length) + ' da sistemare', testo, nota: 'Dati letti da Odoo ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' · si aggiornano da soli ogni minuto',
     tasto: 'Apri la prima in Odoo', url: 'https://next-srl.odoo.com/odoo/customer-invoices', invia: () => { try { window.open(primo.url, '_blank', 'noopener'); } catch (e) {} } };
 }
 Component.prototype.datiAvvia = function () {
@@ -955,7 +955,7 @@ Component.prototype.datiAvvia = function () {
   const leggi = async () => {
     try { const j = await (await fetch('https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-dati?sdi=1&t=' + encodeURIComponent(pass))).json(); if (j && j.ok) this.setState({ sdiVero: j }); } catch (e) {}
   };
-  leggi(); this.giroDati = setInterval(leggi, 600000);
+  leggi(); this.giroDati = setInterval(leggi, 60000); window.addEventListener('focus', leggi); document.addEventListener('visibilitychange', () => { if (!document.hidden) leggi(); });
 };
 </script>
 </body>

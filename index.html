@@ -226,6 +226,7 @@ html.solo header.solo-tieni > *:not(.solo-tieni){display:none!important}
 html.solo .solo-tieni > *{grid-column:1 / -1!important}
 .ciondolo:hover{background:#0E9AC0!important}.ciondolo:active{transform:scale(.96)}
 main.v-auto > *:not(.v-tieni){display:none!important}
+main.v-auto header > *:not(.v-tieni){visibility:hidden}
 main.v-lavoro .v-auto-sez{display:none!important}
 html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </style>
@@ -258,25 +259,24 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </nav>
 
 <main class="{{vistaCls}}" style="flex: 999 1 560px; min-width: 0; padding: 24px 30px 48px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box; zoom: 0.84;">
-<div role="tablist" aria-label="Viste dell'area di lavoro" class="v-tieni" style="display: flex; gap: 4px; border-bottom: 1px solid var(--ln);">
-<sc-for list="{{viste}}" as="v" hint-placeholder-count="2"><button role="tab" aria-selected="{{v.sel}}" onClick="{{v.vai}}" style="font: 700 13.5px Manrope, sans-serif; padding: 9px 18px; border: 0; border-bottom: 2px solid {{v.riga}}; border-radius: 9px 9px 0 0; background: {{v.bg}}; color: {{v.fg}}; cursor: pointer;">{{v.nome}}</button></sc-for>
-</div>
 
 
 
 
-<header class="{{clsP}}" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;">
+
+<header class="{{clsP}} v-tieni" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px;">
 <div style="display: flex; flex-direction: column; gap: 4px;">
 <span style="font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3);">Mercoledì 28 ottobre · dati di esempio</span>
 <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.01em;">Area di lavoro</h1>
 </div>
-<section aria-label="Post-it" class="{{clsP}} postit-testa" style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 260px; min-width: 0; align-self: flex-end;">
+<section aria-label="Post-it" class="{{clsP}} postit-testa" style="display: flex; flex-direction: row; align-items: center; gap: 10px; flex: 1 1 100%; min-width: 0; order: 4;">
 <div style="display: flex; align-items: baseline; gap: 10px;"><h2 style="margin: 0; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3);">Post-it</h2><button onClick="{{nuovoPostit}}" style="font: 700 11.5px Manrope, sans-serif; border: 0; background: transparent; color: #0891B2; cursor: pointer; padding: 0;">+ nuovo</button><sc-if value="{{sceltaColore}}" hint-placeholder-val="{{false}}"><span role="group" aria-label="Scegli il colore del nuovo post-it" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px; border: 1px solid var(--ln); border-radius: 8px; background: var(--sf);"><span style="font-size: 11px; color: var(--ink3);">colore:</span><sc-for list="{{coloriNuovo}}" as="k" hint-placeholder-count="5"><button onClick="{{k.crea}}" aria-label="Post-it {{k.nome}}" title="{{k.nome}}" style="width: 22px; height: 22px; padding: 0; cursor: pointer; background: {{k.bg}}; border: 1px solid {{k.bd}}; border-radius: 3px 3px 7px 3px;"></button></sc-for><button onClick="{{annullaColore}}" aria-label="Annulla" title="Annulla" style="width: 20px; height: 20px; border: 0; background: transparent; color: var(--ink3); cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-if><button onClick="{{staccaPostit}}" aria-label="Apri in una finestra separata" title="Apri in una finestra separata, da spostare su un altro monitor" style="width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--ln); background: var(--sf); color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="2"></rect><path d="M11 3h10v10M21 3l-9 9"></path></svg></button></div>
 <div class="senza-barre" style="display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; align-items: center;">
 <sc-for list="{{postit}}" as="p" hint-placeholder-count="2"><button onClick="{{p.apri}}" title="{{p.testo}}" aria-pressed="{{p.aperto}}" style="flex: 0 0 auto; max-width: 200px; height: 30px; padding: 0 10px; cursor: pointer; font: 600 12px Manrope, sans-serif; color: var(--ink); background: {{p.bg}}; border: 1px solid {{p.bd}}; border-bottom: 2px solid {{p.lin}}; border-radius: 4px 4px 8px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: 0 2px 6px rgba(15, 23, 42, .06);">{{p.corto}}</button></sc-for>
 </div>
 </section>
-<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+<div role="tablist" aria-label="Viste dell'area di lavoro" class="v-tieni" style="display: flex; gap: 2px; background: var(--sf); border: 1px solid var(--ln); border-radius: 12px; padding: 4px; margin: 0 auto; order: 2;"><sc-for list="{{viste}}" as="v" hint-placeholder-count="2"><button role="tab" aria-selected="{{v.sel}}" onClick="{{v.vai}}" style="font: 700 13px Manrope, sans-serif; height: 38px; padding: 0 16px; border: 0; border-bottom: 2px solid {{v.riga}}; border-radius: 9px 9px 4px 4px; background: {{v.bg}}; color: {{v.fg}}; cursor: pointer; white-space: nowrap;">{{v.nome}}</button></sc-for></div>
+<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; order: 3;">
 <div role="tablist" aria-label="Di chi" style="display: flex; gap: 2px; background: var(--sf); border: 1px solid var(--ln); border-radius: 12px; padding: 4px;">
 <sc-for list="{{persone}}" as="p" hint-placeholder-count="5">
 <button role="tab" aria-selected="{{p.sel}}" onClick="{{p.pick}}" style="font: 700 13px Manrope, sans-serif; border: 0; border-bottom: 2px solid {{p.riga}}; border-radius: 9px 9px 4px 4px; height: 38px; min-width: 92px; padding: 0 12px; cursor: pointer; background: {{p.bg}}; color: {{p.fg}};">{{p.etichetta}}</button>

@@ -945,7 +945,7 @@ function sdiAllarme(v) {
   if (scartate.length) parti.push(scartate.length === 1 ? 'una nota è stata scartata dallo SDI e va rimandata' : scartate.length + ' documenti sono stati scartati dallo SDI');
   const testo = parti.join('; ').replace(/^./, (c) => c.toUpperCase()) + '.';
   const primo = scartate[0] || scadute[0] || p;
-  return { c: true, titolo: 'Fatture allo SDI · ' + (da.length + scartate.length) + ' da sistemare', testo, nota: 'Dati letti da Odoo ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' · si aggiornano da soli ogni 5 minuti e quando torni sulla pagina',
+  return { c: true, titolo: 'Fatture allo SDI · ' + (da.length + scartate.length) + ' da sistemare', testo, nota: 'Dati letti da Odoo ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' · aggiornati in tempo reale da Odoo',
     tasto: 'Apri la prima in Odoo', url: 'https://next-srl.odoo.com/odoo/customer-invoices', invia: () => { try { window.open(primo.url, '_blank', 'noopener'); } catch (e) {} } };
 }
 Component.prototype.datiAvvia = function () {
@@ -955,7 +955,7 @@ Component.prototype.datiAvvia = function () {
   const leggi = async () => {
     try { const j = await (await fetch('https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-dati?sdi=1&t=' + encodeURIComponent(pass))).json(); if (j && j.ok) this.setState({ sdiVero: j }); } catch (e) {}
   };
-  leggi(); this.giroDati = setInterval(leggi, 300000); let ultima = Date.now(); const forse = () => { if (Date.now() - ultima > 60000) { ultima = Date.now(); leggi(); } }; window.addEventListener('focus', forse); document.addEventListener('visibilitychange', () => { if (!document.hidden) forse(); });
+  leggi(); this.giroDati = setInterval(leggi, 300000); let ultima = Date.now(); const forse = () => { if (Date.now() - ultima > 60000) { ultima = Date.now(); leggi(); } }; window.addEventListener('focus', forse); document.addEventListener('visibilitychange', () => { if (!document.hidden) forse(); }); let attesaRt = null; const presto = () => { clearTimeout(attesaRt); attesaRt = setTimeout(leggi, 2000); }; const inAscolto = () => { try { const c = window.supabase.createClient('https://pnxhthrheqeucoisifjw.supabase.co', 'sb_publishable_krNaDAk8GFjvuZ-UGcBwtA_tDg-Fn4N'); this.canale = c.channel('area-lavoro').on('broadcast', { event: 'sdi' }, presto).subscribe(); } catch (e) {} }; if (window.supabase && window.supabase.createClient) inAscolto(); else { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; sc.onload = inAscolto; document.head.appendChild(sc); }
 };
 </script>
 </body>

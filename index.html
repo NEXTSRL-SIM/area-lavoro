@@ -229,6 +229,52 @@ main.v-auto > *:not(.v-tieni){display:none!important}
 main.v-auto header > *:not(.v-tieni){visibility:hidden}
 main.v-lavoro .v-auto-sez{display:none!important}
 html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
+/* PORTALE NEXT-102 — barre laterali: con la puntina restano aperte, senza si riducono a una striscia e si aprono passandoci sopra */
+.lato{position:sticky;top:0;align-self:flex-start;height:100vh;flex:0 0 auto;display:flex;z-index:30;font-family:Manrope,Arial,sans-serif}
+.lato-dx{flex-direction:row-reverse}
+.lato-striscia{width:38px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 0;background:var(--sf);color:var(--ink3);cursor:pointer;overflow:hidden}
+.lato-sx .lato-striscia{border-right:1px solid var(--ln)}.lato-dx .lato-striscia{border-left:1px solid var(--ln)}
+.lato-striscia:hover{color:#0891B2;background:var(--acw)}
+.lato-voce{display:flex;flex-direction:column;align-items:center;gap:6px}
+.lato-voce b{font-size:10.5px;font-weight:800;border-radius:999px;padding:1px 6px;line-height:15px}
+.lato-vert{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11.5px;font-weight:700;color:var(--ink2);white-space:nowrap;max-height:150px;overflow:hidden;text-overflow:ellipsis}
+.lato-pannello{display:none;flex-direction:column;gap:10px;width:330px;box-sizing:border-box;height:100%;overflow-y:auto;padding:12px 12px 24px;background:var(--sf2)}
+.lato:not(.fisso) .lato-pannello{position:absolute;top:0;height:100%;background:var(--sf);box-shadow:0 10px 40px rgba(15,23,42,.22)}
+.lato-sx:not(.fisso) .lato-pannello{left:38px}.lato-dx:not(.fisso) .lato-pannello{right:38px}
+.lato:not(.fisso):hover .lato-pannello,.lato.aperta .lato-pannello{display:flex}
+.lato.fisso .lato-striscia{display:none}
+.lato.fisso .lato-pannello{display:flex;position:static}
+.lato-sx.fisso .lato-pannello{border-right:1px solid var(--ln)}.lato-dx.fisso .lato-pannello{border-left:1px solid var(--ln)}
+.lato.vuota .lato-striscia{display:none}
+.lato.vuota .lato-pannello{display:flex!important;position:static!important;width:64px;padding:8px;background:var(--acw);border:2px dashed #0891B2!important;box-shadow:none}
+.lato.vuota .lato-testa{display:none}
+.lato.vuota .lato-vuoto{writing-mode:vertical-rl;margin:auto;color:#0E7490;font-weight:800;font-size:12px;border:0}
+.lato-testa{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 2px}
+.lato-pin{width:28px;height:28px;border-radius:8px;border:1px solid var(--ln);background:var(--sf);color:var(--ink3);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.lato-pin svg{transform:rotate(45deg)}
+.lato-pin.su{border-color:#0891B2;background:var(--acw);color:#0891B2}.lato-pin.su svg{transform:none}
+.lato-vuoto{font-size:12px;color:var(--ink3);border:1px dashed var(--ln);border-radius:10px;padding:14px;text-align:center}
+.lato-w{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.lato-wt{display:flex;align-items:center;gap:6px}
+.lato-nome{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--ink);font:700 13px Manrope,sans-serif;cursor:pointer;padding:2px;text-align:left}
+.lato-nome span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lato-n{font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px}
+.lato-btn{width:26px;height:26px;border-radius:7px;border:1px solid var(--ln);background:var(--sf);color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.lato-btn:hover{color:#0891B2;border-color:#0891B2}
+.lato-righe{display:flex;flex-direction:column;max-height:320px;overflow-y:auto}
+.lato-r{display:grid;grid-template-columns:8px minmax(0,1fr) auto 26px;gap:8px;align-items:start;padding:7px 0;border-top:1px solid var(--ln)}
+html.solo .lato,html.finestra .lato{display:none!important}
+.lato-larga{height:28px;min-width:30px;padding:0 7px;border-radius:8px;border:1px solid var(--ln);background:var(--sf);color:var(--ink3);font:800 11px Manrope,sans-serif;letter-spacing:0;text-transform:none;cursor:pointer}
+.lato-larga.su{border-color:#0891B2;background:var(--acw);color:#0891B2}
+.lato.w-meta .lato-pannello{position:fixed!important;top:0;bottom:0;height:auto;width:50vw;z-index:60;background:var(--sf2);box-shadow:0 10px 50px rgba(15,23,42,.28)}
+.lato-sx.w-meta .lato-pannello{left:0}.lato-dx.w-meta .lato-pannello{right:0;left:auto}
+.lato.fisso.w-meta,.lato.fisso.w-tutto{width:0}
+.lato.w-tutto .lato-pannello{position:fixed!important;top:0;bottom:0;left:0;right:0;width:auto;height:auto;z-index:60;box-shadow:none}
+.lato.w-meta .lato-pannello,.lato.w-tutto .lato-pannello{display:none;flex-direction:row;flex-wrap:wrap;align-content:flex-start}
+.lato.fisso.w-meta .lato-pannello,.lato.fisso.w-tutto .lato-pannello,.lato.aperta .lato-pannello,.lato:not(.fisso):hover .lato-pannello{display:flex}
+.lato.w-meta .lato-testa,.lato.w-tutto .lato-testa{flex:1 1 100%}
+.lato.w-meta .lato-w,.lato.w-tutto .lato-w{flex:1 1 360px;min-width:0}
+.lato.w-meta .lato-righe,.lato.w-tutto .lato-righe{max-height:none}
 </style>
 </helmet>
 <div data-tema="{{tema}}" style="display: flex; flex-wrap: wrap; min-height: 1500px; background: var(--sf2); font-family: Manrope, Arial, sans-serif; color: var(--ink);">
@@ -258,6 +304,42 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 <div style="margin-top: auto; display: flex; align-items: center; gap: 9px; padding: 12px 6px 0; border-top: 1px solid #1A2330; color: #E6EDF5; font-size: 12px;"><span style="width: 28px; height: 28px; border-radius: 50%; background: #1F2B3A; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #A3B1C2;">SB</span><b>Sante</b><button onClick="{{cambiaTema}}" aria-label="{{temaLabel}}" title="{{temaLabel}}" style="margin-left: auto; width: 28px; height: 28px; border-radius: 7px; border: 1px solid #1F2B3A; background: transparent; color: #A3B1C2; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{temaIcona}}"></path></svg></button></div>
 </nav>
 
+<sc-if value="{{latoSx.mostra}}" hint-placeholder-val="{{false}}">
+<aside aria-label="Barra laterale sinistra" class="lato lato-sx {{latoSx.cls}}" onDragOver="{{sopra}}" onDrop="{{latoSx.drop}}">
+<div class="lato-striscia" onClick="{{latoSx.apri}}" title="{{latoSx.tStriscia}}">
+<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto; transform: rotate(45deg);"><path d="M9 4h6l-1 6 3 3H7l3-3zM12 13v8"></path></svg>
+<sc-for list="{{latoSx.voci}}" as="w"><span class="lato-voce"><b style="color: {{w.nc}}; background: {{w.nb}};">{{w.n}}</b><span class="lato-vert">{{w.titolo}}</span></span></sc-for>
+</div>
+<div class="lato-pannello">
+<div class="lato-testa"><span>{{latoSx.titolo}}</span><span style="display: flex; gap: 4px;"><sc-for list="{{latoSx.larghe}}" as="g"><button type="button" onClick="{{g.scegli}}" aria-pressed="{{g.sel}}" title="{{g.t}}" class="lato-larga {{g.cls}}">{{g.et}}</button></sc-for><button type="button" onClick="{{latoSx.punta}}" aria-pressed="{{latoSx.fissoTxt}}" title="{{latoSx.tPunta}}" class="lato-pin {{latoSx.pinCls}}"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 6 3 3H7l3-3zM12 13v8"></path></svg></button></span></div>
+<sc-if value="{{latoSx.vuoto}}" hint-placeholder-val="{{false}}"><div class="lato-vuoto">Lascia qui un widget</div></sc-if>
+<sc-for list="{{latoSx.voci}}" as="w">
+<section class="lato-w" draggable="true" onDragStart="{{w.drag}}" onDragOver="{{sopra}}" onDrop="{{w.dropLato}}">
+<div class="lato-wt">
+<span title="Trascina" style="cursor: grab; display: flex; padding: 2px;"><svg aria-hidden="true" width="9" height="13" viewBox="0 0 12 16" fill="#94A3B8"><circle cx="3" cy="3" r="1.4"></circle><circle cx="9" cy="3" r="1.4"></circle><circle cx="3" cy="8" r="1.4"></circle><circle cx="9" cy="8" r="1.4"></circle><circle cx="3" cy="13" r="1.4"></circle><circle cx="9" cy="13" r="1.4"></circle></svg></span>
+<button type="button" onClick="{{w.gira}}" aria-expanded="{{w.apertaTxt}}" title="{{w.tGira}}" class="lato-nome"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{w.freccia}}"></path></svg><span>{{w.titolo}}</span></button>
+<b class="lato-n" style="color: {{w.nc}}; background: {{w.nb}};">{{w.n}}</b>
+<a href="{{w.lUrl}}" target="_blank" rel="noopener" title="{{w.lTitolo}}" class="lato-btn"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+<button type="button" onClick="{{w.riporta}}" title="Riporta nell'area di lavoro" class="lato-btn"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{latoSx.rientro}}"></path></svg></button>
+</div>
+<sc-if value="{{w.aperta}}" hint-placeholder-val="{{true}}">
+<div class="lato-righe">
+<sc-for list="{{w.righe}}" as="r">
+<div class="lato-r" style="opacity: {{r.op}};">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.pallino}}; margin-top: 5px;"></span>
+<div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;"><span style="font-size: 12.5px; font-weight: 600; text-decoration: {{r.barra}};">{{r.testo}}</span><span style="font-size: 11.5px; color: var(--ink3);">{{r.sub}}</span></div>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; white-space: nowrap;">{{r.val}}</span>
+<button type="button" onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 26px; height: 26px; border-radius: 50%; border: 0; background: {{r.tondo}}; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{r.spessore}}" stroke-linecap="round" stroke-linejoin="round"><path d="{{r.icona}}"></path></svg></button>
+</div>
+</sc-for>
+<sc-if value="{{w.vuoto}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: var(--ink3); padding: 6px 0;">Niente qui per questa persona.</span></sc-if>
+</div>
+</sc-if>
+</section>
+</sc-for>
+</div>
+</aside>
+</sc-if>
 <main class="{{vistaCls}}" style="flex: 999 1 560px; min-width: 0; padding: 24px 30px 48px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box; zoom: 0.84;">
 
 
@@ -493,7 +575,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </div></sc-if>
 
 <div style="padding: 18px 26px 6px; display: flex; flex-direction: column; gap: 14px;">
-<div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;"><h2 style="margin: 0; font-size: 19px; font-weight: 700; line-height: 1.3;">{{intera.oggetto}}</h2></div>
+<div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;"><h2 style="margin: 0; font-size: 19px; font-weight: 700; line-height: 1.3;">{{intera.oggetto}}</h2><sc-if value="{{intera.haDaFare}}"><button type="button" onClick="{{intera.daFare}}" aria-pressed="{{intera.daFareSi}}" title="{{intera.daFareT}}" style="font: 700 12.5px Manrope, sans-serif; border: 1px solid {{intera.daFareBd}}; border-radius: 10px; height: 32px; padding: 0 11px; margin-left: auto; background: {{intera.daFareBg}}; color: {{intera.daFareFg}}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 7px;"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"></path><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>{{intera.daFareEt}}</button></sc-if></div>
 <div style="display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: start;">
 <span style="width: 40px; height: 40px; border-radius: 50%; background: var(--acw); color: #0891B2; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">{{intera.iniziali}}</span>
 <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 12.5px; color: var(--ink2);">
@@ -530,11 +612,48 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </sc-if>
 
 </main>
+<sc-if value="{{latoDx.mostra}}" hint-placeholder-val="{{false}}">
+<aside aria-label="Barra laterale destra" class="lato lato-dx {{latoDx.cls}}" onDragOver="{{sopra}}" onDrop="{{latoDx.drop}}">
+<div class="lato-striscia" onClick="{{latoDx.apri}}" title="{{latoDx.tStriscia}}">
+<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto; transform: rotate(45deg);"><path d="M9 4h6l-1 6 3 3H7l3-3zM12 13v8"></path></svg>
+<sc-for list="{{latoDx.voci}}" as="w"><span class="lato-voce"><b style="color: {{w.nc}}; background: {{w.nb}};">{{w.n}}</b><span class="lato-vert">{{w.titolo}}</span></span></sc-for>
+</div>
+<div class="lato-pannello">
+<div class="lato-testa"><span>{{latoDx.titolo}}</span><span style="display: flex; gap: 4px;"><sc-for list="{{latoDx.larghe}}" as="g"><button type="button" onClick="{{g.scegli}}" aria-pressed="{{g.sel}}" title="{{g.t}}" class="lato-larga {{g.cls}}">{{g.et}}</button></sc-for><button type="button" onClick="{{latoDx.punta}}" aria-pressed="{{latoDx.fissoTxt}}" title="{{latoDx.tPunta}}" class="lato-pin {{latoDx.pinCls}}"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 6 3 3H7l3-3zM12 13v8"></path></svg></button></span></div>
+<sc-if value="{{latoDx.vuoto}}" hint-placeholder-val="{{false}}"><div class="lato-vuoto">Lascia qui un widget</div></sc-if>
+<sc-for list="{{latoDx.voci}}" as="w">
+<section class="lato-w" draggable="true" onDragStart="{{w.drag}}" onDragOver="{{sopra}}" onDrop="{{w.dropLato}}">
+<div class="lato-wt">
+<span title="Trascina" style="cursor: grab; display: flex; padding: 2px;"><svg aria-hidden="true" width="9" height="13" viewBox="0 0 12 16" fill="#94A3B8"><circle cx="3" cy="3" r="1.4"></circle><circle cx="9" cy="3" r="1.4"></circle><circle cx="3" cy="8" r="1.4"></circle><circle cx="9" cy="8" r="1.4"></circle><circle cx="3" cy="13" r="1.4"></circle><circle cx="9" cy="13" r="1.4"></circle></svg></span>
+<button type="button" onClick="{{w.gira}}" aria-expanded="{{w.apertaTxt}}" title="{{w.tGira}}" class="lato-nome"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{w.freccia}}"></path></svg><span>{{w.titolo}}</span></button>
+<b class="lato-n" style="color: {{w.nc}}; background: {{w.nb}};">{{w.n}}</b>
+<a href="{{w.lUrl}}" target="_blank" rel="noopener" title="{{w.lTitolo}}" class="lato-btn"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+<button type="button" onClick="{{w.riporta}}" title="Riporta nell'area di lavoro" class="lato-btn"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{latoDx.rientro}}"></path></svg></button>
+</div>
+<sc-if value="{{w.aperta}}" hint-placeholder-val="{{true}}">
+<div class="lato-righe">
+<sc-for list="{{w.righe}}" as="r">
+<div class="lato-r" style="opacity: {{r.op}};">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.pallino}}; margin-top: 5px;"></span>
+<div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;"><span style="font-size: 12.5px; font-weight: 600; text-decoration: {{r.barra}};">{{r.testo}}</span><span style="font-size: 11.5px; color: var(--ink3);">{{r.sub}}</span></div>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; white-space: nowrap;">{{r.val}}</span>
+<button type="button" onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 26px; height: 26px; border-radius: 50%; border: 0; background: {{r.tondo}}; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{r.spessore}}" stroke-linecap="round" stroke-linejoin="round"><path d="{{r.icona}}"></path></svg></button>
+</div>
+</sc-for>
+<sc-if value="{{w.vuoto}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: var(--ink3); padding: 6px 0;">Niente qui per questa persona.</span></sc-if>
+</div>
+</sc-if>
+</section>
+</sc-for>
+</div>
+</aside>
+</sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
 const U = { r: '#DC2626', g: '#D97706', v: '#16A34A', b: '#7C3AED' };
 const W = {
+  att: { titolo: 'Attività da fare', flusso: 'Dalla mail col pulsante «Da fare» → la fai → spunta', piede: '', righe: [] },
   bon: { titolo: 'Bonifici da fare', flusso: 'Conferma d’ordine del fornitore non pagata → bonifico → si chiude con l’addebito', piede: 'Ogni conferma d’ordine arrivata e non pagata finisce qui da sola', numeri: [{ et: 'In fila', val: '€ 7.212,00', col: 'var(--ink)' }, { et: 'Scadono oggi', val: '1', col: '#B91C1C' }, { et: 'In attesa banca', val: '1', col: '#6D4AE0' }], righe: [
     { id: 'b1', chi: 'cristina', u: 'r', testo: 'ITALSOL SRL', sub: 'Conferma d’ordine del 24/10 non pagata · scade oggi', val: '€ 4.312,00', az: 'Disposto' },
     { id: 'b2', chi: 'cristina', u: 'g', testo: 'GHIOTTO IMPIANTI', sub: 'Conferma d’ordine del 27/10 non pagata · entro 02/11', val: '€ 2.900,00', az: 'Disposto' },
@@ -606,7 +725,7 @@ const CHIAVE_USO = 'next-strumenti-uso';
 /* ogni azione delle righe è un tasto tondo con il suo simbolo; il nome compare passandoci sopra */
 const SPUNTA_D = 'M5 12.5l4.5 4.5L19 7.5';
 const ICONE = {
-  Disposto: SPUNTA_D, Conferma: SPUNTA_D, Genera: SPUNTA_D, Firma: SPUNTA_D, Manda: SPUNTA_D, 'Va bene': SPUNTA_D, Fatto: SPUNTA_D,
+  Disposto: SPUNTA_D, Conferma: SPUNTA_D, Genera: SPUNTA_D, Firma: SPUNTA_D, Manda: SPUNTA_D, 'Va bene': SPUNTA_D, Fatto: SPUNTA_D, Fatta: SPUNTA_D,
   Dettagli: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6', Vedi: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6', Apri: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6',
   'Invia ora': 'M22 2L11 13M22 2l-7 20-4-9-9-4z',
   Reinvia: 'M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5',
@@ -629,6 +748,7 @@ const CHIAVE = 'next-area-lavoro-v2';
 const EDGE = '';
 const ODOO = EDGE + 'https://next-srl.odoo.com/odoo';
 const APP = {
+  att: { et: 'Posta', titolo: 'Apri la posta per trasformare una mail in attività', url: 'https://nextsrl-sim.github.io/area-posta/' },
   bon: { et: 'UniCredit', titolo: 'Apri UniCredit Corporate per disporre il bonifico', url: EDGE + 'https://online.unicreditcorporate.it/nb/it/uniweb.html' },
   sdi: { et: 'Odoo', titolo: 'Apri le fatture in Odoo', url: ODOO + '/customer-invoices' },
   ord: { et: 'Odoo', titolo: 'Apri gli ordini in Odoo', url: ODOO + '/sales' },
@@ -702,6 +822,9 @@ const WA = [
 ];
 class Component extends DCLogic {
   componentDidMount() {
+    window.__attRidisegna = () => this.setState({ attT: Date.now() });
+    /* finito un trascinamento (anche annullato) le barre vuote tornano nascoste */
+    window.addEventListener('dragend', () => { this.trascina = null; if (this.state && this.state.trascinando) this.setState({ trascinando: false }); });
     if (this.waVeroAvvia) this.waVeroAvvia();
     if (this.datiAvvia) this.datiAvvia();
     try { const h0 = (window.location.hash || '').slice(1);
@@ -734,7 +857,10 @@ class Component extends DCLogic {
   }
   renderVals() {
     const s = this.state || {};
-    const lay = s.lay || INIZIALE;
+    const lay0 = s.lay || INIZIALE;
+    /* il widget delle attività è nuovo: chi aveva già una disposizione salvata lo trova in testa, puntato */
+    const lay = lay0.ordine.includes('att') ? lay0 : { ...lay0, ordine: ['att', ...lay0.ordine], puntati: [...lay0.puntati, 'att'], taglia: { att: 3, ...(lay0.taglia || {}) } };
+    attWidget(s.attT);
     const persona = s.persona || 'tutti';
     const fatti = s.fatti || [];
     const ai = s.ai || 0;
@@ -745,15 +871,19 @@ class Component extends DCLogic {
       const o = lay.ordine.filter((x) => x !== da);
       const i = o.indexOf(a);
       o.splice(i < 0 ? o.length : i, 0, da);
-      this.salva({ ...lay, ordine: o });
+      const lt = lay.lati || { sx: [], dx: [] };
+      const daLato = (lt.sx || []).includes(da) || (lt.dx || []).includes(da);
+      const versoAperto = lay.puntati.includes(a) || lay.aperto === a;
+      this.salva({ ...lay, ordine: o, lati: { sx: (lt.sx || []).filter((x) => x !== da), dx: (lt.dx || []).filter((x) => x !== da) },
+        puntati: daLato && versoAperto && !lay.puntati.includes(da) ? [...lay.puntati, da] : lay.puntati });
     };
     if (s.sdiVero) sdiApplica(s.sdiVero);
     const riga = (r) => {
-      const f = fatti.includes(r.id);
+      const f = fatti.includes(r.id) || !!r.fattaGia;
       return { ...r, val: r.val || '', sfondo: 'transparent', marker: !f && r.evid ? 'linear-gradient(100deg, rgba(244, 114, 114, 0) 0%, rgba(244, 114, 114, .30) 3%, rgba(244, 114, 114, .24) 70%, rgba(244, 114, 114, .30) 97%, rgba(244, 114, 114, 0) 100%)' : 'transparent', pallino: f ? '#CBD5E1' : U[r.u], op: f ? '0.5' : '1', barra: f ? 'line-through' : 'none',
         az: f ? 'Fatto' : r.az, bd: f ? 'var(--ln)' : '#0891B2', bg: f ? 'var(--sf)' : '#0891B2', fg: f ? 'var(--ink3)' : '#FFFFFF',
         spunta: true, testo2: false, tondo: f ? '#CBD5E1' : '#0891B2', icona: f ? ICONE.Fatto : (ICONE[r.az] || ICONE._), spessore: ICONE[r.az] === ICONE.Disposto || f ? '2.8' : '2.2',
-        fai: () => { if (r.url) { try { window.open(r.url, '_blank', 'noopener'); } catch (e) {} return; } if (!f) segna([r.id]); } };
+        fai: () => { if (r.chiudi) { r.chiudi(); this.setState({ attT: Date.now() }); return; } if (r.url) { try { window.open(r.url, '_blank', 'noopener'); } catch (e) {} return; } if (!f) segna([r.id]); } };
     };
     const conta = (righe) => {
       const aperte = righe.filter((r) => r.az !== 'Fatto');
@@ -764,11 +894,44 @@ class Component extends DCLogic {
       const w = W[id];
       const righe = w.righe.filter((r) => persona === 'tutti' || r.chi === persona).map((r) => ({ ...riga(r), app: APP[id].et, url: APP[id].url }));
       return { ...w, id, righe, lEt: APP[id].et, lUrl: APP[id].url, lTitolo: APP[id].titolo, vuoto: righe.length === 0, ...conta(righe), piede: w.piede || '',
-        drag: (e) => { this.trascina = id; try { e.dataTransfer.setData('text/plain', id); } catch (x) {} },
+        drag: (e) => { this.trascina = id; try { e.dataTransfer.setData('text/plain', id); } catch (x) {} setTimeout(() => this.setState({ trascinando: true }), 0); },
         drop: (e) => { if (e && e.preventDefault) e.preventDefault(); sposta(this.trascina, id); this.trascina = null; } };
     };
-    const isAperto = (id) => lay.puntati.includes(id) || lay.aperto === id;
-    const chiusi = lay.ordine.filter((id) => !isAperto(id)).map((id) => ({ ...comune(id),
+    /* le barre laterali: lati.sx / lati.dx (widget messi lì), fissi (puntina), giu (widget ripiegati nella barra) */
+    const lati = { sx: [], dx: [], ...(lay.lati || {}) };
+    const fissi = { sx: true, dx: true, ...(lay.fissi || {}) };
+    const inLato = (id) => lati.sx.includes(id) || lati.dx.includes(id);
+    const isAperto = (id) => !inLato(id) && (lay.puntati.includes(id) || lay.aperto === id);
+    const metti = (lato, id, prima) => {
+      if (!id || !W[id]) return;
+      const l = { sx: lati.sx.filter((x) => x !== id), dx: lati.dx.filter((x) => x !== id) };
+      const i = prima ? l[lato].indexOf(prima) : -1;
+      l[lato].splice(i < 0 ? l[lato].length : i, 0, id);
+      this.salva({ ...lay, lati: l, puntati: lay.puntati.filter((x) => x !== id), aperto: lay.aperto === id ? null : lay.aperto });
+      this.trascina = null; this.setState({ trascinando: false });
+    };
+    const barra = (lato) => {
+      const ids = lati[lato].filter((id) => W[id]);
+      const fisso = fissi[lato] !== false;
+      const larga = (lay.larghe || {})[lato] || 'n';
+      const giu = lay.giu || [];
+      const voci = ids.map((id) => { const c = comune(id); const ap = !giu.includes(id); return { ...c, aperta: ap, apertaTxt: ap ? 'true' : 'false', freccia: ap ? 'M6 9l6 6 6-6' : 'M9 6l6 6-6 6', tGira: ap ? 'Ripiega' : 'Apri',
+        gira: () => this.salva({ ...lay, giu: ap ? [...giu, id] : giu.filter((x) => x !== id) }),
+        dropLato: (e) => { if (e) { e.preventDefault(); e.stopPropagation(); } metti(lato, this.trascina, id); },
+        riporta: () => this.salva({ ...lay, lati: { ...lati, [lato]: lati[lato].filter((x) => x !== id) }, puntati: [...lay.puntati.filter((x) => x !== id), id] }) }; });
+      const vuota = voci.length === 0;
+      return { mostra: !this.solo && (!vuota || !!s.trascinando), voci, vuoto: vuota, titolo: 'Barra ' + (lato === 'sx' ? 'sinistra' : 'destra'),
+        cls: [vuota ? 'vuota' : '', fisso ? 'fisso' : '', s.latoAperto === lato ? 'aperta' : '', 'w-' + larga].join(' '),
+        larghe: [['n', 'S', 'Stretta'], ['meta', '½', 'Metà schermo'], ['tutto', '⛶', 'Tutto schermo']].map(([k, et, t]) => ({ et, t, sel: k === larga ? 'true' : 'false', cls: k === larga ? 'su' : '',
+          scegli: () => this.salva({ ...lay, larghe: { ...(lay.larghe || {}), [lato]: k } }) })),
+        fissoTxt: fisso ? 'true' : 'false', pinCls: fisso ? 'su' : '', tPunta: fisso ? 'Togli la puntina: la barra si chiude e si apre passandoci sopra' : 'Metti la puntina: la barra resta aperta',
+        tStriscia: 'Barra ' + (lato === 'sx' ? 'sinistra' : 'destra') + ': passa sopra o tocca per aprirla',
+        rientro: lato === 'sx' ? 'M5 12h14M13 6l6 6-6 6' : 'M19 12H5M11 6l-6 6 6 6',
+        punta: () => { this.salva({ ...lay, fissi: { ...fissi, [lato]: !fisso } }); this.setState({ latoAperto: null }); },
+        apri: () => this.setState({ latoAperto: s.latoAperto === lato ? null : lato }),
+        drop: (e) => { if (e) e.preventDefault(); metti(lato, this.trascina); } };
+    };
+    const chiusi = lay.ordine.filter((id) => !isAperto(id) && !inLato(id)).map((id) => ({ ...comune(id),
       apri: () => this.salva({ ...lay, aperto: id }) }));
     const aperti = (this.solo && W[this.solo] ? [this.solo] : lay.ordine.filter(isAperto)).map((id) => {
       const p = lay.puntati.includes(id);
@@ -873,9 +1036,10 @@ class Component extends DCLogic {
     const chiudiPostit = () => this.setState({ pAperti: false });
     const apriPostit = () => this.setState({ pAperti: !s.pAperti });
     const pNumero = String((lay.postit || INIZIALE.postit).length);
-    return { pAperti, chiudiPostit, apriPostit, pNumero, pApertiTxt: pAperti ? 'true' : 'false', pTitolo: pAperti ? 'Richiudi i post-it' : 'Apri i post-it', pFreccia: pAperti ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6', vistaCls, viste, inFinestra, clsW, clsP, clsA, sceltaColore, annullaColore, coloriNuovo, waIn, ...temaX, apriFuoriArea, apriFuoriPosta, staccaPostit, staccaPosta, strumenti, postit, nuovoPostit, allarme, wa, posta, haIntera: !!s.intera, intera: s.intera || {}, chiudiIntera: () => this.setState({ intera: null, risp: null }),
+    return { pAperti, chiudiPostit, apriPostit, pNumero, pApertiTxt: pAperti ? 'true' : 'false', pTitolo: pAperti ? 'Richiudi i post-it' : 'Apri i post-it', pFreccia: pAperti ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6', vistaCls, viste, inFinestra, clsW, clsP, clsA, sceltaColore, annullaColore, coloriNuovo, waIn, ...temaX, apriFuoriArea, apriFuoriPosta, staccaPostit, staccaPosta, strumenti, postit, nuovoPostit, allarme, wa, posta, haIntera: !!s.intera, intera: s.intera ? { ...s.intera, ...this.attBottone(s.intera) } : {}, chiudiIntera: () => this.setState({ intera: null, risp: null }),
       inRisposta: !!(s.intera && s.risp), risposta: risposta(s.intera, s.risp),
       rispondi: () => this.setState({ risp: 'r' }), rispondiTutti: () => this.setState({ risp: 't' }), inoltra: () => this.setState({ risp: 'i' }), annullaRisposta: () => this.setState({ risp: null }),
+      latoSx: barra('sx'), latoDx: barra('dx'),
       persone, chiusi, aperti, nessunChiuso: chiusi.length === 0, avviso, auto,
       sopra: (e) => { if (e && e.preventDefault) e.preventDefault(); },
       ripristina: () => this.salva(INIZIALE) };
@@ -975,6 +1139,20 @@ Component.prototype.waVeroVista = function (s, waS) {
 const euro = (n) => '€ ' + Number(n || 0).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const ggmm = (d) => String(d).slice(8, 10) + '/' + String(d).slice(5, 7);
 const GIORNI = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
+/* le attività da fare nel loro widget: aperte prima, quelle fatte oggi restano grigie fino a domani */
+function attWidget() {
+  const oggi = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' });
+  const l = (typeof attLeggi === 'function' ? attLeggi() : []).filter((a) => !a.fatta || String(new Date(a.fatta).toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' })) === oggi);
+  l.sort((a, b) => (a.fatta ? 1 : 0) - (b.fatta ? 1 : 0) || String(b.creata).localeCompare(String(a.creata)));
+  W.att.righe = l.map((a) => {
+    const d = new Date(a.creata).toLocaleDateString('it-IT', { timeZone: 'Europe/Rome', day: '2-digit', month: '2-digit' });
+    return { id: 'att-' + a.id, chi: a.chi || 'sante', u: 'b', testo: a.testo, fattaGia: !!a.fatta,
+      sub: a.mail ? 'dalla mail di ' + (a.mail.mittente || 'mittente') + ' · ' + String(a.mail.casella || '').replace(/^./, (c) => c.toUpperCase()) + ' · ' + d : 'aggiunta il ' + d,
+      val: '', az: 'Fatta', chiudi: () => attSegna(a.id, !a.fatta) };
+  });
+  const aperte = l.filter((a) => !a.fatta).length;
+  W.att.piede = aperte ? aperte + (aperte === 1 ? ' attività aperta' : ' attività aperte') + ' · per ora salvate in questo browser' : 'Nessuna attività aperta: dalla Posta, «Da fare» su una mail la porta qui';
+}
 function sdiApplica(v) {
   const f = v.fatture || [];
   const scartate = f.filter((x) => x.categoria === 'scartata');
@@ -1160,6 +1338,38 @@ Component.prototype.bandaVera = function (s) {
   return { ultima: tutte[0] ? conApri(tutte[0]) : vuota, nastro: [...resto, ...resto],
     nuove: String(tutte.filter((v) => v.nuova).length), anim: (s.pvLampo || 0) % 2 ? 'lampoB' : 'lampoA' };
 };
+/* PORTALE NEXT-102 — le ATTIVITÀ DA FARE.
+   Una mail letta si trasforma in attività col pulsante «Da fare»; l'attività compare nel widget
+   «Attività da fare» dell'Area di lavoro (stesse regole degli altri widget: taglia, puntina, spostamento, barre).
+   Per ora l'elenco vive in questo browser (localStorage, condiviso fra Posta e Area di lavoro perché stanno
+   sullo stesso indirizzo); quando Sante autorizza la tabella su Supabase si sposta lì, uguale per tutti. */
+const ATT_CHIAVE = 'next-attivita-v1';
+const attLeggi = () => { try { const l = JSON.parse(window.localStorage.getItem(ATT_CHIAVE) || '[]'); return Array.isArray(l) ? l : []; } catch (e) { return []; } };
+const attScrivi = (l) => { try { window.localStorage.setItem(ATT_CHIAVE, JSON.stringify(l.slice(0, 500))); } catch (e) {} };
+const attChi = () => { try { const c = String(window.sessionStorage.getItem('regia_chi') || '').toLowerCase(); for (const p of ['sante', 'cristina', 'roberto', 'belloni']) if (c.includes(p)) return p; } catch (e) {} return 'sante'; };
+const attDiMail = (chiave) => attLeggi().find((a) => a.mail && a.mail.chiave === chiave && !a.fatta) || null;
+/* la mail (voce della posta vera, o scheda della mail intera) diventa un'attività */
+function attDaMail(v) {
+  if (!v || !v.chiave) return null;
+  const c = attDiMail(v.chiave); if (c) return c;
+  const l = attLeggi();
+  const a = { id: 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), testo: String(v.oggetto || '(senza oggetto)').trim(), chi: attChi(), creata: new Date().toISOString(), fatta: null,
+    mail: { chiave: v.chiave, casella: String(v.casella || ''), cartella: String(v.cartella || ''), uid: v.uid || null, mittente: String(v.daNome || v.chi || v.da || ''), data: v.iso || null } };
+  l.unshift(a); attScrivi(l); return a;
+}
+function attSegna(id, fatta) { const l = attLeggi(); const a = l.find((x) => x.id === id); if (!a) return; a.fatta = fatta ? new Date().toISOString() : null; attScrivi(l); }
+function attTogli(id) { attScrivi(attLeggi().filter((x) => x.id !== id)); }
+/* il pulsante sulla mail: «Da fare» oppure «Nelle attività» se c'è già */
+Component.prototype.attBottone = function (v) {
+  if (!v || !v.vera || !v.chiave) return { haDaFare: false };
+  const c = attDiMail(v.chiave);
+  return { haDaFare: true, daFareEt: c ? 'Nelle attività' : 'Da fare', daFareSi: c ? 'true' : 'false',
+    daFareBd: c ? '#16A34A' : '#0891B2', daFareBg: c ? 'var(--grw)' : '#0891B2', daFareFg: c ? '#15803D' : '#FFFFFF',
+    daFareT: c ? 'Questa mail è già un’attività da fare (tocca per toglierla)' : 'Trasforma questa mail in un’attività da fare',
+    daFare: () => { if (c) attTogli(c.id); else attDaMail(v); this.setState({ attT: Date.now() }); } };
+};
+/* le altre pagine aperte (Posta ↔ Area di lavoro) si aggiornano da sole */
+window.addEventListener('storage', (e) => { if (e.key === ATT_CHIAVE && window.__attRidisegna) window.__attRidisegna(); });
 </script>
 </body>
 </html>

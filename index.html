@@ -680,7 +680,7 @@ class Component extends DCLogic {
         puntaLabel: p ? 'Togli la puntina' : 'Tieni aperto', pBd: p ? '#0891B2' : 'var(--ln)', pBg: p ? 'var(--acw)' : 'var(--sf)', pFg: p ? '#0891B2' : 'var(--ink3)',
         punta: () => this.salva({ ...lay, puntati: p ? lay.puntati.filter((x) => x !== id) : [...lay.puntati, id], aperto: p ? id : (lay.aperto === id ? null : lay.aperto) }),
         chiudi: () => this.salva({ ...lay, puntati: lay.puntati.filter((x) => x !== id), aperto: lay.aperto === id ? null : lay.aperto }),
-        stacca: () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#solo-' + id, 'next-widget-' + id, 'popup,width=760,height=640'); } catch (e) {} },
+        stacca: () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/?v=' + Date.now() + '#solo-' + id, 'next-widget-' + id, 'popup,width=760,height=640'); } catch (e) {} },
         misura: () => this.salva({ ...lay, taglia: { ...lay.taglia, [id]: TAGLIE[(TAGLIE.indexOf(t) + 1) % TAGLIE.length] } }) };
     });
     const persone = [['tutti', 'Tutti'], ['sante', 'Sante'], ['cristina', 'Cristina'], ['roberto', 'Roberto'], ['belloni', 'Belloni']].map(([id, nome]) => ({
@@ -749,12 +749,12 @@ class Component extends DCLogic {
     try { temaV = (this.state && this.state.tema) || window.localStorage.getItem('next-tema') || 'giorno'; } catch (e) {}
     const temaX = { tema: temaV, temaLabel: temaV === 'notte' ? 'Passa al tema di giorno' : 'Passa al tema di notte', temaIcona: temaV === 'notte' ? 'M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4' : 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
       cambiaTema: () => { const n = temaV === 'notte' ? 'giorno' : 'notte'; this.setState({ tema: n }); try { window.localStorage.setItem('next-tema', n); } catch (e) {} } };
-    const staccaPostit = () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#solo-postit', 'next-postit', 'popup,width=520,height=640'); } catch (e) {} };
-    const staccaPosta = () => { try { window.open('https://nextsrl-sim.github.io/area-posta/#finestra', 'next-posta', 'popup,width=1280,height=900'); } catch (e) {} };
+    const staccaPostit = () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/?v=' + Date.now() + '#solo-postit', 'next-postit', 'popup,width=520,height=640'); } catch (e) {} };
+    const staccaPosta = () => { try { window.open('https://nextsrl-sim.github.io/area-posta/?v=' + Date.now() + '#finestra', 'next-posta', 'popup,width=1280,height=900'); } catch (e) {} };
     const fuoriPagina = (url, nome) => () => { try { window.open(url, 'next-pagina-' + nome, 'popup,width=1320,height=900'); } catch (e) {} };
     const apriFuoriArea = fuoriPagina('https://nextsrl-sim.github.io/area-lavoro/', 'area');
     const apriFuoriPosta = fuoriPagina('https://nextsrl-sim.github.io/area-posta/', 'posta');
-    const inFinestra = () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#finestra', 'next-scheda-area', 'popup,width=1320,height=900'); } catch (e) {} };
+    const inFinestra = () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/?v=' + Date.now() + '#finestra', 'next-scheda-area', 'popup,width=1320,height=900'); } catch (e) {} };
     const clsW = this.solo && this.solo !== 'postit' ? 'solo-tieni' : '';
     const clsP = this.solo === 'postit' ? 'solo-tieni' : '';
     return { inFinestra, clsW, clsP, sceltaColore, annullaColore, coloriNuovo, waIn, ...temaX, apriFuoriArea, apriFuoriPosta, staccaPostit, staccaPosta, strumenti, postit, nuovoPostit, allarme, wa, posta, haIntera: !!s.intera, intera: s.intera || {}, chiudiIntera: () => this.setState({ intera: null, risp: null }),

@@ -84,6 +84,13 @@
     var xdc = document.querySelector('x-dc');
     var codice = document.querySelector('script[type="text/x-dc"]');
     if (!xdc || !codice) return;
+    /* l'accesso del portale vale anche quando la pagina è aperta da sola (app sul desktop, altro monitor):
+       chi entra dal portale lo lascia su questo computer, la pagina aperta da sola lo ritrova. */
+    try {
+      var ps = sessionStorage.getItem('regia_pass');
+      if (ps) { localStorage.setItem('next_regia_pass', ps); var ch = sessionStorage.getItem('regia_chi'); if (ch) localStorage.setItem('next_regia_chi', ch); }
+      else { var pl = localStorage.getItem('next_regia_pass'); if (pl) { sessionStorage.setItem('regia_pass', pl); var cl = localStorage.getItem('next_regia_chi'); if (cl) sessionStorage.setItem('regia_chi', cl); } }
+    } catch (e) {}
     try { if (window.self !== window.top) document.documentElement.classList.add('incorniciata'); } catch (e) { document.documentElement.classList.add('incorniciata'); }
     var helmet = xdc.querySelector('helmet');
     if (helmet) { while (helmet.firstChild) document.head.appendChild(helmet.firstChild); helmet.remove(); }
@@ -624,9 +631,9 @@ const CAS = {
   info: { cas: 'Info', ind: 'info@next-srl.eu', col: '#D97706' },
   pec: { cas: 'PEC', ind: '[INDIRIZZO PEC]', col: '#DC2626' },
   amm: { cas: 'Amministrazione', ind: 'amministrazione@next-srl.eu', col: '#7C3AED' },
-  acq: { cas: 'Acquisti', ind: 'acquisti@next-srl.eu', col: '#0891B2' },
+  acq: { cas: 'Acquisti', ind: 'acquisti@next-srl.eu', col: '#2563EB' },
   com: { cas: 'Commerciale', ind: 'commerciale@next-srl.eu', col: '#16A34A' },
-  ass: { cas: 'Assistenza', ind: 'assistenza@next-srl.eu', col: '#0891B2' }
+  ass: { cas: 'Assistenza', ind: 'assistenza@next-srl.eu', col: '#DB2777' }
 };
 const ARRIVI = [
   ['com', '11:31', '[CLIENTE]', 'Richiesta preventivo impianto 6 kWp'],
@@ -1021,12 +1028,14 @@ const pvDoc = (nome, casella, cartella, uid) => {
 };
 /* una mail com'è nelle liste della pagina */
 const pvVoce = (m, casella, verso) => {
-  const tag = verso === 'out' ? 'inviata' : (m.non_letta ? 'nuova' : (m.cliente ? 'cliente' : 'letta'));
-  const chi = verso === 'out' ? pvPulisci((m.a || '').replace(/<[^>]*>/g, '').replace(/"/g, '')) || 'destinatario' : pvNome(m);
+  /* chi scrive (o a chi abbiamo scritto): riconosciuto dalla rubrica di Odoo, dal dominio o da regole semplici */
+  const tag = m.chi_tipo || (verso === 'out' ? 'sconosciuto' : (m.cliente ? 'cliente' : 'sconosciuto'));
+  const grezzo = verso === 'out' ? pvPulisci((m.a || '').replace(/<[^>]*>/g, '').replace(/"/g, '')) || 'destinatario' : pvNome(m);
+  const chi = m.chi_nome ? (m.chi_persona ? m.chi_nome + ' · ' + m.chi_persona : m.chi_nome) : grezzo;
   return { vera: true, chiave: casella + ':' + m.cartella + ':' + m.uid, casella, cartella: m.cartella, uid: m.uid, iso: m.data,
     chi, ora: pvOra(m.data), oggetto: pvPulisci(m.oggetto) || '(senza oggetto)', tag, nuova: !!m.non_letta, da: m.da || '', a: m.a || '',
     cliente: m.cliente || '', haClip: !!m.allegati,
-    testo: '', sistema: m.cliente ? 'mittente riconosciuto: cliente ' + m.cliente + '.' : '', az: '' };
+    testo: '', sistema: '', az: '' };
 };
 /* legge tutte le caselle; risponde con { per: { idPagina: { in, out, errore } }, alle } oppure null */
 async function pvLeggiTutto() {

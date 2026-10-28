@@ -180,6 +180,7 @@ html.solo main{padding:10px!important;gap:0!important}
 html.solo main > *:not(.solo-tieni){display:none!important}
 html.solo .solo-tieni{grid-template-columns:1fr!important}
 html.solo .solo-tieni > *{grid-column:1 / -1!important}
+.ciondolo:hover{background:var(--acw)!important;border-color:#0891B2!important}
 html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </style>
 </helmet>
@@ -222,7 +223,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
 <div role="tablist" aria-label="Di chi" style="display: flex; gap: 2px; background: var(--sf); border: 1px solid var(--ln); border-radius: 12px; padding: 4px;">
 <sc-for list="{{persone}}" as="p" hint-placeholder-count="5">
-<button role="tab" aria-selected="{{p.sel}}" onClick="{{p.pick}}" style="font: 700 13px Manrope, sans-serif; border: 0; border-radius: 9px; height: 38px; min-width: 92px; padding: 0 12px; cursor: pointer; background: {{p.bg}}; color: {{p.fg}};">{{p.etichetta}}</button>
+<button role="tab" aria-selected="{{p.sel}}" onClick="{{p.pick}}" style="font: 700 13px Manrope, sans-serif; border: 0; border-bottom: 2px solid {{p.riga}}; border-radius: 9px 9px 4px 4px; height: 38px; min-width: 92px; padding: 0 12px; cursor: pointer; background: {{p.bg}}; color: {{p.fg}};">{{p.etichetta}}</button>
 </sc-for>
 </div>
 <button onClick="{{ripristina}}" style="font: 700 13.5px Manrope, sans-serif; border: 1px solid var(--ln); border-radius: 10px; height: 40px; padding: 0 14px; background: var(--sf); color: var(--ink); cursor: pointer;">Disposizione iniziale</button>
@@ -328,7 +329,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 <span style="width: 10px; height: 10px; border-radius: 50%; background: {{r.pallino}};"></span>
 <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0;"><span style="font-size: 13.5px; font-weight: 600; text-decoration: {{r.barra}}; background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 2px 6px 3px 5px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.testo}}</span><span style="font-size: 12.5px; color: var(--ink2); background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 3px 5px 2px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.sub}}</span></div>
 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px;">{{r.val}}</span>
-<button onClick="{{r.fai}}" style="font: 700 13.5px Manrope, sans-serif; border: 1px solid {{r.bd}}; border-radius: 10px; height: 40px; width: 104px; background: {{r.bg}}; color: {{r.fg}}; cursor: pointer;">{{r.az}}</button>
+<sc-if value="{{r.spunta}}" hint-placeholder-val="{{false}}"><span style="width: 104px; display: flex; justify-content: center;"><button onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--ln); background: var(--sf); color: #0891B2; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button></span></sc-if><sc-if value="{{r.testo2}}" hint-placeholder-val="{{true}}"><button onClick="{{r.fai}}" style="font: 700 13.5px Manrope, sans-serif; border: 1px solid {{r.bd}}; border-radius: 10px; height: 40px; width: 104px; background: {{r.bg}}; color: {{r.fg}}; cursor: pointer;">{{r.az}}</button></sc-if>
 </div>
 </sc-for>
 <sc-if value="{{w.vuoto}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: var(--ink3); padding: 10px 0;">Niente qui per questa persona.</span></sc-if>
@@ -544,6 +545,8 @@ const STRUMENTI = [
   { id: 'claude', nome: 'Claude', url: 'https://claude.ai', d: 'M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15.5l-1.8-4.7L5.5 9l4.7-1.3zM18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8z' }
 ];
 const CHIAVE_USO = 'next-strumenti-uso';
+/* le azioni di sola conferma diventano il tasto tondo con la spunta */
+const SPUNTA = ['Disposto', 'Conferma', 'Genera', 'Firma', 'Manda', 'Fatto'];
 const WA_IN = [
   ['paola', 'Grazie, ricevute. Mi manca solo la foto del contatore.'],
   ['roberto', 'Sono dal cliente di Treviso, firma oggi. Appena ho il contratto firmato te lo giro e lo carichiamo.', '0:24'],
@@ -674,6 +677,7 @@ class Component extends DCLogic {
       const f = fatti.includes(r.id);
       return { ...r, val: r.val || '', sfondo: 'transparent', marker: !f && r.evid ? 'linear-gradient(100deg, rgba(244, 114, 114, 0) 0%, rgba(244, 114, 114, .30) 3%, rgba(244, 114, 114, .24) 70%, rgba(244, 114, 114, .30) 97%, rgba(244, 114, 114, 0) 100%)' : 'transparent', pallino: f ? '#CBD5E1' : U[r.u], op: f ? '0.5' : '1', barra: f ? 'line-through' : 'none',
         az: f ? 'Fatto' : r.az, bd: f ? 'var(--ln)' : '#0891B2', bg: f ? 'var(--sf)' : '#0891B2', fg: f ? 'var(--ink3)' : '#FFFFFF',
+        spunta: !f && SPUNTA.includes(r.az), testo2: f || !SPUNTA.includes(r.az),
         fai: () => { if (!f) segna([r.id]); } };
     };
     const conta = (righe) => {
@@ -702,7 +706,7 @@ class Component extends DCLogic {
         misura: () => this.salva({ ...lay, taglia: { ...lay.taglia, [id]: TAGLIE[(TAGLIE.indexOf(t) + 1) % TAGLIE.length] } }) };
     });
     const persone = [['tutti', 'Tutti'], ['sante', 'Sante'], ['cristina', 'Cristina'], ['roberto', 'Roberto'], ['belloni', 'Belloni']].map(([id, nome]) => ({
-      etichetta: nome, sel: persona === id ? 'true' : 'false', bg: persona === id ? '#0891B2' : 'transparent', fg: persona === id ? '#FFFFFF' : 'var(--ink2)',
+      etichetta: nome, sel: persona === id ? 'true' : 'false', bg: persona === id ? 'var(--acw)' : 'transparent', fg: persona === id ? '#0891B2' : 'var(--ink2)', riga: persona === id ? '#0891B2' : 'transparent',
       pick: () => this.setState({ persona: id }) }));
     const a = AVVISI[ai];
     const avviso = a ? { c: true, ...a, pos: (ai + 1) + ' di ' + AVVISI.length,

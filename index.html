@@ -175,6 +175,11 @@ nav[aria-label="Menu Next"] .mn-fuori{position:absolute;right:4px;top:50%;transf
 nav[aria-label="Menu Next"] .mn-riga:hover .mn-fuori,nav[aria-label="Menu Next"] .mn-fuori:focus{opacity:1}
 nav[aria-label="Menu Next"] .mn-fuori:hover{color:#22D3EE;background:rgba(34,211,238,.12)}
 *{scrollbar-width:none}*::-webkit-scrollbar{display:none}
+html.finestra nav[aria-label="Menu Next"],html.solo nav[aria-label="Menu Next"]{display:none!important}
+html.solo main{padding:10px!important;gap:0!important}
+html.solo main > *:not(.solo-tieni){display:none!important}
+html.solo .solo-tieni{grid-template-columns:1fr!important}
+html.solo .solo-tieni > *{grid-column:1 / -1!important}
 html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </style>
 </helmet>
@@ -211,6 +216,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 <a href="#" role="tab" aria-selected="true" style="font-size: 13.5px; font-weight: 700; color: #0891B2; text-decoration: none; padding: 10px 14px; border-bottom: 2px solid #0891B2;">Area di lavoro</a>
 <a href="https://nextsrl-sim.github.io/area-posta/" role="tab" aria-selected="false" style="font-size: 13.5px; font-weight: 700; color: var(--ink2); text-decoration: none; padding: 10px 14px; border-bottom: 2px solid transparent;">Posta</a>
 <a href="https://nextsrl-sim.github.io/area-automatismi/" role="tab" aria-selected="false" style="font-size: 13.5px; font-weight: 700; color: var(--ink2); text-decoration: none; padding: 10px 14px; border-bottom: 2px solid transparent;">Automatismi</a>
+<button onClick="{{inFinestra}}" title="Apri questa scheda in una finestra, da spostare su un altro monitor" aria-label="Apri questa scheda in una finestra" style="margin-left: auto; align-self: center; width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--ln); background: var(--sf); color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="2"></rect><path d="M11 3h10v10M21 3l-9 9"></path></svg></button>
 </div>
 
 <header style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;">
@@ -276,7 +282,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 <button onClick="{{staccaPosta}}" aria-label="Apri in una finestra separata" title="Apri in una finestra separata, da spostare su un altro monitor" style="width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--ln); background: var(--sf); color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="2"></rect><path d="M11 3h10v10M21 3l-9 9"></path></svg></button>
 </section>
 
-<section aria-label="Post-it" style="display: flex; flex-direction: column; gap: 6px;">
+<section aria-label="Post-it" class="{{clsP}}" style="display: flex; flex-direction: column; gap: 6px;">
 <div style="display: flex; align-items: baseline; gap: 10px;"><h2 style="margin: 0; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3);">Post-it</h2><button onClick="{{nuovoPostit}}" style="font: 700 11.5px Manrope, sans-serif; border: 0; background: transparent; color: #0891B2; cursor: pointer; padding: 0;">+ nuovo</button><sc-if value="{{sceltaColore}}" hint-placeholder-val="{{false}}"><span role="group" aria-label="Scegli il colore del nuovo post-it" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px; border: 1px solid var(--ln); border-radius: 8px; background: var(--sf);"><span style="font-size: 11px; color: var(--ink3);">colore:</span><sc-for list="{{coloriNuovo}}" as="k" hint-placeholder-count="5"><button onClick="{{k.crea}}" aria-label="Post-it {{k.nome}}" title="{{k.nome}}" style="width: 22px; height: 22px; padding: 0; cursor: pointer; background: {{k.bg}}; border: 1px solid {{k.bd}}; border-radius: 3px 3px 7px 3px;"></button></sc-for><button onClick="{{annullaColore}}" aria-label="Annulla" title="Annulla" style="width: 20px; height: 20px; border: 0; background: transparent; color: var(--ink3); cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span></sc-if><button onClick="{{staccaPostit}}" aria-label="Apri in una finestra separata" title="Apri in una finestra separata, da spostare su un altro monitor" style="width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--ln); background: var(--sf); color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="2"></rect><path d="M11 3h10v10M21 3l-9 9"></path></svg></button></div>
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
 <sc-for list="{{postit}}" as="p" hint-placeholder-count="2">
@@ -301,7 +307,7 @@ html.incorniciata nav[aria-label="Menu Next"]{display:none!important}
 </div>
 </section>
 
-<section aria-label="Widget aperti" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px; align-items: start;">
+<section aria-label="Widget aperti" class="{{clsW}}" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px; align-items: start;">
 <sc-for list="{{aperti}}" as="w" hint-placeholder-count="3">
 <article draggable="true" onDragStart="{{w.drag}}" onDragOver="{{sopra}}" onDrop="{{w.drop}}" style="grid-column: span {{w.span}}; background: var(--sf); border: 1px solid var(--ln); border-radius: 16px; padding: 16px 18px 14px; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box; min-width: 0;">
 <div style="display: flex; align-items: center; gap: 8px;">
@@ -604,6 +610,10 @@ const WA = [
 ];
 class Component extends DCLogic {
   componentDidMount() {
+    try { const h0 = (window.location.hash || '').slice(1);
+      if (h0 === 'finestra') document.documentElement.classList.add('finestra');
+      if (h0.indexOf('solo-') === 0) { this.solo = h0.slice(5); document.documentElement.classList.add('solo'); this.setState({ solo: this.solo }); document.title = 'Next · widget'; }
+    } catch (e) {}
     try { const t = window.localStorage.getItem(CHIAVE); if (t) this.setState({ lay: JSON.parse(t) }); } catch (e) {}
     try { const u = window.localStorage.getItem(CHIAVE_USO); if (u) this.setState({ uso: JSON.parse(u) }); } catch (e) {}
     this.giro = setInterval(() => this.setState((st) => ({ arrivo: (((st && st.arrivo) || 0) + 1) % ARRIVI.length })), 15000);
@@ -624,6 +634,7 @@ class Component extends DCLogic {
   componentWillUnmount() { clearInterval(this.giro); clearInterval(this.giroWa); clearTimeout(this.viaToast); }
   salva(lay) {
     this.setState({ lay });
+    if (this.solo) return;
     try { window.localStorage.setItem(CHIAVE, JSON.stringify(lay)); } catch (e) {}
   }
   renderVals() {
@@ -662,14 +673,14 @@ class Component extends DCLogic {
     const isAperto = (id) => lay.puntati.includes(id) || lay.aperto === id;
     const chiusi = lay.ordine.filter((id) => !isAperto(id)).map((id) => ({ ...comune(id),
       apri: () => this.salva({ ...lay, aperto: id }) }));
-    const aperti = lay.ordine.filter(isAperto).map((id) => {
+    const aperti = (this.solo && W[this.solo] ? [this.solo] : lay.ordine.filter(isAperto)).map((id) => {
       const p = lay.puntati.includes(id);
       const t = lay.taglia[id] || 3;
       return { ...comune(id), span: String(t), taglia: NOME_TAGLIA[t], haNumeri: !!W[id].numeri, numeri: W[id].numeri || [],
         puntaLabel: p ? 'Togli la puntina' : 'Tieni aperto', pBd: p ? '#0891B2' : 'var(--ln)', pBg: p ? 'var(--acw)' : 'var(--sf)', pFg: p ? '#0891B2' : 'var(--ink3)',
         punta: () => this.salva({ ...lay, puntati: p ? lay.puntati.filter((x) => x !== id) : [...lay.puntati, id], aperto: p ? id : (lay.aperto === id ? null : lay.aperto) }),
         chiudi: () => this.salva({ ...lay, puntati: lay.puntati.filter((x) => x !== id), aperto: lay.aperto === id ? null : lay.aperto }),
-        stacca: () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#' + id, 'next-widget-' + id, 'popup,width=760,height=640'); } catch (e) {} },
+        stacca: () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#solo-' + id, 'next-widget-' + id, 'popup,width=760,height=640'); } catch (e) {} },
         misura: () => this.salva({ ...lay, taglia: { ...lay.taglia, [id]: TAGLIE[(TAGLIE.indexOf(t) + 1) % TAGLIE.length] } }) };
     });
     const persone = [['tutti', 'Tutti'], ['sante', 'Sante'], ['cristina', 'Cristina'], ['roberto', 'Roberto'], ['belloni', 'Belloni']].map(([id, nome]) => ({
@@ -738,12 +749,15 @@ class Component extends DCLogic {
     try { temaV = (this.state && this.state.tema) || window.localStorage.getItem('next-tema') || 'giorno'; } catch (e) {}
     const temaX = { tema: temaV, temaLabel: temaV === 'notte' ? 'Passa al tema di giorno' : 'Passa al tema di notte', temaIcona: temaV === 'notte' ? 'M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4' : 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
       cambiaTema: () => { const n = temaV === 'notte' ? 'giorno' : 'notte'; this.setState({ tema: n }); try { window.localStorage.setItem('next-tema', n); } catch (e) {} } };
-    const staccaPostit = () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#postit', 'next-postit', 'popup,width=520,height=640'); } catch (e) {} };
-    const staccaPosta = () => { try { window.open('https://nextsrl-sim.github.io/area-posta/', 'next-posta', 'popup,width=1280,height=900'); } catch (e) {} };
+    const staccaPostit = () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#solo-postit', 'next-postit', 'popup,width=520,height=640'); } catch (e) {} };
+    const staccaPosta = () => { try { window.open('https://nextsrl-sim.github.io/area-posta/#finestra', 'next-posta', 'popup,width=1280,height=900'); } catch (e) {} };
     const fuoriPagina = (url, nome) => () => { try { window.open(url, 'next-pagina-' + nome, 'popup,width=1320,height=900'); } catch (e) {} };
     const apriFuoriArea = fuoriPagina('https://nextsrl-sim.github.io/area-lavoro/', 'area');
     const apriFuoriPosta = fuoriPagina('https://nextsrl-sim.github.io/area-posta/', 'posta');
-    return { sceltaColore, annullaColore, coloriNuovo, waIn, ...temaX, apriFuoriArea, apriFuoriPosta, staccaPostit, staccaPosta, strumenti, postit, nuovoPostit, allarme, wa, posta, haIntera: !!s.intera, intera: s.intera || {}, chiudiIntera: () => this.setState({ intera: null, risp: null }),
+    const inFinestra = () => { try { window.open('https://nextsrl-sim.github.io/area-lavoro/#finestra', 'next-scheda-area', 'popup,width=1320,height=900'); } catch (e) {} };
+    const clsW = this.solo && this.solo !== 'postit' ? 'solo-tieni' : '';
+    const clsP = this.solo === 'postit' ? 'solo-tieni' : '';
+    return { inFinestra, clsW, clsP, sceltaColore, annullaColore, coloriNuovo, waIn, ...temaX, apriFuoriArea, apriFuoriPosta, staccaPostit, staccaPosta, strumenti, postit, nuovoPostit, allarme, wa, posta, haIntera: !!s.intera, intera: s.intera || {}, chiudiIntera: () => this.setState({ intera: null, risp: null }),
       inRisposta: !!(s.intera && s.risp), risposta: risposta(s.intera, s.risp),
       rispondi: () => this.setState({ risp: 'r' }), rispondiTutti: () => this.setState({ risp: 't' }), inoltra: () => this.setState({ risp: 'i' }), annullaRisposta: () => this.setState({ risp: null }),
       persone, chiusi, aperti, nessunChiuso: chiusi.length === 0, avviso, auto,

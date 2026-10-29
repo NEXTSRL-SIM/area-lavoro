@@ -335,7 +335,7 @@ html.solo .lato,html.finestra .lato{display:none!important}
 <sc-for list="{{w.righe}}" as="r">
 <div class="lato-r" style="opacity: {{r.op}};">
 <span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.pallino}}; margin-top: 5px;"></span>
-<div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;"><span style="font-size: 12.5px; font-weight: 600; text-decoration: {{r.barra}};">{{r.testo}}</span><span style="font-size: 11.5px; color: var(--ink3);">{{r.sub}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;"><span style="font-size: 12.5px; font-weight: 600; text-decoration: {{r.barra}};">{{r.testo}}</span><span style="font-size: 11.5px; color: var(--ink3);">{{r.sub}}</span><sc-if value="{{r.haSposta}}"><label title="Sposta in un’altra scheda" style="position: relative; display: inline-flex; align-items: center; gap: 4px; font: 700 11px Manrope, sans-serif; color: #0891B2; cursor: pointer; margin-top: 2px;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>Sposta in…<select aria-label="Sposta in un’altra scheda" onChange="{{r.sposta}}" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;"><option value="" selected disabled>Sposta in…</option><sc-for list="{{r.spostaOpz}}" as="o"><option value="{{o.id}}">{{o.t}}</option></sc-for></select></label></sc-if></div>
 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; white-space: nowrap;">{{r.val}}</span>
 <button type="button" onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 26px; height: 26px; border-radius: 50%; border: 0; background: {{r.tondo}}; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{r.spessore}}" stroke-linecap="round" stroke-linejoin="round"><path d="{{r.icona}}"></path></svg></button>
 </div>
@@ -475,7 +475,7 @@ html.solo .lato,html.finestra .lato{display:none!important}
 <sc-for list="{{w.righe}}" as="r" hint-placeholder-count="3">
 <div style="display: grid; grid-template-columns: 10px minmax(0, 1fr) auto 104px; gap: 12px; align-items: center; padding: 10px 8px; margin: 0 -8px; border-radius: 8px; background: {{r.sfondo}}; border-bottom: 1px solid var(--ln); opacity: {{r.op}};">
 <span style="width: 10px; height: 10px; border-radius: 50%; background: {{r.pallino}};"></span>
-<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0;"><span style="font-size: 13.5px; font-weight: 600; text-decoration: {{r.barra}}; background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 2px 6px 3px 5px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.testo}}</span><span style="font-size: 12.5px; color: var(--ink2); background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 3px 5px 2px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.sub}}</span></div>
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0;"><span style="font-size: 13.5px; font-weight: 600; text-decoration: {{r.barra}}; background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 2px 6px 3px 5px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.testo}}</span><span style="font-size: 12.5px; color: var(--ink2); background: {{r.marker}}; padding: 0 4px; margin-left: -4px; border-radius: 3px 5px 2px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{r.sub}}</span><sc-if value="{{r.haSposta}}"><label title="Sposta in un’altra scheda" style="position: relative; display: inline-flex; align-items: center; gap: 4px; font: 700 11px Manrope, sans-serif; color: #0891B2; cursor: pointer; margin-top: 2px;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>Sposta in…<select aria-label="Sposta in un’altra scheda" onChange="{{r.sposta}}" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;"><option value="" selected disabled>Sposta in…</option><sc-for list="{{r.spostaOpz}}" as="o"><option value="{{o.id}}">{{o.t}}</option></sc-for></select></label></sc-if></div>
 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px;">{{r.val}}</span>
 <sc-if value="{{r.spunta}}" hint-placeholder-val="{{false}}"><span style="width: 104px; display: flex; justify-content: center;"><button onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 38px; height: 38px; border-radius: 50%; border: 0; background: {{r.tondo}}; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(8, 145, 178, .30);"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{r.spessore}}" stroke-linecap="round" stroke-linejoin="round"><path d="{{r.icona}}"></path></svg></button></span></sc-if><sc-if value="{{r.testo2}}" hint-placeholder-val="{{true}}"><button onClick="{{r.fai}}" style="font: 700 13.5px Manrope, sans-serif; border: 1px solid {{r.bd}}; border-radius: 10px; height: 40px; width: 104px; background: {{r.bg}}; color: {{r.fg}}; cursor: pointer;">{{r.az}}</button></sc-if>
 </div>
@@ -583,7 +583,7 @@ html.solo .lato,html.finestra .lato{display:none!important}
 </div></sc-if>
 
 <div style="padding: 18px 26px 6px; display: flex; flex-direction: column; gap: 14px;">
-<div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;"><h2 style="margin: 0; font-size: 19px; font-weight: 700; line-height: 1.3;">{{intera.oggetto}}</h2><sc-if value="{{intera.haDaFare}}"><button type="button" onClick="{{intera.daFare}}" aria-pressed="{{intera.daFareSi}}" title="{{intera.daFareT}}" style="font: 700 12.5px Manrope, sans-serif; border: 1px solid {{intera.daFareBd}}; border-radius: 10px; height: 32px; padding: 0 11px; margin-left: auto; background: {{intera.daFareBg}}; color: {{intera.daFareFg}}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 7px;"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"></path><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>{{intera.daFareEt}}</button></sc-if></div>
+<div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;"><h2 style="margin: 0; font-size: 19px; font-weight: 700; line-height: 1.3;">{{intera.oggetto}}</h2><sc-if value="{{intera.haDaFare}}"><label title="{{intera.daFareT}}" style="position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font: 700 12.5px Manrope, sans-serif; border: 1px solid {{intera.daFareBd}}; border-radius: 10px; height: 32px; padding: 0 11px; margin-left: auto; background: {{intera.daFareBg}}; color: {{intera.daFareFg}}; cursor: pointer; box-sizing: border-box; min-width: 0;"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto;"><path d="M9 11l3 3 8-8"></path><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{intera.daFareEt}}</span><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto;"><path d="M6 9l6 6 6-6"></path></svg><select aria-label="Metti la mail in una scheda" onChange="{{intera.daFare}}" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;"><option value="" selected disabled>Metti in…</option><sc-for list="{{intera.daFareOpz}}" as="o"><option value="{{o.id}}">{{o.t}}</option></sc-for></select></label></sc-if></div>
 <div style="display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: start;">
 <span style="width: 40px; height: 40px; border-radius: 50%; background: var(--acw); color: #0891B2; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">{{intera.iniziali}}</span>
 <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 12.5px; color: var(--ink2);">
@@ -643,7 +643,7 @@ html.solo .lato,html.finestra .lato{display:none!important}
 <sc-for list="{{w.righe}}" as="r">
 <div class="lato-r" style="opacity: {{r.op}};">
 <span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.pallino}}; margin-top: 5px;"></span>
-<div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;"><span style="font-size: 12.5px; font-weight: 600; text-decoration: {{r.barra}};">{{r.testo}}</span><span style="font-size: 11.5px; color: var(--ink3);">{{r.sub}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;"><span style="font-size: 12.5px; font-weight: 600; text-decoration: {{r.barra}};">{{r.testo}}</span><span style="font-size: 11.5px; color: var(--ink3);">{{r.sub}}</span><sc-if value="{{r.haSposta}}"><label title="Sposta in un’altra scheda" style="position: relative; display: inline-flex; align-items: center; gap: 4px; font: 700 11px Manrope, sans-serif; color: #0891B2; cursor: pointer; margin-top: 2px;"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>Sposta in…<select aria-label="Sposta in un’altra scheda" onChange="{{r.sposta}}" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;"><option value="" selected disabled>Sposta in…</option><sc-for list="{{r.spostaOpz}}" as="o"><option value="{{o.id}}">{{o.t}}</option></sc-for></select></label></sc-if></div>
 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; white-space: nowrap;">{{r.val}}</span>
 <button type="button" onClick="{{r.fai}}" aria-label="{{r.az}}" title="{{r.az}}" class="ciondolo" style="width: 26px; height: 26px; border-radius: 50%; border: 0; background: {{r.tondo}}; color: #FFFFFF; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{r.spessore}}" stroke-linecap="round" stroke-linejoin="round"><path d="{{r.icona}}"></path></svg></button>
 </div>
@@ -900,7 +900,7 @@ class Component extends DCLogic {
     };
     const comune = (id) => {
       const w = W[id];
-      const righe = w.righe.filter((r) => persona === 'tutti' || r.chi === persona).map((r) => ({ ...riga(r), app: APP[id].et, url: APP[id].url }));
+      const righe = [...w.righe, ...attRighe(id)].filter((r) => persona === 'tutti' || r.chi === persona).map((r) => ({ ...riga(r), app: APP[id].et, url: APP[id].url }));
       return { ...w, id, righe, lEt: APP[id].et, lUrl: APP[id].url, lTitolo: APP[id].titolo, vuoto: righe.length === 0, ...conta(righe), piede: w.piede || '',
         drag: (e) => { this.trascina = id; try { e.dataTransfer.setData('text/plain', id); } catch (x) {} setTimeout(() => this.setState({ trascinando: true }), 0); },
         drop: (e) => { if (e && e.preventDefault) e.preventDefault(); sposta(this.trascina, id); this.trascina = null; } };
@@ -1147,19 +1147,25 @@ Component.prototype.waVeroVista = function (s, waS) {
 const euro = (n) => '€ ' + Number(n || 0).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const ggmm = (d) => String(d).slice(8, 10) + '/' + String(d).slice(5, 7);
 const GIORNI = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
-/* le attività da fare nel loro widget: aperte prima, quelle fatte oggi restano grigie fino a domani */
+/* le cose da fare messe a mano (da una mail o spostate): ogni scheda mostra le sue, in coda alle proprie righe.
+   Quelle fatte oggi restano grigie fino a domani. Ognuna si può spostare in un'altra scheda. */
+let ATT_TUTTE = [];
 function attWidget() {
   const oggi = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' });
-  const l = (typeof attLeggi === 'function' ? attLeggi() : []).filter((a) => !a.fatta || String(new Date(a.fatta).toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' })) === oggi);
-  l.sort((a, b) => (a.fatta ? 1 : 0) - (b.fatta ? 1 : 0) || String(b.creata).localeCompare(String(a.creata)));
-  W.att.righe = l.map((a) => {
+  ATT_TUTTE = (typeof attLeggi === 'function' ? attLeggi() : []).filter((a) => !a.fatta || String(new Date(a.fatta).toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' })) === oggi);
+  ATT_TUTTE.sort((a, b) => (a.fatta ? 1 : 0) - (b.fatta ? 1 : 0) || String(b.creata).localeCompare(String(a.creata)));
+  const aperte = ATT_TUTTE.filter((a) => !a.fatta && (a.scheda || 'att') === 'att').length;
+  W.att.righe = [];
+  W.att.piede = aperte ? aperte + (aperte === 1 ? ' attività aperta' : ' attività aperte') + ' · per ora salvate in questo browser' : 'Dalla Posta, «Da fare in…» su una mail la porta qui o nella scheda che scegli';
+}
+function attRighe(id) {
+  return ATT_TUTTE.filter((a) => (a.scheda || 'att') === id).map((a) => {
     const d = new Date(a.creata).toLocaleDateString('it-IT', { timeZone: 'Europe/Rome', day: '2-digit', month: '2-digit' });
     return { id: 'att-' + a.id, chi: a.chi || 'sante', u: 'b', testo: a.testo, fattaGia: !!a.fatta,
       sub: a.mail ? 'dalla mail di ' + (a.mail.mittente || 'mittente') + ' · ' + String(a.mail.casella || '').replace(/^./, (c) => c.toUpperCase()) + ' · ' + d : 'aggiunta il ' + d,
-      val: '', az: 'Fatta', chiudi: () => attSegna(a.id, !a.fatta) };
+      val: '', az: 'Fatta', chiudi: () => attSegna(a.id, !a.fatta),
+      haSposta: true, spostaOpz: attOpzioni(id), sposta: (e) => { const k = e && e.target ? e.target.value : ''; if (k) attSposta(a.id, k); try { e.target.selectedIndex = 0; } catch (x) {} if (window.__attRidisegna) window.__attRidisegna(); } };
   });
-  const aperte = l.filter((a) => !a.fatta).length;
-  W.att.piede = aperte ? aperte + (aperte === 1 ? ' attività aperta' : ' attività aperte') + ' · per ora salvate in questo browser' : 'Nessuna attività aperta: dalla Posta, «Da fare» su una mail la porta qui';
 }
 function sdiApplica(v) {
   const f = v.fatture || [];
@@ -1355,26 +1361,37 @@ const ATT_CHIAVE = 'next-attivita-v1';
 const attLeggi = () => { try { const l = JSON.parse(window.localStorage.getItem(ATT_CHIAVE) || '[]'); return Array.isArray(l) ? l : []; } catch (e) { return []; } };
 const attScrivi = (l) => { try { window.localStorage.setItem(ATT_CHIAVE, JSON.stringify(l.slice(0, 500))); } catch (e) {} };
 const attChi = () => { try { const c = String(window.sessionStorage.getItem('regia_chi') || '').toLowerCase(); for (const p of ['sante', 'cristina', 'roberto', 'belloni']) if (c.includes(p)) return p; } catch (e) {} return 'sante'; };
+/* le schede (widget dell'Area di lavoro) in cui si può mettere una mail o spostare un'attività.
+   Le Fatture allo SDI no: quelle le scrive Odoo da solo. */
+const ATT_SCHEDE = [['att', 'Attività da fare'], ['bon', 'Bonifici da fare'], ['ofo', 'Offerte dei fornitori da confermare'], ['ord', 'Ordini dei clienti da generare'],
+  ['fat', 'Fatture dei fornitori'], ['ric', 'Incassi da attribuire'], ['fot', 'Foto e documenti richiesti'], ['mai', 'Mail che chiedono qualcosa'], ['fir', 'Firma dei contratti'], ['com', 'Il commercialista attende']];
+const attNomeScheda = (id) => (ATT_SCHEDE.find((x) => x[0] === id) || ATT_SCHEDE[0])[1];
 const attDiMail = (chiave) => attLeggi().find((a) => a.mail && a.mail.chiave === chiave && !a.fatta) || null;
 /* la mail (voce della posta vera, o scheda della mail intera) diventa un'attività */
-function attDaMail(v) {
+function attDaMail(v, scheda) {
   if (!v || !v.chiave) return null;
-  const c = attDiMail(v.chiave); if (c) return c;
+  const c = attDiMail(v.chiave); if (c) { if (scheda) attSposta(c.id, scheda); return c; }
   const l = attLeggi();
-  const a = { id: 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), testo: String(v.oggetto || '(senza oggetto)').trim(), chi: attChi(), creata: new Date().toISOString(), fatta: null,
+  const a = { id: 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), testo: String(v.oggetto || '(senza oggetto)').trim(), chi: attChi(), scheda: scheda || 'att', creata: new Date().toISOString(), fatta: null,
     mail: { chiave: v.chiave, casella: String(v.casella || ''), cartella: String(v.cartella || ''), uid: v.uid || null, mittente: String(v.daNome || v.chi || v.da || ''), data: v.iso || null } };
   l.unshift(a); attScrivi(l); return a;
 }
 function attSegna(id, fatta) { const l = attLeggi(); const a = l.find((x) => x.id === id); if (!a) return; a.fatta = fatta ? new Date().toISOString() : null; attScrivi(l); }
+function attSposta(id, scheda) { const l = attLeggi(); const a = l.find((x) => x.id === id); if (!a || !ATT_SCHEDE.some((x) => x[0] === scheda)) return; a.scheda = scheda; attScrivi(l); }
+/* l'elenco per il menu «Sposta in…»: tutte le schede tranne quella dove sta già */
+const attOpzioni = (dove) => ATT_SCHEDE.filter((x) => x[0] !== dove).map(([id, t]) => ({ id, t }));
 function attTogli(id) { attScrivi(attLeggi().filter((x) => x.id !== id)); }
-/* il pulsante sulla mail: «Da fare» oppure «Nelle attività» se c'è già */
+/* il pulsante sulla mail: un menu «Da fare in…» con tutte le schede; se la mail c'è già, dice dove sta */
 Component.prototype.attBottone = function (v) {
   if (!v || !v.vera || !v.chiave) return { haDaFare: false };
   const c = attDiMail(v.chiave);
-  return { haDaFare: true, daFareEt: c ? 'Nelle attività' : 'Da fare', daFareSi: c ? 'true' : 'false',
+  const dove = c ? (c.scheda || 'att') : null;
+  const opz = ATT_SCHEDE.map(([id, t]) => ({ id, t: (id === dove ? '✓ ' : '') + t }));
+  if (c) opz.push({ id: 'via', t: '✕ Togli dalle schede' });
+  return { haDaFare: true, daFareEt: c ? '✓ In: ' + attNomeScheda(dove) : 'Da fare in…', daFareSi: c ? 'true' : 'false', daFareOpz: opz,
     daFareBd: c ? '#16A34A' : '#0891B2', daFareBg: c ? 'var(--grw)' : '#0891B2', daFareFg: c ? '#15803D' : '#FFFFFF',
-    daFareT: c ? 'Questa mail è già un’attività da fare (tocca per toglierla)' : 'Trasforma questa mail in un’attività da fare',
-    daFare: () => { if (c) attTogli(c.id); else attDaMail(v); this.setState({ attT: Date.now() }); } };
+    daFareT: c ? 'Questa mail è già nella scheda «' + attNomeScheda(dove) + '»: scegli un’altra scheda per spostarla, o toglila' : 'Metti questa mail fra le cose da fare: scegli la scheda (Attività, Bonifici, Ordini…)',
+    daFare: (e) => { const k = e && e.target ? e.target.value : ''; if (!k) return; if (k === 'via') { if (c) attTogli(c.id); } else attDaMail(v, k); try { e.target.selectedIndex = 0; } catch (x) {} this.setState({ attT: Date.now() }); } };
 };
 /* le altre pagine aperte (Posta ↔ Area di lavoro) si aggiornano da sole */
 window.addEventListener('storage', (e) => { if (e.key === ATT_CHIAVE && window.__attRidisegna) window.__attRidisegna(); });

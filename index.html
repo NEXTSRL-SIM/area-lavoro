@@ -1255,11 +1255,21 @@ function bonApplica(v) {
     sub: [bonModo(x.modo), 'emessa ' + ggmm(x.data), x.scadenza ? (x.scaduta ? 'scaduta il ' : 'scade il ') + ggmm(x.scadenza) : '', x.esito === 'parziale' ? 'già pagati ' + euro(x.pagato) : ''].filter(Boolean).join(' · '),
     val: euro(x.da_pagare), az: 'Disposto' });
   const anom = (v.anomalie || []).map((a, i) => ({ id: 'bon-an-' + i + '-' + a.rif, chi: 'sante', u: 'b', testo: a.fornitore + ' · ' + (a.rif ? 'fattura ' + a.rif : ''), sub: a.tipo, val: a.importo ? euro(a.importo) : '', az: 'Vedi' }));
-  W.bon.righe = [...dp.map((x) => riga(x, x.scaduta ? 'r' : 'g')), ...poi.map((x) => riga(x, 'v')), ...anom];
+  /* PORTALE NEXT-113 (Sante 02/11): rimborsi delle spese anticipate fatti con Odoo Spese, controllati sull'estratto conto */
+  const rb = v.rimborsi || {};
+  const rimb = [
+    ...(rb.note || []).filter((n) => n.stato !== 'rimborsata').map((n) => ({ id: 'bon-ns-' + n.id, chi: 'sante', u: n.stato === 'da_rimborsare' ? 'g' : 'v', url: n.url || null,
+      testo: 'Rimborso a ' + n.persona + ' · nota spese ' + n.nome, sub: n.stato === 'da_approvare' ? 'nota ancora da approvare in Odoo Spese' : 'nessun bonifico di rimborso in banca · ' + n.voci + (n.voci === 1 ? ' spesa' : ' spese'), val: euro(n.totale), az: 'Apri' })),
+    ...(rb.sciolte || []).map((e) => ({ id: 'bon-sc-' + e.id, chi: 'sante', u: 'v', testo: e.cosa + ' · scontrino di ' + e.persona,
+      sub: 'del ' + ggmm(e.data) + ' · in Odoo Spese ma non ancora in una nota spese: da mettere in nota per rimborsarlo', val: euro(e.importo), az: 'Fatta' })),
+    ...(rb.note || []).filter((n) => n.stato === 'rimborsata' && n.odoo_non_allineato).map((n) => ({ id: 'bon-nr-' + n.id, chi: 'sante', u: 'b', url: n.url || null,
+      testo: 'Nota spese ' + n.nome + ' · riconciliazione non allineata', sub: 'rimborsata in banca il ' + ggmm(n.bonifico.data) + ' (' + euro(n.bonifico.importo) + '), in Odoo risulta ancora da pagare', val: '', az: 'Apri' })),
+  ];
+  W.bon.righe = [...dp.map((x) => riga(x, x.scaduta ? 'r' : 'g')), ...poi.map((x) => riga(x, 'v')), ...rimb, ...anom];
   W.bon.flusso = 'Fattura del fornitore → bonifico → sparisce quando lo vede l’estratto conto';
   const t = v.totali || {};
   W.bon.numeri = [{ et: 'Da pagare', val: euro(t.da_pagare), col: 'var(--ink)' }, { et: 'Fatture', val: String(dp.length), col: dp.some((x) => x.scaduta) ? '#B91C1C' : '#15803D' }, { et: 'Più avanti', val: euro(t.in_scadenza_oltre_7gg), col: '#15803D' }];
-  W.bon.piede = 'Verifica sull’estratto conto UniCredit delle ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' }) + ' del ' + ggmm(String(v.letto_alle).slice(0, 10)) + ' · prossima verifica ' + (() => { const h = Number(new Date().toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' }).replace(':', '.')); return h < 9.55 ? 'alle 9:55' : h < 21.55 ? 'alle 21:55' : 'domani alle 9:55'; })() + ' (la banca scarica alle 9:40 e alle 21:40)' + ' · fuori dall’elenco: spese anticipate e rimborsate, carte, avvisi di parcella, fatture di oltre 6 mesi' + ((v.escluse || []).length ? ' · ' + v.escluse.length + ' escluse (le hai dette tu o i documenti)' : '');
+  W.bon.piede = 'Verifica sull’estratto conto UniCredit delle ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' }) + ' del ' + ggmm(String(v.letto_alle).slice(0, 10)) + ' · prossima verifica ' + (() => { const h = Number(new Date().toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' }).replace(':', '.')); return h < 9.55 ? 'alle 9:55' : h < 21.55 ? 'alle 21:55' : 'domani alle 9:55'; })() + ' (la banca scarica alle 9:40 e alle 21:40)' + ' · rimborsi: note di Odoo Spese controllate sull’estratto conto · fuori dall’elenco: spese anticipate e rimborsate, carte, avvisi di parcella, fatture di oltre 6 mesi' + ((v.escluse || []).length ? ' · ' + v.escluse.length + ' escluse (le hai dette tu o i documenti)' : '');
 }
 function ofoApplica(v) {
   const r = v.righe || [];

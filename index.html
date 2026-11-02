@@ -375,6 +375,11 @@ html.solo .lato,html.finestra .lato{display:none!important}
 </div>
 </header>
 
+<div class="v-tieni" style="position: sticky; top: 0; z-index: 25; margin: -6px -30px 0; padding: 8px 30px; background: var(--sf2); display: flex; align-items: center; gap: 10px;">
+<label style="flex: 1 1 auto; display: flex; align-items: center; gap: 8px; height: 40px; border: 1px solid var(--ln); border-radius: 10px; padding: 0 10px; background: var(--sf); box-shadow: 0 2px 8px rgba(15, 23, 42, .06);"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg><input id="al-cerca" type="search" aria-label="Cerca in tutta l’area di lavoro" onInput="{{cercaG.scrivi}}" onKeyDown="{{cercaG.tasto}}" placeholder="Cerca in tutti i widget: cliente, fornitore, numero, importo…" autocomplete="off" style="flex-grow: 1; min-width: 0; border: 0; outline: none; font: 400 14px Manrope, sans-serif; color: var(--ink); background: transparent;"><sc-if value="{{cercaG.attivo}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 700; color: var(--ink3); white-space: nowrap;">{{cercaG.esito}}</span><button onClick="{{cercaG.pulisci}}" aria-label="Cancella la ricerca" title="Cancella la ricerca (Esc)" style="width: 26px; height: 26px; border: 0; border-radius: 6px; background: var(--ln); color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></sc-if></label>
+</div>
+<sc-if value="{{cercaG.vuoto}}" hint-placeholder-val="{{false}}"><p style="margin: 0; font-size: 14px; color: var(--ink3);">Nessuna riga contiene quello che cerchi.</p></sc-if>
+
 <sc-if value="{{allarme.c}}" hint-placeholder-val="{{true}}">
 <section role="alert" aria-label="Allarme fatture" style="display: flex; align-items: center; gap: 12px; background: var(--rdw); border: 1px solid var(--rdw); border-left: 3px solid #E9A8A8; border-radius: 12px; padding: 10px 14px;">
 <span style="flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; background: var(--sf); color: #B91C1C; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 20h20z"></path><path d="M12 10v4M12 17h.01"></path></svg></span>
@@ -880,6 +885,12 @@ class Component extends DCLogic {
     const lay = lay2.ordine.includes('rcn') ? lay2 : (() => { const o = [...lay2.ordine]; const i = o.indexOf('rim'); o.splice(i < 0 ? o.length : i + 1, 0, 'rcn'); return { ...lay2, ordine: o, puntati: [...lay2.puntati, 'rcn'], taglia: { rcn: 3, ...(lay2.taglia || {}) } }; })();
     attWidget(s.attT);
     const persona = s.persona || 'tutti';
+    /* PORTALE NEXT-113 (Sante 03/11): cerca generale, sempre visibile in alto come nella posta. Cerca in tutte le righe
+       di tutti i widget (testo, sotto-riga, importo); con la ricerca si vedono solo i widget che trovano qualcosa. */
+    const piega = (x) => String(x == null ? '' : x).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const cq = piega(s.cercaG || '').trim();
+    const cParole = cq ? cq.split(/\s+/) : [];
+    const trova = (r, id) => { if (!cParole.length) return true; const t = piega([r.testo, r.sub, r.val, r.chi].join(' ')); return cParole.every((w) => t.includes(w)); };
     const fatti = s.fatti || [];
     const ai = s.ai || 0;
     const modi = s.modi || {};
@@ -938,7 +949,7 @@ class Component extends DCLogic {
     const comune = (id) => {
       const w = W[id];
       const ieri = Date.now() - 20 * 3600e3;
-      const righe = [...w.righe, ...(id !== 'att' ? (ATT_SRV_ALTRE[id] || []) : []), ...attRighe(id)].filter((r) => persona === 'tutti' || r.chi === persona)
+      const righe = [...w.righe, ...(id !== 'att' ? (ATT_SRV_ALTRE[id] || []) : []), ...attRighe(id)].filter((r) => persona === 'tutti' || r.chi === persona).filter((r) => trova(r, id))
         .filter((r) => { const st = stati[r.id]; return !(st && st.stato === 'fatta' && !r.chiudi && new Date(st.at).getTime() < ieri && Date.now() - new Date(st.at).getTime() <= 7 * 864e5); })
         .map((r) => ({ ...riga(r), app: APP[id].et }))
         .map((r, i) => ({ r, i })).sort((a, b) => (a.r.ordineAttesa - b.r.ordineAttesa) || (a.i - b.i)).map((x) => x.r);
@@ -982,7 +993,7 @@ class Component extends DCLogic {
     };
     const chiusi = lay.ordine.filter((id) => !isAperto(id) && !inLato(id)).map((id) => ({ ...comune(id),
       apri: () => this.salva({ ...lay, aperto: id }) }));
-    const aperti = (this.solo && W[this.solo] ? [this.solo] : lay.ordine.filter(isAperto)).map((id) => {
+    const aperti = (this.solo && W[this.solo] ? [this.solo] : cParole.length ? lay.ordine.filter((id) => W[id] && !inLato(id) && comune(id).righe.length) : lay.ordine.filter(isAperto)).map((id) => {
       const p = lay.puntati.includes(id);
       const t = lay.taglia[id] || 3;
       return { ...comune(id), span: String(t), taglia: NOME_TAGLIA[t], haNumeri: !!W[id].numeri, numeri: W[id].numeri || [],
@@ -1095,6 +1106,11 @@ class Component extends DCLogic {
       inRisposta: !!(s.intera && s.risp), risposta: risposta(s.intera, s.risp),
       rispondi: () => this.setState({ risp: 'r' }), rispondiTutti: () => this.setState({ risp: 't' }), inoltra: () => this.setState({ risp: 'i' }), annullaRisposta: () => this.setState({ risp: null }),
       latoSx: barra('sx'), latoDx: barra('dx'),
+      cercaG: { attivo: !!cParole.length, vuoto: !!cParole.length && !aperti.length,
+        esito: cParole.length ? (aperti.length ? (() => { const n = aperti.reduce((t, w) => t + w.righe.length, 0); return n + (n === 1 ? ' riga' : ' righe') + ' in ' + aperti.length + ' widget'; })() : 'nessuna riga') : '',
+        scrivi: (e) => { const v = e && e.target ? e.target.value : ''; clearTimeout(this.tCerca); this.tCerca = setTimeout(() => this.setState({ cercaG: v }), 120); },
+        tasto: (e) => { if (e && e.key === 'Escape') { e.target.value = ''; this.setState({ cercaG: '' }); } },
+        pulisci: () => { const el = document.getElementById('al-cerca'); if (el) { el.value = ''; el.focus(); } this.setState({ cercaG: '' }); } },
       persone, chiusi, aperti, nessunChiuso: chiusi.length === 0, avviso, auto,
       sopra: (e) => { if (e && e.preventDefault) e.preventDefault(); },
       confermaRip: !!s.confermaRip, confermaRipTxt: s.confermaRip ? 'true' : 'false',

@@ -889,6 +889,8 @@ class Component extends DCLogic {
     if (s.bonVero) bonApplica(s.bonVero);
     if (s.ofoVero) ofoApplica(s.ofoVero);
     if (s.ordVero) ordApplica(s.ordVero);
+    if (s.attVero) attApplica(s.attVero);
+    if (s.fotVero) fotApplica(s.fotVero);
     const riga = (r) => {
       const f = fatti.includes(r.id) || !!r.fattaGia;
       return { ...r, val: r.val || '', sfondo: 'transparent', marker: !f && r.evid ? 'linear-gradient(100deg, rgba(244, 114, 114, 0) 0%, rgba(244, 114, 114, .30) 3%, rgba(244, 114, 114, .24) 70%, rgba(244, 114, 114, .30) 97%, rgba(244, 114, 114, 0) 100%)' : 'transparent', pallino: f ? '#CBD5E1' : U[r.u], op: f ? '0.5' : '1', barra: f ? 'line-through' : 'none',
@@ -1213,6 +1215,33 @@ function sdiAllarme(v) {
    e le fatture da non pagare li ha detti Sante (fornitori_pagamento, bonifici_esclusioni). «Disposto» è solo un promemoria:
    la riga sparisce da sola quando il bonifico compare in banca (lettura due volte al giorno, dopo lo scarico delle 9:40 e 21:40). */
 const bonModo = (m) => m === 'anticipato' ? 'pagamento anticipato: il lavoro parte dopo il bonifico' : m === 'a_scadenza' ? 'si paga alla scadenza scritta in fattura' : m === 'a_posteriori' ? 'fattura a lavoro fatto' : '';
+/* PORTALE NEXT-113 — Attività da fare dalla tabella attivita (uguali per tutti, non piu' solo nel browser) e
+   Foto e documenti: cosa manca del fine lavori, pratica per pratica, con a chi chiederlo (regola #4107: il coordinatore se c'e'). */
+const ATT_SRV_FATTE = new Set();
+function attApplica(v) {
+  const r = (v.righe || []).filter((a) => (a.scheda || 'att') === 'att');
+  const srv = r.map((a) => { const fatta = a.stato === 'fatta' || ATT_SRV_FATTE.has(a.id);
+    return { id: 'atts-' + a.id, chi: a.chi || 'sante', u: a.priorita === 'alta' ? 'r' : 'g', evid: a.priorita === 'alta' && !fatta, testo: a.testo, fattaGia: fatta,
+      sub: [a.nota || '', 'aggiunta il ' + ggmm(String(a.creata_at).slice(0, 10))].filter(Boolean).join(' · '), val: '', az: 'Fatta',
+      chiudi: () => { const ora = !fatta; if (ora) ATT_SRV_FATTE.add(a.id); else ATT_SRV_FATTE.delete(a.id);
+        fetch('https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-schede', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: window.__alPass, att_fatta: a.id, fatta: ora }) })
+          .then(() => { if (window.__alRicarica) window.__alRicarica(); }).catch(() => {}); } }; });
+  W.att.righe = [...srv, ...(W.att.righe || [])];
+  const aperte = srv.filter((x) => !x.fattaGia).length + ATT_TUTTE.filter((a) => !a.fatta && (a.scheda || 'att') === 'att').length;
+  W.att.flusso = 'Le cose da fare, uguali per tutti → la fai → spunta';
+  W.att.piede = aperte ? aperte + (aperte === 1 ? ' attività aperta' : ' attività aperte') : 'Niente da fare';
+}
+function fotApplica(v) {
+  const r = v.righe || [];
+  W.fot.righe = r.map((x) => ({ id: 'fot-' + x.practice_id, chi: 'sante', u: x.manca_dico ? 'r' : 'g',
+    testo: x.cliente + ' · manca ' + x.manca.join(', '),
+    sub: [x.installatore ? 'installa ' + x.installatore : '', x.coordinatore ? 'si chiede a ' + x.coordinatore + ' (coordinatore)' : 'si chiede all’installatore'].filter(Boolean).join(' · '),
+    val: '', az: 'Sollecita' }));
+  const chi = {}; for (const x of r) chi[x.chiedere_a] = (chi[x.chiedere_a] || 0) + 1;
+  W.fot.flusso = 'Lavoro finito → DiCo, matricole, autotest, foto → si chiedono a chi coordina o installa';
+  W.fot.numeri = Object.entries(chi).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([k, n]) => ({ et: (String(k).split(' ')[0].length <= 2 ? String(k).split(' ')[0] : String(k).split(' ')[0].charAt(0) + String(k).split(' ')[0].slice(1).toLowerCase()), val: String(n), col: 'var(--ink)' }));
+  W.fot.piede = r.length ? r.length + ' pratiche finite con documenti mancanti · contano solo i lavori già fatti (almeno un documento di fine lavori in archivio)' : 'Tutte le pratiche finite hanno i loro documenti';
+}
 function bonApplica(v) {
   const r = v.righe || [];
   const dp = r.filter((x) => x.gruppo === 'da_pagare').sort((a, b) => (b.scaduta ? 1 : 0) - (a.scaduta ? 1 : 0) || String(a.scadenza || a.data).localeCompare(String(b.scadenza || b.data)));
@@ -1253,7 +1282,8 @@ Component.prototype.datiAvvia = function () {
   const leggi = async () => {
     try { const j = await (await fetch('https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-dati?sdi=1&t=' + encodeURIComponent(pass))).json(); if (j && j.ok) this.setState({ sdiVero: j }); } catch (e) {}
     const SCH = 'https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-schede?t=' + encodeURIComponent(pass);
-    for (const [q, k] of [['bon', 'bonVero'], ['ofo', 'ofoVero'], ['ord', 'ordVero']]) { try { const j = await (await fetch(SCH + '&' + q + '=1')).json(); if (j && j.ok) this.setState({ [k]: j }); } catch (e) {} }
+    window.__alPass = pass; window.__alRicarica = leggi;
+    for (const [q, k] of [['bon', 'bonVero'], ['ofo', 'ofoVero'], ['ord', 'ordVero'], ['att', 'attVero'], ['fot', 'fotVero']]) { try { const j = await (await fetch(SCH + '&' + q + '=1')).json(); if (j && j.ok) this.setState({ [k]: j }); } catch (e) {} }
   };
   leggi(); this.giroDati = setInterval(leggi, 300000); let ultima = Date.now(); const forse = () => { if (Date.now() - ultima > 60000) { ultima = Date.now(); leggi(); } }; window.addEventListener('focus', forse); document.addEventListener('visibilitychange', () => { if (!document.hidden) forse(); }); let attesaRt = null; const presto = () => { clearTimeout(attesaRt); attesaRt = setTimeout(leggi, 2000); }; const inAscolto = () => { try { const c = window.supabase.createClient('https://pnxhthrheqeucoisifjw.supabase.co', 'sb_publishable_krNaDAk8GFjvuZ-UGcBwtA_tDg-Fn4N'); this.canale = c.channel('area-lavoro').on('broadcast', { event: 'sdi' }, presto).subscribe(); } catch (e) {} }; if (window.supabase && window.supabase.createClient) inAscolto(); else { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; sc.onload = inAscolto; document.head.appendChild(sc); }
 };

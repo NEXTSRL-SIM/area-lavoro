@@ -1298,9 +1298,9 @@ function bonApplica(v) {
   const dp = r.filter((x) => x.gruppo === 'da_pagare').sort((a, b) => (b.scaduta ? 1 : 0) - (a.scaduta ? 1 : 0) || String(a.scadenza || a.data).localeCompare(String(b.scadenza || b.data)));
   const poi = r.filter((x) => x.gruppo === 'in_scadenza');
   const riga = (x, u) => ({ id: 'bon-' + x.partner_id + '-' + x.rif, chi: 'sante', u, url: x.url || null, evid: x.scaduta && x.modo === 'anticipato',
-    testo: x.fornitore + ' · fattura ' + x.rif + (x.cliente ? ' · cliente ' + x.cliente : '') + (x.bozza ? ' · ancora in bozza in Odoo' : ''),
+    testo: x.fornitore + ' · fattura ' + x.rif + (x.cliente ? ' · cliente ' + x.cliente : x.riferimento ? ' · ' + x.riferimento : '') + (x.bozza ? ' · ancora in bozza in Odoo' : ''),
     /* PORTALE NEXT-113 (Sante 02/11): di ogni fattura si dice a cosa si riferisce: il cliente e il testo della fattura */
-    sub: [x.oggetto ? (x.oggetto.length > 120 ? x.oggetto.slice(0, 118) + '…' : x.oggetto) : (x.cliente ? '' : 'la fattura non dice a che cliente si riferisce'), bonModo(x.modo), 'emessa ' + ggmm(x.data), x.scadenza ? (x.scaduta ? 'scaduta il ' : 'scade il ') + ggmm(x.scadenza) : '', x.esito === 'parziale' ? 'già pagati ' + euro(x.pagato) : ''].filter(Boolean).join(' · '),
+    sub: [x.oggetto ? (x.oggetto.length > 120 ? x.oggetto.slice(0, 118) + '…' : x.oggetto) : (x.cliente || x.riferimento ? '' : 'la fattura non dice a cosa si riferisce'), bonModo(x.modo), 'emessa ' + ggmm(x.data), x.scadenza ? (x.scaduta ? 'scaduta il ' : 'scade il ') + ggmm(x.scadenza) : '', x.esito === 'parziale' ? 'già pagati ' + euro(x.pagato) : ''].filter(Boolean).join(' · '),
     val: euro(x.da_pagare), az: 'Disposto' });
   const anom = (v.anomalie || []).map((a, i) => ({ id: 'bon-an-' + i + '-' + a.rif, chi: 'sante', u: 'b', testo: a.fornitore + ' · ' + (a.rif ? 'fattura ' + a.rif : ''), sub: a.tipo, val: a.importo ? euro(a.importo) : '', az: 'Vedi' }));
   let filtro = 'scaduti'; try { filtro = window.localStorage.getItem('al_bon_filtro') || 'scaduti'; } catch (e) {}

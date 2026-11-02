@@ -356,7 +356,7 @@ html.solo .lato,html.finestra .lato{display:none!important}
 
 <header class="{{clsP}} v-tieni" style="display: flex; flex-wrap: nowrap; align-items: center; gap: 0;">
 <div style="display: flex; flex-direction: column; gap: 4px;">
-<span style="font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3);">Mercoledì 28 ottobre · dati di esempio</span>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3);">{{intestaData}}<span style="font-weight: 600; letter-spacing: .02em; text-transform: none; margin-left: 10px; color: var(--ink3);">{{intestaAgg}}</span></span>
 <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.01em;">Area di lavoro</h1>
 </div>
 <section aria-label="Post-it" class="{{clsP}} postit-testa" style="display: flex; flex-direction: row; align-items: center; gap: 8px; flex: 0 0 auto; margin-left: auto; order: 2;">
@@ -1051,7 +1051,11 @@ class Component extends DCLogic {
     const pNumero = String((lay.postit || INIZIALE.postit).length);
     /* un browser normale, con la barra: dall'app installata si apre fuori dall'app (Google) */
     const apriBrowser = () => { try { window.open('https://www.google.com/', '_blank', 'noopener'); } catch (e) {} };
-    return { apriBrowser, pAperti, chiudiPostit, apriPostit, pNumero, pApertiTxt: pAperti ? 'true' : 'false', pTitolo: pAperti ? 'Richiudi i post-it' : 'Apri i post-it', pFreccia: pAperti ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6', vistaCls, viste, inFinestra, clsW, clsP, clsA, sceltaColore, annullaColore, coloriNuovo, waIn, ...temaX, apriFuoriArea, apriFuoriPosta, staccaPostit, staccaPosta, strumenti, postit, nuovoPostit, allarme, wa, posta, haIntera: !!s.intera, intera: s.intera ? { ...s.intera, ...this.attBottone(s.intera) } : {}, chiudiIntera: () => this.setState({ intera: null, risp: null }),
+    const oraT = (t) => new Date(t).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
+    const adesso = new Date(s.ora || Date.now());
+    const intestaData = adesso.toLocaleDateString('it-IT', { timeZone: 'Europe/Rome', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + ' · ore ' + oraT(adesso);
+    const intestaAgg = s.lettoAlle ? 'dati aggiornati alle ' + oraT(s.lettoAlle) + ' · prossimo aggiornamento alle ' + oraT(s.lettoAlle + 300000) : 'sto leggendo i dati…';
+    return { intestaData, intestaAgg, apriBrowser, pAperti, chiudiPostit, apriPostit, pNumero, pApertiTxt: pAperti ? 'true' : 'false', pTitolo: pAperti ? 'Richiudi i post-it' : 'Apri i post-it', pFreccia: pAperti ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6', vistaCls, viste, inFinestra, clsW, clsP, clsA, sceltaColore, annullaColore, coloriNuovo, waIn, ...temaX, apriFuoriArea, apriFuoriPosta, staccaPostit, staccaPosta, strumenti, postit, nuovoPostit, allarme, wa, posta, haIntera: !!s.intera, intera: s.intera ? { ...s.intera, ...this.attBottone(s.intera) } : {}, chiudiIntera: () => this.setState({ intera: null, risp: null }),
       inRisposta: !!(s.intera && s.risp), risposta: risposta(s.intera, s.risp),
       rispondi: () => this.setState({ risp: 'r' }), rispondiTutti: () => this.setState({ risp: 't' }), inoltra: () => this.setState({ risp: 'i' }), annullaRisposta: () => this.setState({ risp: null }),
       latoSx: barra('sx'), latoDx: barra('dx'),
@@ -1229,7 +1233,7 @@ function attApplica(v) {
   W.att.righe = [...srv, ...(W.att.righe || [])];
   const aperte = srv.filter((x) => !x.fattaGia).length + ATT_TUTTE.filter((a) => !a.fatta && (a.scheda || 'att') === 'att').length;
   W.att.flusso = 'Le cose da fare, uguali per tutti → la fai → spunta';
-  W.att.piede = aperte ? aperte + (aperte === 1 ? ' attività aperta' : ' attività aperte') : 'Niente da fare';
+  W.att.piede = (aperte ? aperte + (aperte === 1 ? ' attività aperta' : ' attività aperte') : 'Niente da fare') + ' · aggiornato alle ' + new Date(v.riletto_alle || v.letto_alle || Date.now()).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 }
 function fotApplica(v) {
   const r = v.righe || [];
@@ -1240,7 +1244,7 @@ function fotApplica(v) {
   const chi = {}; for (const x of r) chi[x.chiedere_a] = (chi[x.chiedere_a] || 0) + 1;
   W.fot.flusso = 'Lavoro finito → DiCo, matricole, autotest, foto → si chiedono a chi coordina o installa';
   W.fot.numeri = Object.entries(chi).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([k, n]) => ({ et: (String(k).split(' ')[0].length <= 2 ? String(k).split(' ')[0] : String(k).split(' ')[0].charAt(0) + String(k).split(' ')[0].slice(1).toLowerCase()), val: String(n), col: 'var(--ink)' }));
-  W.fot.piede = r.length ? r.length + ' pratiche finite con documenti mancanti · contano solo i lavori già fatti (almeno un documento di fine lavori in archivio)' : 'Tutte le pratiche finite hanno i loro documenti';
+  W.fot.piede = (r.length ? r.length + ' pratiche finite con documenti mancanti · contano solo i lavori già fatti (almeno un documento di fine lavori in archivio)' : 'Tutte le pratiche finite hanno i loro documenti') + ' · aggiornato alle ' + new Date(v.riletto_alle || v.letto_alle || Date.now()).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 }
 function bonApplica(v) {
   const r = v.righe || [];
@@ -1255,7 +1259,7 @@ function bonApplica(v) {
   W.bon.flusso = 'Fattura del fornitore → bonifico → sparisce quando lo vede l’estratto conto';
   const t = v.totali || {};
   W.bon.numeri = [{ et: 'Da pagare', val: euro(t.da_pagare), col: 'var(--ink)' }, { et: 'Fatture', val: String(dp.length), col: dp.some((x) => x.scaduta) ? '#B91C1C' : '#15803D' }, { et: 'Più avanti', val: euro(t.in_scadenza_oltre_7gg), col: '#15803D' }];
-  W.bon.piede = 'Estratto conto UniCredit letto alle ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' del ' + ggmm(String(v.letto_alle).slice(0, 10)) + ' · fuori dall’elenco: spese anticipate e rimborsate, carte, avvisi di parcella, fatture di oltre 6 mesi' + ((v.escluse || []).length ? ' · ' + v.escluse.length + ' escluse (le hai dette tu o i documenti)' : '');
+  W.bon.piede = 'Verifica sull’estratto conto UniCredit delle ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' }) + ' del ' + ggmm(String(v.letto_alle).slice(0, 10)) + ' · prossima verifica ' + (() => { const h = Number(new Date().toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' }).replace(':', '.')); return h < 9.55 ? 'alle 9:55' : h < 21.55 ? 'alle 21:55' : 'domani alle 9:55'; })() + ' (la banca scarica alle 9:40 e alle 21:40)' + ' · fuori dall’elenco: spese anticipate e rimborsate, carte, avvisi di parcella, fatture di oltre 6 mesi' + ((v.escluse || []).length ? ' · ' + v.escluse.length + ' escluse (le hai dette tu o i documenti)' : '');
 }
 function ofoApplica(v) {
   const r = v.righe || [];
@@ -1264,7 +1268,7 @@ function ofoApplica(v) {
     sub: [x.cantiere ? String(x.cantiere).slice(0, 70) : '', 'del ' + ggmm(x.data), x.giorni_fermo ? 'ferma da ' + x.giorni_fermo + ' giorni' : '', x.ordine_odoo ? 'ordine ' + x.ordine_odoo : 'senza ordine in Odoo'].filter(Boolean).join(' · '),
     val: x.totale ? euro(x.totale) : '', az: x.url_ordine ? 'Apri' : 'Fatta' }));
   W.ofo.flusso = 'Offerta del fornitore → la confermi tu → diventa ordine · ultimi 45 giorni';
-  W.ofo.piede = r.length ? r.length + (r.length === 1 ? ' offerta da confermare' : ' offerte da confermare') : 'Nessuna offerta in attesa';
+  W.ofo.piede = (r.length ? r.length + (r.length === 1 ? ' offerta da confermare' : ' offerte da confermare') : 'Nessuna offerta in attesa') + ' · aggiornato alle ' + new Date(v.riletto_alle || v.letto_alle || Date.now()).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 }
 function ordApplica(v) {
   const r = v.righe || [];
@@ -1273,7 +1277,7 @@ function ordApplica(v) {
     sub: ['firmato il ' + ggmm(String(x.contract_signed_at || x.data_firma_documento || '').slice(0, 10)), x.tipologia_cliente || '', 'nessun ordine di vendita in Odoo'].filter(Boolean).join(' · '),
     val: x.totale_contratto_eur ? euro(x.totale_contratto_eur) : '', az: 'Apri' }));
   W.ord.flusso = 'Contratto firmato → ordine di vendita in Odoo · per ora lo generi tu';
-  W.ord.piede = r.length ? r.length + (r.length === 1 ? ' pratica firmata senza ordine' : ' pratiche firmate senza ordine') : 'Tutti i contratti hanno il loro ordine';
+  W.ord.piede = (r.length ? r.length + (r.length === 1 ? ' pratica firmata senza ordine' : ' pratiche firmate senza ordine') : 'Tutti i contratti hanno il loro ordine') + ' · aggiornato alle ' + new Date(v.riletto_alle || v.letto_alle || Date.now()).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 }
 Component.prototype.datiAvvia = function () {
   let pass = null;
@@ -1283,8 +1287,10 @@ Component.prototype.datiAvvia = function () {
     try { const j = await (await fetch('https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-dati?sdi=1&t=' + encodeURIComponent(pass))).json(); if (j && j.ok) this.setState({ sdiVero: j }); } catch (e) {}
     const SCH = 'https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-schede?t=' + encodeURIComponent(pass);
     window.__alPass = pass; window.__alRicarica = leggi;
-    for (const [q, k] of [['bon', 'bonVero'], ['ofo', 'ofoVero'], ['ord', 'ordVero'], ['att', 'attVero'], ['fot', 'fotVero']]) { try { const j = await (await fetch(SCH + '&' + q + '=1')).json(); if (j && j.ok) this.setState({ [k]: j }); } catch (e) {} }
+    for (const [q, k] of [['bon', 'bonVero'], ['ofo', 'ofoVero'], ['ord', 'ordVero'], ['att', 'attVero'], ['fot', 'fotVero']]) { try { const j = await (await fetch(SCH + '&' + q + '=1')).json(); if (j && j.ok) this.setState({ [k]: { ...j, riletto_alle: Date.now() } }); } catch (e) {} }
+    this.setState({ lettoAlle: Date.now() });
   };
+  this.orologio = setInterval(() => this.setState({ ora: Date.now() }), 30000);
   leggi(); this.giroDati = setInterval(leggi, 300000); let ultima = Date.now(); const forse = () => { if (Date.now() - ultima > 60000) { ultima = Date.now(); leggi(); } }; window.addEventListener('focus', forse); document.addEventListener('visibilitychange', () => { if (!document.hidden) forse(); }); let attesaRt = null; const presto = () => { clearTimeout(attesaRt); attesaRt = setTimeout(leggi, 2000); }; const inAscolto = () => { try { const c = window.supabase.createClient('https://pnxhthrheqeucoisifjw.supabase.co', 'sb_publishable_krNaDAk8GFjvuZ-UGcBwtA_tDg-Fn4N'); this.canale = c.channel('area-lavoro').on('broadcast', { event: 'sdi' }, presto).subscribe(); } catch (e) {} }; if (window.supabase && window.supabase.createClient) inAscolto(); else { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; sc.onload = inAscolto; document.head.appendChild(sc); }
 };
 /* PORTALE NEXT-102 — la posta vera nell'Area di lavoro.

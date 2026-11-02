@@ -1286,11 +1286,11 @@ function rimApplica(v) {
       sub: [aperte.length ? aperte.length + (aperte.length === 1 ? ' nota da rimborsare' : ' note da rimborsare') : 'nessuna nota da rimborsare', sp.length ? sp.length + (sp.length === 1 ? ' scontrino fuori nota' : ' scontrini fuori nota') + ' (' + euro(tS) + ')' : '', fatte.length ? 'ultimo rimborso ' + ggmm(fatte[0].bonifico.data) + ' · ' + euro(fatte[0].bonifico.importo) : ''].filter(Boolean).join(' · '),
       val: euro(tA), az: 'Apri' });
     for (const n of aperte) righe.push({ id: 'rim-n-' + n.id, chi: 'sante', u: n.stato === 'da_rimborsare' ? 'g' : 'v', url: n.url || null,
-      testo: '↳ nota spese ' + n.nome, sub: (n.stato === 'da_approvare' ? 'da approvare in Odoo Spese' : 'nessun bonifico di rimborso in banca') + ' · ' + n.voci + (n.voci === 1 ? ' spesa' : ' spese'), val: euro(n.totale), az: 'Apri' });
+      testo: '\u2003\u2003↳ nota spese ' + n.nome, sub: '\u2003\u2003\u2003\u2003' + (n.stato === 'da_approvare' ? 'da approvare in Odoo Spese' : 'nessun bonifico di rimborso in banca') + ' · ' + n.voci + (n.voci === 1 ? ' spesa' : ' spese'), val: euro(n.totale), az: 'Apri' });
     for (const e of sp) righe.push({ id: 'rim-s-' + e.id, chi: 'sante', u: 'v', url: null,
-      testo: '↳ ' + e.cosa, sub: 'scontrino del ' + ggmm(e.data) + ' · da mettere in una nota spese per rimborsarlo', val: euro(e.importo), az: 'Fatta' });
+      testo: '\u2003\u2003↳ ' + e.cosa, sub: '\u2003\u2003\u2003\u2003scontrino del ' + ggmm(e.data) + ' · da mettere in una nota spese per rimborsarlo', val: euro(e.importo), az: 'Fatta' });
     for (const n of nonAll) righe.push({ id: 'rim-r-' + n.id, chi: 'sante', u: 'b', url: n.url || null,
-      testo: '↳ nota spese ' + n.nome + ' · riconciliazione non allineata', sub: 'rimborsata in banca il ' + ggmm(n.bonifico.data) + ' (' + euro(n.bonifico.importo) + '), in Odoo risulta ancora da pagare', val: '', az: 'Apri' });
+      testo: '\u2003\u2003↳ nota spese ' + n.nome + ' · riconciliazione non allineata', sub: '\u2003\u2003\u2003\u2003rimborsata in banca il ' + ggmm(n.bonifico.data) + ' (' + euro(n.bonifico.importo) + '), in Odoo risulta ancora da pagare', val: '', az: 'Apri' });
   }
   W.rim.righe = righe;
   W.rim.numeri = [{ et: 'Da rimborsare', val: euro(daRimb), col: daRimb > 0 ? '#B45309' : '#15803D' }, { et: 'Scontrini fuori nota', val: euro(fuori), col: fuori > 0 ? '#B45309' : '#15803D' }];

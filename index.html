@@ -886,6 +886,9 @@ class Component extends DCLogic {
         puntati: daLato && versoAperto && !lay.puntati.includes(da) ? [...lay.puntati, da] : lay.puntati });
     };
     if (s.sdiVero) sdiApplica(s.sdiVero);
+    if (s.bonVero) bonApplica(s.bonVero);
+    if (s.ofoVero) ofoApplica(s.ofoVero);
+    if (s.ordVero) ordApplica(s.ordVero);
     const riga = (r) => {
       const f = fatti.includes(r.id) || !!r.fattaGia;
       return { ...r, val: r.val || '', sfondo: 'transparent', marker: !f && r.evid ? 'linear-gradient(100deg, rgba(244, 114, 114, 0) 0%, rgba(244, 114, 114, .30) 3%, rgba(244, 114, 114, .24) 70%, rgba(244, 114, 114, .30) 97%, rgba(244, 114, 114, 0) 100%)' : 'transparent', pallino: f ? '#CBD5E1' : U[r.u], op: f ? '0.5' : '1', barra: f ? 'line-through' : 'none',
@@ -1205,12 +1208,52 @@ function sdiAllarme(v) {
   return { c: true, titolo: 'Fatture allo SDI · ' + (da.length + scartate.length) + ' da sistemare', testo, nota: 'Dati letti da Odoo ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' · aggiornati in tempo reale da Odoo',
     tasto: 'Apri la prima in Odoo', url: 'https://next-srl.odoo.com/odoo/customer-invoices', invia: () => { try { window.open(primo.url, '_blank', 'noopener'); } catch (e) {} } };
 }
+/* PORTALE NEXT-113 — Bonifici da fare, Offerte dei fornitori e Ordini dei clienti con i dati veri (edge area-lavoro-schede).
+   Bonifici: pagato o no lo dice l'estratto conto UniCredit (non la riconciliazione di Odoo); il modo di pagamento di ogni fornitore
+   e le fatture da non pagare li ha detti Sante (fornitori_pagamento, bonifici_esclusioni). «Disposto» è solo un promemoria:
+   la riga sparisce da sola quando il bonifico compare in banca (lettura due volte al giorno, dopo lo scarico delle 9:40 e 21:40). */
+const bonModo = (m) => m === 'anticipato' ? 'pagamento anticipato: il lavoro parte dopo il bonifico' : m === 'a_scadenza' ? 'si paga alla scadenza scritta in fattura' : m === 'a_posteriori' ? 'fattura a lavoro fatto' : '';
+function bonApplica(v) {
+  const r = v.righe || [];
+  const dp = r.filter((x) => x.gruppo === 'da_pagare').sort((a, b) => (b.scaduta ? 1 : 0) - (a.scaduta ? 1 : 0) || String(a.scadenza || a.data).localeCompare(String(b.scadenza || b.data)));
+  const poi = r.filter((x) => x.gruppo === 'in_scadenza');
+  const riga = (x, u) => ({ id: 'bon-' + x.partner_id + '-' + x.rif, chi: 'sante', u, evid: x.scaduta && x.modo === 'anticipato',
+    testo: x.fornitore + ' · fattura ' + x.rif + (x.bozza ? ' · ancora in bozza in Odoo' : ''),
+    sub: [bonModo(x.modo), 'emessa ' + ggmm(x.data), x.scadenza ? (x.scaduta ? 'scaduta il ' : 'scade il ') + ggmm(x.scadenza) : '', x.esito === 'parziale' ? 'già pagati ' + euro(x.pagato) : ''].filter(Boolean).join(' · '),
+    val: euro(x.da_pagare), az: 'Disposto' });
+  const anom = (v.anomalie || []).map((a, i) => ({ id: 'bon-an-' + i + '-' + a.rif, chi: 'sante', u: 'b', testo: a.fornitore + ' · ' + (a.rif ? 'fattura ' + a.rif : ''), sub: a.tipo, val: a.importo ? euro(a.importo) : '', az: 'Vedi' }));
+  W.bon.righe = [...dp.map((x) => riga(x, x.scaduta ? 'r' : 'g')), ...poi.map((x) => riga(x, 'v')), ...anom];
+  W.bon.flusso = 'Fattura del fornitore → bonifico → sparisce quando lo vede l’estratto conto';
+  const t = v.totali || {};
+  W.bon.numeri = [{ et: 'Da pagare', val: euro(t.da_pagare), col: 'var(--ink)' }, { et: 'Fatture', val: String(dp.length), col: dp.some((x) => x.scaduta) ? '#B91C1C' : '#15803D' }, { et: 'Più avanti', val: euro(t.in_scadenza_oltre_7gg), col: '#15803D' }];
+  W.bon.piede = 'Estratto conto UniCredit letto alle ' + new Date(v.letto_alle).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' del ' + ggmm(String(v.letto_alle).slice(0, 10)) + ' · fuori dall’elenco: spese anticipate e rimborsate, carte, avvisi di parcella, fatture di oltre 6 mesi' + ((v.escluse || []).length ? ' · ' + v.escluse.length + ' escluse (le hai dette tu o i documenti)' : '');
+}
+function ofoApplica(v) {
+  const r = v.righe || [];
+  W.ofo.righe = r.map((x) => ({ id: 'ofo-' + x.id, chi: 'sante', u: (x.giorni_fermo || 0) > 7 ? 'r' : 'g', url: x.url_ordine || null,
+    testo: x.fornitore + ' · offerta ' + x.numero + (x.versione > 1 ? ' (versione ' + x.versione + ')' : ''),
+    sub: [x.cantiere ? String(x.cantiere).slice(0, 70) : '', 'del ' + ggmm(x.data), x.giorni_fermo ? 'ferma da ' + x.giorni_fermo + ' giorni' : '', x.ordine_odoo ? 'ordine ' + x.ordine_odoo : 'senza ordine in Odoo'].filter(Boolean).join(' · '),
+    val: x.totale ? euro(x.totale) : '', az: x.url_ordine ? 'Apri' : 'Fatta' }));
+  W.ofo.flusso = 'Offerta del fornitore → la confermi tu → diventa ordine · ultimi 45 giorni';
+  W.ofo.piede = r.length ? r.length + (r.length === 1 ? ' offerta da confermare' : ' offerte da confermare') : 'Nessuna offerta in attesa';
+}
+function ordApplica(v) {
+  const r = v.righe || [];
+  W.ord.righe = r.map((x) => ({ id: 'ord-' + x.id, chi: 'sante', u: 'g', url: x.odoo_customer_id ? ODOO + '/contacts/' + x.odoo_customer_id : null,
+    testo: (x.cliente || 'Cliente da collegare in Odoo') + ' · contratto firmato',
+    sub: ['firmato il ' + ggmm(String(x.contract_signed_at || x.data_firma_documento || '').slice(0, 10)), x.tipologia_cliente || '', 'nessun ordine di vendita in Odoo'].filter(Boolean).join(' · '),
+    val: x.totale_contratto_eur ? euro(x.totale_contratto_eur) : '', az: 'Apri' }));
+  W.ord.flusso = 'Contratto firmato → ordine di vendita in Odoo · per ora lo generi tu';
+  W.ord.piede = r.length ? r.length + (r.length === 1 ? ' pratica firmata senza ordine' : ' pratiche firmate senza ordine') : 'Tutti i contratti hanno il loro ordine';
+}
 Component.prototype.datiAvvia = function () {
   let pass = null;
   try { pass = window.sessionStorage.getItem('regia_pass'); } catch (e) {}
   if (!pass) return;
   const leggi = async () => {
     try { const j = await (await fetch('https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-dati?sdi=1&t=' + encodeURIComponent(pass))).json(); if (j && j.ok) this.setState({ sdiVero: j }); } catch (e) {}
+    const SCH = 'https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/area-lavoro-schede?t=' + encodeURIComponent(pass);
+    for (const [q, k] of [['bon', 'bonVero'], ['ofo', 'ofoVero'], ['ord', 'ordVero']]) { try { const j = await (await fetch(SCH + '&' + q + '=1')).json(); if (j && j.ok) this.setState({ [k]: j }); } catch (e) {} }
   };
   leggi(); this.giroDati = setInterval(leggi, 300000); let ultima = Date.now(); const forse = () => { if (Date.now() - ultima > 60000) { ultima = Date.now(); leggi(); } }; window.addEventListener('focus', forse); document.addEventListener('visibilitychange', () => { if (!document.hidden) forse(); }); let attesaRt = null; const presto = () => { clearTimeout(attesaRt); attesaRt = setTimeout(leggi, 2000); }; const inAscolto = () => { try { const c = window.supabase.createClient('https://pnxhthrheqeucoisifjw.supabase.co', 'sb_publishable_krNaDAk8GFjvuZ-UGcBwtA_tDg-Fn4N'); this.canale = c.channel('area-lavoro').on('broadcast', { event: 'sdi' }, presto).subscribe(); } catch (e) {} }; if (window.supabase && window.supabase.createClient) inAscolto(); else { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; sc.onload = inAscolto; document.head.appendChild(sc); }
 };

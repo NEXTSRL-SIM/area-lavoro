@@ -921,7 +921,7 @@ class Component extends DCLogic {
         fai: () => { if (r.chiudi) { r.chiudi(); if (attesa) metti(null); this.setState({ attT: Date.now() }); return; } if (f) { metti(null); this.setState({ fatti: fatti.filter((x) => x !== r.id) }); return; } segna([r.id]); metti('fatta'); } };
     };
     const conta = (righe) => {
-      const aperte = righe.filter((r) => r.az !== 'Fatto');
+      const aperte = righe.filter((r) => r.op !== '0.5');
       const rosso = aperte.some((r) => r.u === 'r');
       return { n: String(aperte.length), nc: rosso ? '#B91C1C' : 'var(--ink2)', nb: rosso ? 'var(--rdw)' : 'var(--ln)' };
     };
@@ -1309,33 +1309,31 @@ function bonApplica(v) {
 /* PORTALE NEXT-113 (Sante 02/11): Rimborsi spese, persona per persona (Bortoletto, Filograno) con sotto le voci.
    Le note spese sono quelle di Odoo Spese; rimborsata o no lo dice l'estratto conto, non Odoo. */
 function rimApplica(v) {
+  /* PORTALE NEXT-113 (Sante 02/11): solo quello che non è ancora stato rimborsato. Riga della persona = totale da rimborsare
+     (note spese senza bonifico + scontrini non ancora in nota); sotto, una riga per spesa col nome di dove si è speso.
+     La riconciliazione in Odoo non sta qui: è contabilità. */
   const rb = v.rimborsi || {};
-  const note = rb.note || [], sc = rb.sciolte || [];
+  const note = (rb.note || []).filter((n) => n.stato !== 'rimborsata'), sc = rb.sciolte || [];
   const persone = [...new Set([...note.map((n) => n.persona), ...sc.map((e) => e.persona)])].sort();
   const righe = [];
-  let daRimb = 0, fuori = 0;
+  let tot = 0;
+  const g = (d) => ggmm(String(d || '').slice(0, 10));
   for (const p of persone) {
-    const aperte = note.filter((n) => n.persona === p && n.stato !== 'rimborsata');
-    const sp = sc.filter((e) => e.persona === p);
-    const fatte = note.filter((n) => n.persona === p && n.stato === 'rimborsata').sort((a, b) => String(b.bonifico.data).localeCompare(String(a.bonifico.data)));
-    const nonAll = fatte.filter((n) => n.odoo_non_allineato);
-    const tA = aperte.reduce((t, n) => t + n.totale, 0), tS = sp.reduce((t, e) => t + e.importo, 0);
-    daRimb += tA; fuori += tS;
-    const cognome = String(p).split(' ').slice(-1)[0];
-    righe.push({ id: 'rim-p-' + cognome, chi: 'sante', u: tA > 0 ? 'g' : 'v', url: ODOO + '/expenses',
-      testo: cognome.toUpperCase() + ' · ' + p,
-      sub: [aperte.length ? aperte.length + (aperte.length === 1 ? ' nota da rimborsare' : ' note da rimborsare') : 'nessuna nota da rimborsare', sp.length ? sp.length + (sp.length === 1 ? ' scontrino fuori nota' : ' scontrini fuori nota') + ' (' + euro(tS) + ')' : '', fatte.length ? 'ultimo rimborso ' + ggmm(fatte[0].bonifico.data) + ' · ' + euro(fatte[0].bonifico.importo) : ''].filter(Boolean).join(' · '),
-      val: euro(tA), az: 'Apri' });
-    for (const n of aperte) righe.push({ id: 'rim-n-' + n.id, chi: 'sante', u: n.stato === 'da_rimborsare' ? 'g' : 'v', url: n.url || null,
-      testo: '\u2003\u2003↳ nota spese ' + n.nome, sub: '\u2003\u2003\u2003\u2003' + (n.stato === 'da_approvare' ? 'da approvare in Odoo Spese' : 'nessun bonifico di rimborso in banca') + ' · ' + n.voci + (n.voci === 1 ? ' spesa' : ' spese'), val: euro(n.totale), az: 'Apri' });
-    for (const e of sp) righe.push({ id: 'rim-s-' + e.id, chi: 'sante', u: 'v', url: null,
-      testo: '\u2003\u2003↳ ' + e.cosa, sub: '\u2003\u2003\u2003\u2003scontrino del ' + ggmm(e.data) + ' · da mettere in una nota spese per rimborsarlo', val: euro(e.importo), az: 'Fatta' });
-    for (const n of nonAll) righe.push({ id: 'rim-r-' + n.id, chi: 'sante', u: 'b', url: n.url || null,
-      testo: '\u2003\u2003↳ nota spese ' + n.nome + ' · riconciliazione non allineata', sub: '\u2003\u2003\u2003\u2003rimborsata in banca il ' + ggmm(n.bonifico.data) + ' (' + euro(n.bonifico.importo) + '), in Odoo risulta ancora da pagare', val: '', az: 'Apri' });
+    const nn = note.filter((n) => n.persona === p), ss = sc.filter((e) => e.persona === p);
+    const t = nn.reduce((x, n) => x + n.totale, 0) + ss.reduce((x, e) => x + e.importo, 0);
+    tot += t;
+    const cognome = String(p).split(' ').slice(-1)[0].toUpperCase();
+    righe.push({ id: 'rim-p-' + cognome, chi: 'sante', u: 'g', url: null, testo: cognome + ' · da rimborsare',
+      sub: [nn.length ? nn.length + (nn.length === 1 ? ' nota spese' : ' note spese') : '', ss.length ? ss.length + (ss.length === 1 ? ' scontrino da mettere in nota' : ' scontrini da mettere in nota') : ''].filter(Boolean).join(' · '),
+      val: euro(t), az: 'Fatto' });
+    for (const e of ss) righe.push({ id: 'rim-s-' + e.id, chi: 'sante', u: 'v', url: null,
+      testo: '  ' + e.cosa, sub: '    scontrino del ' + g(e.data) + ' · da mettere in una nota spese', val: euro(e.importo), az: 'Fatto' });
+    for (const n of nn) righe.push({ id: 'rim-n-' + n.id, chi: 'sante', u: 'g', url: n.url || null,
+      testo: '  nota spese ' + n.nome, sub: '    ' + (n.stato === 'da_approvare' ? 'da approvare in Odoo Spese' : 'approvata, il bonifico di rimborso non è ancora in banca') + ' · ' + n.voci + (n.voci === 1 ? ' spesa' : ' spese'), val: euro(n.totale), az: 'Fatto' });
   }
   W.rim.righe = righe;
-  W.rim.numeri = [{ et: 'Da rimborsare', val: euro(daRimb), col: daRimb > 0 ? '#B45309' : '#15803D' }, { et: 'Scontrini fuori nota', val: euro(fuori), col: fuori > 0 ? '#B45309' : '#15803D' }];
-  W.rim.piede = rb.errore ? 'Odoo Spese non letto: ' + rb.errore : 'Note spese di Odoo Spese controllate sull’estratto conto UniCredit · nella causale del rimborso scrivi «NOTA» e il numero · aggiornato alle ' + new Date(v.riletto_alle || v.letto_alle || Date.now()).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
+  W.rim.numeri = [{ et: 'Da rimborsare', val: euro(tot), col: tot > 0 ? '#B45309' : '#15803D' }];
+  W.rim.piede = rb.errore ? 'Odoo Spese non letto: ' + rb.errore : (righe.length ? '' : 'Niente da rimborsare · ') + 'Spese di Odoo Spese controllate sull’estratto conto UniCredit · nella causale del rimborso scrivi «NOTA» e il numero · aggiornato alle ' + new Date(v.riletto_alle || v.letto_alle || Date.now()).toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 }
 function ofoApplica(v) {
   const r = v.righe || [];

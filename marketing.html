@@ -421,62 +421,112 @@ function schedaAnnuncio(a) {
 
 /* ---------- B) PROPOSTE ---------- */
 function sezProposte() {
-  /* PORTALE NEXT 2.0-143 (Sante 11/11): le proposte vere, con immagini, testi per Meta e il giudizio di Sante; «Nuova campagna» apre la richiesta allo studio */
+  /* PORTALE NEXT 2.0-143 (Sante 11/11): progetti dello studio (richiesta → analisi → proposte → consiglio), proposte con immagini, carosello e video, giudizio di Sante, «Nuova campagna», microfono per dettare */
   var P = D.proposte, R = P.richieste || [], s = '';
   s += '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px"><button class="btn pri" data-pz="nuova">' + ICO.piu + 'Nuova campagna</button>' +
-    '<span class="nota">Scrivi cosa vuoi promuovere: lo studio prepara le proposte complete (immagini, testi, formati) e te le riporta qui.</span></div>';
+    '<span class="nota">Dici o scrivi cosa vuoi ottenere: lo studio fa l’analisi, prepara le proposte (immagini, caroselli, video) e te le riporta qui con il suo consiglio.</span></div>';
   s += '<article class="card" id="pzForm" style="display:none;margin-bottom:16px"><div style="padding:18px 20px"><h3 style="margin:0 0 4px">Nuova campagna</h3>' +
-    '<div class="nota" style="margin-bottom:12px">Basta la prima riga; il resto aiuta. Se un dato manca, lo studio lo chiede.</div>' +
+    '<div class="nota" style="margin-bottom:12px">Basta la prima riga; il resto aiuta. Puoi dettare con il microfono accanto a ogni campo.</div>' +
     '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">' +
-    pzCampo('pzCosa', 'Cosa vuoi promuovere *', 'es. fotovoltaico 10 kWp con batteria 16 kWh allo stesso prezzo di un 6 kWp', true) +
+    pzCampo('pzCosa', 'Cosa vuoi ottenere o promuovere *', 'es. 50 contatti in Veneto per il 10 kWp con batteria entro dicembre', true) +
     pzCampo('pzObiettivo', 'Obiettivo', 'es. contatti per preventivo, appuntamenti, notorietà') +
     pzCampo('pzPubblico', 'A chi', 'es. proprietari di casa 35-65, chi ha già un preventivo') +
     pzCampo('pzZona', 'Dove', 'es. Veneto e Friuli, oppure Nord e Centro') +
     pzCampo('pzBudget', 'Budget', 'es. 20 euro al giorno, 600 euro in tutto') +
     pzCampo('pzScadenza', 'Entro quando', 'es. partenza lunedì, promozione fino al 31/12') +
+    '<label style="display:block"><span class="lbl">Formati</span><select id="pzFormati" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit">' +
+    ['decidi tu', 'immagine singola', 'carosello', 'video', 'immagine, carosello e video'].map(function (x) { return '<option>' + x + '</option>'; }).join('') + '</select></label>' +
     '</div><label style="display:block;margin-top:12px"><span class="lbl">Note, idee, cose da evitare</span>' +
-    '<textarea id="pzNote" rows="3" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></textarea></label>' +
+    '<div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px"><textarea id="pzNote" rows="3" style="flex:1;box-sizing:border-box;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></textarea>' + pzMic('pzNote') + '</div></label>' +
     '<div style="display:flex;gap:10px;align-items:center;margin-top:12px"><button class="btn pri" data-pz="invia">Invia allo studio</button><button class="btn" data-pz="nuova">Annulla</button><span class="nota" id="pzMsg"></span></div>' +
     '</div></article>';
-  if (R.length) {
-    s += '<article class="card" style="margin-bottom:16px"><div style="padding:14px 20px"><span class="lbl">Richieste allo studio</span>' +
-      R.map(function (r) {
-        var st = { aperta: ['p-am', 'in attesa'], in_lavorazione: ['p-ac', 'in lavorazione'], proposte_pronte: ['p-gr', 'proposte pronte'] }[r.stato] || ['p-gy', r.stato];
-        return '<div style="display:flex;gap:10px;align-items:baseline;padding:8px 0;border-top:1px solid var(--ln)"><span class="pill ' + st[0] + '">' + esc(st[1]) + '</span><b>' + esc(r.cosa) + '</b>' +
-          '<span class="nota">' + esc([r.zona, r.budget, r.scadenza].filter(Boolean).join(' · ')) + ' — ' + ora(r.creata_at) + '</span></div>';
-      }).join('') + '</div></article>';
-  }
-  if (!P.righe.length) {
-    s += '<article class="card"><div class="vuoto"><span class="ic">' + ICO.idea + '</span><h3>Nessuna proposta, per ora</h3><div style="max-width:560px">Premi «Nuova campagna» e scrivi cosa vuoi promuovere: le proposte arrivano qui, ognuna con Approva, Chiedi modifiche e Scarta.</div></div></article>';
-    return s;
-  }
-  P.righe.forEach(function (p) { s += pzScheda(p); });
+  var perProg = {}, senza = [];
+  P.righe.forEach(function (p) { if (p.richiesta_id) (perProg[p.richiesta_id] = perProg[p.richiesta_id] || []).push(p); else senza.push(p); });
+  R.forEach(function (r) { s += pzProgetto(r, perProg[r.id] || []); });
+  if (senza.length) s += '<h3 style="margin:18px 0 10px">Altre proposte</h3>' + senza.map(pzScheda).join('');
+  if (!R.length && !P.righe.length) s += '<article class="card"><div class="vuoto"><span class="ic">' + ICO.idea + '</span><h3>Nessun progetto, per ora</h3><div style="max-width:560px">Premi «Nuova campagna» e scrivi o detta cosa vuoi ottenere.</div></div></article>';
   return s;
 }
+function pzMd(t) {
+  /* markdown semplice e sicuro: titoli, elenchi, grassetto */
+  var righe = String(t || '').split('\n'), h = '', inLista = false;
+  righe.forEach(function (x) {
+    var e = esc(x).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    if (/^\s*[-*]\s+/.test(x)) { if (!inLista) { h += '<ul style="margin:4px 0 8px 18px;padding:0">'; inLista = true; } h += '<li style="margin:2px 0">' + e.replace(/^\s*[-*]\s+/, '') + '</li>'; return; }
+    if (inLista) { h += '</ul>'; inLista = false; }
+    if (/^#{1,4}\s/.test(x)) { h += '<div style="font-weight:800;margin:12px 0 4px">' + e.replace(/^#{1,4}\s/, '') + '</div>'; return; }
+    if (x.trim()) h += '<p style="margin:4px 0">' + e + '</p>';
+  });
+  if (inLista) h += '</ul>';
+  return h;
+}
+function pzProgetto(r, lista) {
+  var st = { aperta: ['p-am', 'in attesa dello studio'], in_lavorazione: ['p-ac', 'in lavorazione'], proposte_pronte: ['p-gr', 'proposte pronte'] }[r.stato] || ['p-gy', r.stato];
+  var dati = [['Obiettivo', r.obiettivo], ['A chi', r.pubblico], ['Dove', r.zona], ['Budget', r.budget], ['Entro quando', r.scadenza], ['Formati', r.formati]].filter(function (x) { return x[1]; });
+  var s = '<section style="margin:0 0 26px"><article class="card" style="margin-bottom:12px"><div style="padding:18px 20px">' +
+    '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="lbl">Progetto</span><span class="pill ' + st[0] + '">' + esc(st[1]) + '</span><span class="nota" style="margin-left:auto">' + ora(r.creata_at) + '</span></div>' +
+    '<h2 style="margin:6px 0 4px;font-size:20px">' + esc(r.titolo || r.cosa) + '</h2>' +
+    (r.titolo ? '<div style="margin-bottom:8px">' + esc(r.cosa) + '</div>' : '') +
+    '<div style="display:flex;gap:18px;flex-wrap:wrap;margin:6px 0">' + dati.map(function (x) { return '<div><span class="lbl">' + esc(x[0]) + '</span><div>' + esc(x[1]) + '</div></div>'; }).join('') + '</div>' +
+    (r.note ? '<div class="nota" style="margin-top:6px">' + esc(r.note) + '</div>' : '') +
+    (r.analisi ? '<details style="margin-top:12px;border-top:1px solid var(--ln);padding-top:10px"><summary style="cursor:pointer;font-weight:800">L’analisi dello studio: concorrenza, la nostra storia, chi deve decidere, strategia</summary><div style="margin-top:8px;line-height:1.5">' + pzMd(r.analisi) + '</div></details>' : '') +
+    (r.consiglio ? '<div style="margin-top:12px;border-top:1px solid var(--ln);padding-top:10px"><div style="font-weight:800;margin-bottom:4px">Il consiglio dello studio</div><div style="line-height:1.5">' + pzMd(r.consiglio) + '</div></div>' : '') +
+    '</div></article>';
+  var att = lista.filter(function (p) { return !lista.some(function (q) { return q.sostituisce === p.id; }); });
+  var vecchie = lista.filter(function (p) { return lista.some(function (q) { return q.sostituisce === p.id; }); });
+  att.sort(function (a, b) { return (a.esito ? 1 : 0) - (b.esito ? 1 : 0) || String(b.creata_at).localeCompare(String(a.creata_at)); });
+  s += att.map(pzScheda).join('');
+  if (vecchie.length) s += '<details style="margin:6px 0 0"><summary class="nota" style="cursor:pointer">Versioni precedenti già giudicate (' + vecchie.length + ')</summary>' + vecchie.map(pzScheda).join('') + '</details>';
+  if (!lista.length) s += '<div class="nota" style="padding:4px 2px">Le proposte arrivano qui appena lo studio le ha pronte.</div>';
+  return s + '</section>';
+}
+function pzMic(id) {
+  return '<button type="button" class="btn" data-mic="' + id + '" title="Detta con il microfono" aria-label="Detta con il microfono" style="flex:0 0 auto;padding:8px 10px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"></path></svg></button>';
+}
 function pzCampo(id, et, ph, largo) {
-  return '<label style="display:block' + (largo ? ';grid-column:1/-1' : '') + '"><span class="lbl">' + esc(et) + '</span><input id="' + id + '" placeholder="' + esc(ph) + '" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></label>';
+  return '<label style="display:block' + (largo ? ';grid-column:1/-1' : '') + '"><span class="lbl">' + esc(et) + '</span><div style="display:flex;gap:8px;margin-top:4px"><input id="' + id + '" placeholder="' + esc(ph) + '" style="flex:1;min-width:0;box-sizing:border-box;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit">' + pzMic(id) + '</div></label>';
+}
+function pzMedia(p) {
+  var im = p.immagini || {}, h = '';
+  var tile = function (u, w, hh, et) {
+    return '<a href="' + esc(u) + '" target="_blank" rel="noopener" title="Apri a grandezza piena" style="text-decoration:none;color:inherit;text-align:center;flex:0 0 auto">' +
+      '<img src="' + esc(u) + '" alt="' + esc(p.codice + ' ' + et) + '" loading="lazy" style="display:block;width:' + w + 'px;height:' + hh + 'px;object-fit:cover;border-radius:8px;border:1px solid var(--ln)"><span class="nota mono">' + esc(et) + '</span></a>';
+  };
+  if (im['video_9:16'] || im['video_4:5']) {
+    [['video_9:16', 160, 284, '9:16'], ['video_4:5', 220, 275, '4:5']].forEach(function (v) {
+      if (im[v[0]]) h += '<div style="text-align:center;flex:0 0 auto"><video src="' + esc(im[v[0]]) + '"' + (im.poster ? ' poster="' + esc(im.poster) + '"' : '') + ' controls muted playsinline preload="none" style="display:block;width:' + v[1] + 'px;height:' + v[2] + 'px;object-fit:cover;border-radius:8px;border:1px solid var(--ln);background:#000"></video><span class="nota mono">video ' + v[3] + '</span></div>';
+    });
+  }
+  if (im.schede && im.schede.length) {
+    h += '<div style="display:flex;gap:8px;overflow-x:auto;max-width:100%;padding-bottom:4px">' + im.schede.map(function (u, i) { return tile(u, 170, 170, 'scheda ' + (i + 1)); }).join('') + '</div>';
+  } else {
+    [['4:5', 200, 250], ['1:1', 200, 200], ['9:16', 141, 250]].forEach(function (f) { if (im[f[0]]) h += tile(im[f[0]], f[1], f[2], f[0]); });
+  }
+  return h;
 }
 function pzScheda(p) {
-  var im = p.immagini || {}, fm = [['4:5', 200, 250], ['1:1', 200, 200], ['9:16', 141, 250]];
   var es = { approvata: ['p-gr', 'Approvata'], da_modificare: ['p-am', 'Da modificare'], scartata: ['p-rd', 'Scartata'] }[p.esito] || ['p-gy', 'Da valutare'];
+  var tipo = { immagine: 'Immagine', carosello: 'Carosello', video: 'Video' }[p.tipo_formato] || 'Immagine';
   var riga = function (et, v, pre) { return v ? '<div style="padding:7px 0;border-top:1px solid var(--ln)"><span class="lbl">' + esc(et) + '</span><div style="margin-top:2px' + (pre ? ';white-space:pre-line' : '') + '">' + esc(v) + '</div></div>' : ''; };
-  return '<article class="card" style="margin-bottom:16px"><div style="padding:16px 20px">' +
+  var pt = p.punteggi || {}, nomi = { attenzione: 'Attira', chiarezza: 'Chiara', credibilita: 'Credibile', differenza: 'Diversa dai concorrenti', coerenza_marchio: 'Coerente con Next' };
+  var punti = Object.keys(nomi).filter(function (k) { return pt[k] != null; }).map(function (k) {
+    return '<div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:160px">' + nomi[k] + '</span><span style="flex:0 0 120px;height:6px;border-radius:3px;background:var(--ln);overflow:hidden"><span style="display:block;height:6px;width:' + (10 * Number(pt[k])) + '%;background:var(--ac)"></span></span><span class="mono">' + esc(pt[k]) + '/10</span></div>';
+  }).join('');
+  return '<article class="card" style="margin-bottom:14px"><div style="padding:16px 20px">' +
     '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px"><h3 style="margin:0">' + esc(p.titolo_interno || p.codice) + '</h3>' +
+    '<span class="pill p-gy">' + tipo + '</span>' + (p.versione > 1 ? '<span class="pill p-vi">versione ' + esc(p.versione) + '</span>' : '') +
     '<span class="pill ' + es[0] + '">' + es[1] + '</span>' + (p.varco ? '<span class="nota">' + esc(p.varco) + '</span>' : '') +
     (p.esito_at ? '<span class="nota" style="margin-left:auto">' + ora(p.esito_at) + '</span>' : '') + '</div>' +
     '<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">' +
-    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">' + fm.filter(function (f) { return im[f[0]]; }).map(function (f) {
-      return '<a href="' + esc(im[f[0]]) + '" target="_blank" rel="noopener" title="Apri il formato ' + f[0] + ' a grandezza piena" style="text-decoration:none;color:inherit;text-align:center">' +
-        '<img src="' + esc(im[f[0]]) + '" alt="Proposta ' + esc(p.codice) + ' formato ' + f[0] + '" loading="lazy" style="display:block;width:' + f[1] + 'px;height:' + f[2] + 'px;object-fit:cover;border-radius:8px;border:1px solid var(--ln)">' +
-        '<span class="nota mono">' + f[0] + '</span></a>';
-    }).join('') + '</div>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;max-width:100%">' + pzMedia(p) + '</div>' +
     '<div style="flex:1 1 320px;min-width:0">' +
+    (punti ? '<div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px">' + punti + '</div>' : '') +
     riga('Titolo (Meta)', p.titolo_meta || p.hook) + riga('Testo principale (Meta)', p.corpo, true) + riga('Descrizione', p.descrizione_meta) +
     riga('Pulsante', p.cta) + riga('Pubblico', p.contro_chi) + riga('Perché funziona', p.perche) + riga('Come la misuriamo', p.come_misurarla) +
     (p.esito_nota ? riga('La tua nota', p.esito_nota, true) : '') +
     '</div></div>' +
     '<div style="margin-top:12px;border-top:1px solid var(--ln);padding-top:12px">' +
-    '<textarea id="pzNota' + p.id + '" rows="2" placeholder="Nota per lo studio (obbligatoria per «Chiedi modifiche»): cosa cambiare, cosa tenere" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></textarea>' +
+    '<div style="display:flex;gap:8px;align-items:flex-start"><textarea id="pzNota' + p.id + '" rows="2" placeholder="Nota per lo studio (obbligatoria per «Chiedi modifiche»): cosa cambiare, cosa tenere. Puoi dettarla col microfono." style="flex:1;box-sizing:border-box;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></textarea>' + pzMic('pzNota' + p.id) + '</div>' +
     '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">' +
     '<button class="btn pri" data-pz="approvata" data-id="' + p.id + '">Approva</button>' +
     '<button class="btn" data-pz="da_modificare" data-id="' + p.id + '">Chiedi modifiche</button>' +
@@ -491,30 +541,52 @@ function pzPost(o) {
 function pzRicarica() {
   return pzPost({}).then(function (j) { if (j && j.proposte) { D = j; ridisegna('proposte'); } });
 }
+/* microfono: dettatura con il riconoscimento vocale del browser (Chrome e Safari), testo modificabile prima dell'invio */
+var pzAscolto = null;
+function pzMicFerma() { if (pzAscolto) { try { pzAscolto.r.stop(); } catch (e) {} if (pzAscolto.b) { pzAscolto.b.style.background = ''; pzAscolto.b.style.color = ''; } pzAscolto = null; } }
+function pzMicAvvia(b, id) {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition, el = document.getElementById(id);
+  if (!el) return;
+  if (!SR) { el.placeholder = 'Questo browser non permette di dettare: usa Chrome o Safari.'; return; }
+  if (pzAscolto && pzAscolto.id === id) { pzMicFerma(); return; }
+  pzMicFerma();
+  var r = new SR(), base = el.value ? el.value.replace(/\s*$/, ' ') : '';
+  r.lang = 'it-IT'; r.continuous = true; r.interimResults = true;
+  r.onresult = function (ev) { var fin = '', prov = ''; for (var i = 0; i < ev.results.length; i++) { if (ev.results[i].isFinal) fin += ev.results[i][0].transcript; else prov += ev.results[i][0].transcript; } el.value = base + fin + prov; };
+  r.onerror = function (ev) { if (ev.error === 'not-allowed') el.placeholder = 'Microfono non permesso: consentilo nel browser.'; pzMicFerma(); };
+  r.onend = function () { if (pzAscolto && pzAscolto.r === r) pzMicFerma(); };
+  pzAscolto = { r: r, b: b, id: id };
+  b.style.background = '#B91C1C'; b.style.color = '#fff';
+  try { r.start(); } catch (e) { pzMicFerma(); }
+}
 document.addEventListener('click', function (e) {
+  var m = e.target.closest('[data-mic]'); if (m) { e.preventDefault(); pzMicAvvia(m, m.getAttribute('data-mic')); return; }
   var b = e.target.closest('[data-pz]'); if (!b) return;
   var a = b.getAttribute('data-pz');
   if (a === 'nuova') {
+    pzMicFerma();
     if (stato.sez !== 'proposte') vai('proposte');
     setTimeout(function () { var f = document.getElementById('pzForm'); if (f) { f.style.display = f.style.display === 'none' ? 'block' : 'none'; if (f.style.display === 'block') { var c = document.getElementById('pzCosa'); if (c) c.focus(); } } }, 60);
     return;
   }
   if (a === 'invia') {
+    pzMicFerma();
     var g = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
-    var r = { cosa: g('pzCosa'), obiettivo: g('pzObiettivo'), pubblico: g('pzPubblico'), zona: g('pzZona'), budget: g('pzBudget'), scadenza: g('pzScadenza'), note: g('pzNote') };
-    var m = document.getElementById('pzMsg');
-    if (!r.cosa) { if (m) m.textContent = 'Scrivi almeno cosa vuoi promuovere.'; return; }
-    b.disabled = true; if (m) m.textContent = 'Invio…';
+    var r = { cosa: g('pzCosa'), obiettivo: g('pzObiettivo'), pubblico: g('pzPubblico'), zona: g('pzZona'), budget: g('pzBudget'), scadenza: g('pzScadenza'), formati: g('pzFormati'), note: g('pzNote') };
+    var m2 = document.getElementById('pzMsg');
+    if (!r.cosa) { if (m2) m2.textContent = 'Scrivi o detta almeno cosa vuoi ottenere.'; return; }
+    b.disabled = true; if (m2) m2.textContent = 'Invio…';
     pzPost({ azione: 'richiesta', richiesta: r }).then(function (j) {
       if (j && j.ok) return pzRicarica();
-      b.disabled = false; if (m) m.textContent = 'Non inviata: ' + ((j && j.errore) || 'errore');
-    }).catch(function () { b.disabled = false; if (m) m.textContent = 'Non inviata: errore di rete.'; });
+      b.disabled = false; if (m2) m2.textContent = 'Non inviata: ' + ((j && j.errore) || 'errore');
+    }).catch(function () { b.disabled = false; if (m2) m2.textContent = 'Non inviata: errore di rete.'; });
     return;
   }
   if (a === 'approvata' || a === 'da_modificare' || a === 'scartata') {
+    pzMicFerma();
     var id = b.getAttribute('data-id'), t = document.getElementById('pzNota' + id), out = document.getElementById('pzEsito' + id);
     var nota = t ? t.value.trim() : '';
-    if (a === 'da_modificare' && !nota) { if (out) out.textContent = 'Scrivi nella nota cosa cambiare.'; if (t) t.focus(); return; }
+    if (a === 'da_modificare' && !nota) { if (out) out.textContent = 'Scrivi o detta nella nota cosa cambiare.'; if (t) t.focus(); return; }
     b.disabled = true; if (out) out.textContent = 'Salvo…';
     pzPost({ azione: 'esito', id: id, esito: a, nota: nota }).then(function (j) {
       if (j && j.ok) return pzRicarica();
@@ -522,8 +594,6 @@ document.addEventListener('click', function (e) {
     }).catch(function () { b.disabled = false; if (out) out.textContent = 'Non salvato: errore di rete.'; });
   }
 });
-
-/* ---------- C) CAMPAGNE ---------- */
 function campagneVisibili() { return D.campagne.filter(function (c) { return stato.pubblico === 'tutte' || c.pubblico === stato.pubblico; }); }
 function periodo(c) {
   if (stato.periodo === '7') return { spesa: +c.spesa_7g, contatti: +c.contatti_7g };

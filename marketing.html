@@ -505,6 +505,34 @@ function pzMedia(p) {
   }
   return h;
 }
+/* PORTALE NEXT 2.0-143 (Sante 11/11): la cronologia della campagna dentro la proposta. Come è nata, le versioni dello studio,
+   i tuoi giudizi e commenti, gli esami e i ritocchi dell'occhio neuromarketing, in ordine. Non si cancella niente. */
+function pzCrono(p) {
+  var C = (D.proposte && D.proposte.cronologia) || [], righe = (D.proposte && D.proposte.righe) || [];
+  var catena = {}, x = p, giri = 0;
+  while (x && !catena[x.id] && giri++ < 30) { catena[x.id] = 1; var s = x.sostituisce; x = s ? righe.filter(function (r) { return r.id === s; })[0] : null; if (s && !x) catena[s] = 1; }
+  var ev = C.filter(function (c) { return (c.proposta_id && catena[c.proposta_id]) || (!c.proposta_id && p.richiesta_id && c.richiesta_id === p.richiesta_id); });
+  if (!ev.length) return '';
+  var chi = { sante: ['Tu', '#B45309'], studio: ['Studio', '#0891B2'], occhio: ['Occhio neuromarketing', '#7C3AED'] };
+  var tipo = { nascita: 'richiesta', analisi: 'analisi', proposta: 'proposta', giudizio: 'giudizio', commento: 'commento', esame: 'esame', ritocco: 'ritocco' };
+  var ver = { approvata: ['p-gr', 'Approvata'], da_modificare: ['p-am', 'Da modificare'], scartata: ['p-rd', 'Scartata'], 'pronta': ['p-gr', 'Pronta'], 'da ritoccare': ['p-am', 'Da ritoccare'], 'da rifare': ['p-rd', 'Da rifare'] };
+  var voce = function (c) {
+    var k = chi[c.chi] || [c.chi, '#475569'], v = c.verdetto ? (ver[c.verdetto] || ['p-gy', c.verdetto]) : null, im = c.immagini || {};
+    var foto = [im['1:1'], im['4:5'], im['9:16'], im.poster].concat(im.schede || []).filter(Boolean).slice(0, 6);
+    var voti = c.voti && typeof c.voti === 'object' ? Object.keys(c.voti).map(function (n) { return esc(n.replace(/_/g, ' ')) + ' ' + esc(c.voti[n]); }).join(' · ') : '';
+    return '<li style="position:relative;padding:0 0 14px 18px;border-left:2px solid ' + k[1] + '33">' +
+      '<span style="position:absolute;left:-6px;top:3px;width:10px;height:10px;border-radius:50%;background:' + k[1] + '"></span>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:baseline"><b style="color:' + k[1] + '">' + esc(k[0]) + '</b><span class="nota">' + esc(tipo[c.tipo] || c.tipo) + ' · ' + ora(c.quando) + '</span>' +
+      (v ? '<span class="pill ' + v[0] + '">' + esc(v[1]) + '</span>' : '') + (c.titolo ? '<span style="font-weight:600">' + esc(c.titolo) + '</span>' : '') + '</div>' +
+      (c.testo ? '<div style="margin-top:4px;white-space:pre-line;font-size:13.5px">' + esc(c.testo) + '</div>' : '') +
+      (voti ? '<div class="nota mono" style="margin-top:4px">' + voti + '</div>' : '') +
+      (foto.length ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">' + foto.map(function (u, i) {
+        return '<a href="' + esc(u) + '" data-lb="cr' + esc(c.id) + '" data-lbn="' + esc(k[0] + ' · ' + (tipo[c.tipo] || '')) + '" style="display:block"><img src="' + esc(u) + '" alt="" loading="lazy" style="width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--ln)"></a>';
+      }).join('') + '</div>' : '') + '</li>';
+  };
+  return '<details style="margin-top:12px;border-top:1px solid var(--ln);padding-top:10px"><summary style="cursor:pointer;font-weight:700">Cronologia della campagna (' + ev.length + ')</summary>' +
+    '<ol style="list-style:none;margin:12px 0 0 6px;padding:0">' + ev.map(voce).join('') + '</ol></details>';
+}
 function pzScheda(p) {
   var es = { approvata: ['p-gr', 'Approvata'], da_modificare: ['p-am', 'Da modificare'], scartata: ['p-rd', 'Scartata'] }[p.esito] || ['p-gy', 'Da valutare'];
   var tipo = { immagine: 'Immagine', carosello: 'Carosello', video: 'Video' }[p.tipo_formato] || 'Immagine';
@@ -525,7 +553,7 @@ function pzScheda(p) {
     riga('Titolo (Meta)', p.titolo_meta || p.hook) + riga('Testo principale (Meta)', p.corpo, true) + riga('Descrizione', p.descrizione_meta) +
     riga('Pulsante', p.cta) + riga('Pubblico', p.contro_chi) + riga('Perché funziona', p.perche) + riga('Come la misuriamo', p.come_misurarla) +
     (p.esito_nota ? riga('La tua nota', p.esito_nota, true) : '') +
-    '</div></div>' +
+    '</div></div>' + pzCrono(p) +
     '<div style="margin-top:12px;border-top:1px solid var(--ln);padding-top:12px">' +
     '<div style="display:flex;gap:8px;align-items:flex-start"><textarea id="pzNota' + p.id + '" rows="2" placeholder="Nota per lo studio (obbligatoria per «Chiedi modifiche»): cosa cambiare, cosa tenere. Puoi dettarla col microfono." style="flex:1;box-sizing:border-box;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></textarea>' + pzMic('pzNota' + p.id) + '</div>' +
     '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">' +

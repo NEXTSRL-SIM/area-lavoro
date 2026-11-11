@@ -472,11 +472,12 @@ function pzProgetto(r, lista) {
     (r.analisi ? '<details open style="margin-top:12px;border-top:1px solid var(--ln);padding-top:10px"><summary style="cursor:pointer;font-weight:800">L’analisi dello studio: concorrenza, la nostra storia, chi deve decidere, strategia</summary><div style="margin-top:8px;line-height:1.5">' + pzMd(r.analisi) + '</div></details>' : '') +
     (r.consiglio ? '<div style="margin-top:12px;border-top:1px solid var(--ln);padding-top:10px"><div style="font-weight:800;margin-bottom:4px">Il consiglio dello studio</div><div style="line-height:1.5">' + pzMd(r.consiglio) + '</div></div>' : '') +
     '</div></article>';
-  var att = lista.filter(function (p) { return !lista.some(function (q) { return q.sostituisce === p.id; }); });
-  var vecchie = lista.filter(function (p) { return lista.some(function (q) { return q.sostituisce === p.id; }); });
+  /* Sante 11/11 17:11: restano tutte visibili, anche le versioni precedenti; si tolgono solo quelle che lui scarta */
+  var att = lista.filter(function (p) { return p.esito !== 'scartata'; });
+  var vecchie = lista.filter(function (p) { return p.esito === 'scartata'; });
   att.sort(function (a, b) { return (a.esito ? 1 : 0) - (b.esito ? 1 : 0) || String(b.creata_at).localeCompare(String(a.creata_at)); });
   s += att.map(pzScheda).join('');
-  if (vecchie.length) s += '<details style="margin:6px 0 0"><summary class="nota" style="cursor:pointer">Versioni precedenti già giudicate (' + vecchie.length + ')</summary>' + vecchie.map(pzScheda).join('') + '</details>';
+  if (vecchie.length) s += '<details style="margin:6px 0 0"><summary class="nota" style="cursor:pointer">Scartate (' + vecchie.length + ')</summary>' + vecchie.map(pzScheda).join('') + '</details>';
   if (!lista.length) s += '<div class="nota" style="padding:4px 2px">Le proposte arrivano qui appena lo studio le ha pronte.</div>';
   return s + '</section>';
 }

@@ -234,7 +234,7 @@ var radice = document.getElementById('radice');
 var D = null, PASS = null, CHI = null;
 var stato = { sez: 'concorrenza', tema: 'giorno', settore: 'nostro', lunghi: false, scelto: null, periodo: 'sempre', pubblico: 'privati', campagna: null, cat: 'tutte' };
 try { var tm = localStorage.getItem('mk_tema'); if (tm === 'notte') stato.tema = 'notte'; } catch (e) {}
-var h0 = (location.hash || '').slice(1); if (['concorrenza', 'proposte', 'campagne', 'imparato'].indexOf(h0) >= 0) stato.sez = h0;
+var h0 = (location.hash || '').slice(1).split('?')[0]; if (['concorrenza', 'proposte', 'campagne', 'imparato'].indexOf(h0) >= 0) stato.sez = h0;
 
 /* ---------- utilità ---------- */
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
@@ -565,7 +565,7 @@ document.addEventListener('click', function (e) {
   if (t.dataset.cat) { stato.cat = t.dataset.cat; ridisegna('imparato'); return; }
 });
 document.addEventListener('click', function (e) { var m = document.getElementById('menu'); if (m && m.classList.contains('aperto') && !e.target.closest('#menu') && !e.target.closest('[data-azione="menu"]')) m.classList.remove('aperto'); });
-window.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (D && ['concorrenza', 'proposte', 'campagne', 'imparato'].indexOf(h) >= 0) vai(h, true); });
+window.addEventListener('hashchange', function () { var h = location.hash.slice(1).split('?')[0]; if (D && ['concorrenza', 'proposte', 'campagne', 'imparato'].indexOf(h) >= 0) vai(h, true); });
 
 leggiPass();
 carica();

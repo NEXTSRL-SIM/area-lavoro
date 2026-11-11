@@ -328,7 +328,7 @@ function disegna() {
     '<main><header class="testa"><div style="display:flex;flex-direction:column;gap:4px"><span class="occhiello">' +
     esc(oggi.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })) + '<em>dati letti alle ' + esc(ora(D.generato_at).split(', ').pop()) + '</em></span><h1>Marketing</h1></div>' +
     '<div class="dx"><a class="btn" href="' + PORTALE + 'regia/" title="I contatti uno per uno: Regia e Chat">Contatti nella Regia</a>' +
-    '<button class="btn pri" disabled title="Non ancora collegato: si accende con il via di Sante">' + ICO.piu + 'Chiedi proposte</button></div></header>' +
+    '<button class="btn pri" data-pz="nuova">' + ICO.piu + 'Nuova campagna</button></div></header>' +
     '<div class="linguette" role="tablist">' +
     '<button class="lg" data-vai="concorrenza">Concorrenza <b>' + c + '</b></button>' +
     '<button class="lg" data-vai="proposte">Proposte <b>' + D.proposte.righe.length + '</b></button>' +
@@ -421,19 +421,107 @@ function schedaAnnuncio(a) {
 
 /* ---------- B) PROPOSTE ---------- */
 function sezProposte() {
-  var P = D.proposte;
-  var s = '<div class="brief"><div><span class="lbl">Campagna da preparare</span><span class="v">nessuna richiesta aperta</span><span class="nota">la richiesta allo studio parte da «Chiedi proposte»</span></div>' +
-    '<div><span class="lbl">Proposte nuove</span><span class="v mono">' + P.righe.length + '</span><span class="nota">dello studio, da questa sezione</span></div>' +
-    '<div><span class="lbl">Archivio di agosto</span><span class="v mono">' + num(P.archivio_agosto) + '</span><span class="nota">proposte dell’osservatorio</span></div>' +
-    '<div><span class="lbl">Stato</span><span class="v"><span class="pill p-gy">non collegato</span></span><span class="nota">aspetta il via di Sante</span></div></div>';
-  if (!P.righe.length) {
-    s += '<article class="card"><div class="vuoto"><span class="ic">' + ICO.idea + '</span><h3>Nessuna proposta, per ora</h3>' +
-      '<div style="max-width:560px">Qui arriveranno le proposte dello studio per la prossima campagna: due formati (4:5 per il feed, 9:16 per storie e reel), il testo, la leva, il pubblico e il costo per contatto atteso, ognuna con Approva, Chiedi modifiche e Metti in prova. Le proposte terranno conto delle regole in «Cosa abbiamo imparato».</div>' +
-      '<button class="btn pri" disabled title="Non ancora collegato: si accende con il via di Sante">' + ICO.piu + 'Chiedi proposte</button>' +
-      '<span class="nota">Il pulsante non è ancora collegato. Le ' + num(P.archivio_agosto) + ' proposte di agosto restano nell’archivio dell’osservatorio (proposte_creative) e non sono riportate qui.</span></div></article>';
+  /* PORTALE NEXT 2.0-143 (Sante 11/11): le proposte vere, con immagini, testi per Meta e il giudizio di Sante; «Nuova campagna» apre la richiesta allo studio */
+  var P = D.proposte, R = P.richieste || [], s = '';
+  s += '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px"><button class="btn pri" data-pz="nuova">' + ICO.piu + 'Nuova campagna</button>' +
+    '<span class="nota">Scrivi cosa vuoi promuovere: lo studio prepara le proposte complete (immagini, testi, formati) e te le riporta qui.</span></div>';
+  s += '<article class="card" id="pzForm" style="display:none;margin-bottom:16px"><div style="padding:18px 20px"><h3 style="margin:0 0 4px">Nuova campagna</h3>' +
+    '<div class="nota" style="margin-bottom:12px">Basta la prima riga; il resto aiuta. Se un dato manca, lo studio lo chiede.</div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">' +
+    pzCampo('pzCosa', 'Cosa vuoi promuovere *', 'es. fotovoltaico 10 kWp con batteria 16 kWh allo stesso prezzo di un 6 kWp', true) +
+    pzCampo('pzObiettivo', 'Obiettivo', 'es. contatti per preventivo, appuntamenti, notorietà') +
+    pzCampo('pzPubblico', 'A chi', 'es. proprietari di casa 35-65, chi ha già un preventivo') +
+    pzCampo('pzZona', 'Dove', 'es. Veneto e Friuli, oppure Nord e Centro') +
+    pzCampo('pzBudget', 'Budget', 'es. 20 euro al giorno, 600 euro in tutto') +
+    pzCampo('pzScadenza', 'Entro quando', 'es. partenza lunedì, promozione fino al 31/12') +
+    '</div><label style="display:block;margin-top:12px"><span class="lbl">Note, idee, cose da evitare</span>' +
+    '<textarea id="pzNote" rows="3" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></textarea></label>' +
+    '<div style="display:flex;gap:10px;align-items:center;margin-top:12px"><button class="btn pri" data-pz="invia">Invia allo studio</button><button class="btn" data-pz="nuova">Annulla</button><span class="nota" id="pzMsg"></span></div>' +
+    '</div></article>';
+  if (R.length) {
+    s += '<article class="card" style="margin-bottom:16px"><div style="padding:14px 20px"><span class="lbl">Richieste allo studio</span>' +
+      R.map(function (r) {
+        var st = { aperta: ['p-am', 'in attesa'], in_lavorazione: ['p-ac', 'in lavorazione'], proposte_pronte: ['p-gr', 'proposte pronte'] }[r.stato] || ['p-gy', r.stato];
+        return '<div style="display:flex;gap:10px;align-items:baseline;padding:8px 0;border-top:1px solid var(--ln)"><span class="pill ' + st[0] + '">' + esc(st[1]) + '</span><b>' + esc(r.cosa) + '</b>' +
+          '<span class="nota">' + esc([r.zona, r.budget, r.scadenza].filter(Boolean).join(' · ')) + ' — ' + ora(r.creata_at) + '</span></div>';
+      }).join('') + '</div></article>';
   }
+  if (!P.righe.length) {
+    s += '<article class="card"><div class="vuoto"><span class="ic">' + ICO.idea + '</span><h3>Nessuna proposta, per ora</h3><div style="max-width:560px">Premi «Nuova campagna» e scrivi cosa vuoi promuovere: le proposte arrivano qui, ognuna con Approva, Chiedi modifiche e Scarta.</div></div></article>';
+    return s;
+  }
+  P.righe.forEach(function (p) { s += pzScheda(p); });
   return s;
 }
+function pzCampo(id, et, ph, largo) {
+  return '<label style="display:block' + (largo ? ';grid-column:1/-1' : '') + '"><span class="lbl">' + esc(et) + '</span><input id="' + id + '" placeholder="' + esc(ph) + '" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></label>';
+}
+function pzScheda(p) {
+  var im = p.immagini || {}, fm = [['4:5', 200, 250], ['1:1', 200, 200], ['9:16', 141, 250]];
+  var es = { approvata: ['p-gr', 'Approvata'], da_modificare: ['p-am', 'Da modificare'], scartata: ['p-rd', 'Scartata'] }[p.esito] || ['p-gy', 'Da valutare'];
+  var riga = function (et, v, pre) { return v ? '<div style="padding:7px 0;border-top:1px solid var(--ln)"><span class="lbl">' + esc(et) + '</span><div style="margin-top:2px' + (pre ? ';white-space:pre-line' : '') + '">' + esc(v) + '</div></div>' : ''; };
+  return '<article class="card" style="margin-bottom:16px"><div style="padding:16px 20px">' +
+    '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px"><h3 style="margin:0">' + esc(p.titolo_interno || p.codice) + '</h3>' +
+    '<span class="pill ' + es[0] + '">' + es[1] + '</span>' + (p.varco ? '<span class="nota">' + esc(p.varco) + '</span>' : '') +
+    (p.esito_at ? '<span class="nota" style="margin-left:auto">' + ora(p.esito_at) + '</span>' : '') + '</div>' +
+    '<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">' + fm.filter(function (f) { return im[f[0]]; }).map(function (f) {
+      return '<a href="' + esc(im[f[0]]) + '" target="_blank" rel="noopener" title="Apri il formato ' + f[0] + ' a grandezza piena" style="text-decoration:none;color:inherit;text-align:center">' +
+        '<img src="' + esc(im[f[0]]) + '" alt="Proposta ' + esc(p.codice) + ' formato ' + f[0] + '" loading="lazy" style="display:block;width:' + f[1] + 'px;height:' + f[2] + 'px;object-fit:cover;border-radius:8px;border:1px solid var(--ln)">' +
+        '<span class="nota mono">' + f[0] + '</span></a>';
+    }).join('') + '</div>' +
+    '<div style="flex:1 1 320px;min-width:0">' +
+    riga('Titolo (Meta)', p.titolo_meta || p.hook) + riga('Testo principale (Meta)', p.corpo, true) + riga('Descrizione', p.descrizione_meta) +
+    riga('Pulsante', p.cta) + riga('Pubblico', p.contro_chi) + riga('Perché funziona', p.perche) + riga('Come la misuriamo', p.come_misurarla) +
+    (p.esito_nota ? riga('La tua nota', p.esito_nota, true) : '') +
+    '</div></div>' +
+    '<div style="margin-top:12px;border-top:1px solid var(--ln);padding-top:12px">' +
+    '<textarea id="pzNota' + p.id + '" rows="2" placeholder="Nota per lo studio (obbligatoria per «Chiedi modifiche»): cosa cambiare, cosa tenere" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--ink);font:inherit"></textarea>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">' +
+    '<button class="btn pri" data-pz="approvata" data-id="' + p.id + '">Approva</button>' +
+    '<button class="btn" data-pz="da_modificare" data-id="' + p.id + '">Chiedi modifiche</button>' +
+    '<button class="btn" data-pz="scartata" data-id="' + p.id + '">Scarta</button>' +
+    '<span class="nota" id="pzEsito' + p.id + '"></span></div></div>' +
+    '</div></article>';
+}
+function pzPost(o) {
+  o.t = PASS;
+  return fetch(API + 'marketing-dati', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(o) }).then(function (r) { return r.json(); });
+}
+function pzRicarica() {
+  return pzPost({}).then(function (j) { if (j && j.proposte) { D = j; ridisegna('proposte'); } });
+}
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('[data-pz]'); if (!b) return;
+  var a = b.getAttribute('data-pz');
+  if (a === 'nuova') {
+    if (stato.sez !== 'proposte') vai('proposte');
+    setTimeout(function () { var f = document.getElementById('pzForm'); if (f) { f.style.display = f.style.display === 'none' ? 'block' : 'none'; if (f.style.display === 'block') { var c = document.getElementById('pzCosa'); if (c) c.focus(); } } }, 60);
+    return;
+  }
+  if (a === 'invia') {
+    var g = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    var r = { cosa: g('pzCosa'), obiettivo: g('pzObiettivo'), pubblico: g('pzPubblico'), zona: g('pzZona'), budget: g('pzBudget'), scadenza: g('pzScadenza'), note: g('pzNote') };
+    var m = document.getElementById('pzMsg');
+    if (!r.cosa) { if (m) m.textContent = 'Scrivi almeno cosa vuoi promuovere.'; return; }
+    b.disabled = true; if (m) m.textContent = 'Invio…';
+    pzPost({ azione: 'richiesta', richiesta: r }).then(function (j) {
+      if (j && j.ok) return pzRicarica();
+      b.disabled = false; if (m) m.textContent = 'Non inviata: ' + ((j && j.errore) || 'errore');
+    }).catch(function () { b.disabled = false; if (m) m.textContent = 'Non inviata: errore di rete.'; });
+    return;
+  }
+  if (a === 'approvata' || a === 'da_modificare' || a === 'scartata') {
+    var id = b.getAttribute('data-id'), t = document.getElementById('pzNota' + id), out = document.getElementById('pzEsito' + id);
+    var nota = t ? t.value.trim() : '';
+    if (a === 'da_modificare' && !nota) { if (out) out.textContent = 'Scrivi nella nota cosa cambiare.'; if (t) t.focus(); return; }
+    b.disabled = true; if (out) out.textContent = 'Salvo…';
+    pzPost({ azione: 'esito', id: id, esito: a, nota: nota }).then(function (j) {
+      if (j && j.ok) return pzRicarica();
+      b.disabled = false; if (out) out.textContent = 'Non salvato: ' + ((j && j.errore) || 'errore');
+    }).catch(function () { b.disabled = false; if (out) out.textContent = 'Non salvato: errore di rete.'; });
+  }
+});
 
 /* ---------- C) CAMPAGNE ---------- */
 function campagneVisibili() { return D.campagne.filter(function (c) { return stato.pubblico === 'tutte' || c.pubblico === stato.pubblico; }); }

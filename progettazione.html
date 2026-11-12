@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="it">
+<head>
+<script>/* PORTALE NEXT 2.0-143: dentro il portale il menu è quello del portale, questo si nasconde */try{if(window.self!==window.top)document.documentElement.classList.add('incorniciata');}catch(e){document.documentElement.classList.add('incorniciata');}</script>
+<style>html.incorniciata nav.menu{display:none!important}html.incorniciata .app{background:var(--sf2)!important}</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Progettazione – Next</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* PORTALE NEXT 2.0-143 — pagina Progettazione (pagine_html 'progettazione', pubblicata come area-lavoro/progettazione.html).
+   Stesso stile di Marketing e dell'Area di lavoro: token --sf/--sf2/--ink/--ln/--acw..., menu scuro #0B1119, accento #0891B2,
+   Manrope + IBM Plex Sans/Mono. Nessun dato dentro la pagina: tutto arriva dalla edge 'progettazione' solo con il lasciapassare. */
+html,body{margin:0;background:#0B1119}
+*{box-sizing:border-box}
+[data-tema]{--sf:#FFFFFF;--sf2:#F6F8FA;--ink:#0F172A;--ink2:#334155;--ink3:#64748B;--ln:#E3E7EC;--acw:#E0F4F9;--rdw:#FEE2E2;--grw:#DCFCE7;--amw:#FEF3C7;--viw:#F0ECFE;--ac:#0891B2;--gr:#15803D;--rd:#B91C1C;--am:#B45309;--vi:#7C3AED;--blu:#1E3A5F}
+[data-tema="notte"]{--sf:#162032;--sf2:#0F1623;--ink:#E8EEF5;--ink2:#A3B3C6;--ink3:#8494AB;--ln:#24324A;--acw:#0B2C3A;--rdw:#3B1618;--grw:#0F2E1C;--amw:#33270F;--viw:#2A2147;--ac:#22B8D8;--gr:#4ADE80;--rd:#F87171;--am:#FBBF24;--vi:#A78BFA;--blu:#8DB4E2;color-scheme:dark}
+.app{display:flex;min-height:100vh;background:linear-gradient(90deg,#0B1119 224px,var(--sf2) 224px);font-family:Manrope,Arial,sans-serif;color:var(--ink)}
+.mono{font-family:'IBM Plex Mono',monospace}
+button,input,select,textarea{font-family:inherit}
+nav.menu{flex:0 0 224px;background:#0B1119;padding:14px 10px;display:flex;flex-direction:column;gap:1px;font-family:'IBM Plex Sans',Arial,sans-serif;position:sticky;top:0;height:100vh;align-self:flex-start;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:9px;padding:2px 6px 14px}
+.logo i{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#22D3EE,#0891B2);display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#0E141D;font-style:normal}
+.logo span{display:flex;flex-direction:column;color:#E6EDF5}.logo b{font-size:13.5px}.logo small{font-size:10.5px;color:#8D9BAD}
+.mv{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;color:#9AA8B9;text-decoration:none;font-size:12.5px;font-weight:600;white-space:nowrap;cursor:pointer;background:none;border:0;text-align:left;width:100%}
+.mv:hover{background:#151E2A;color:#E6EDF5}
+.mv.su{color:#22D3EE;background:rgba(34,211,238,.12)}
+.mg{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#5F6E81;font-weight:800;padding:12px 10px 4px}
+.mpie{margin-top:auto;display:flex;align-items:center;gap:9px;padding:12px 6px 0;border-top:1px solid #1A2330;color:#E6EDF5;font-size:12px}
+.mpie .av{width:28px;height:28px;border-radius:50%;background:#1F2B3A;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#A3B1C2}
+.btema{margin-left:auto;width:28px;height:28px;border-radius:7px;border:1px solid #1F2B3A;background:transparent;color:#A3B1C2;cursor:pointer;display:flex;align-items:center;justify-content:center}
+main{flex:1 1 auto;min-width:0;background:var(--sf2);min-height:100vh;padding:22px 28px 48px;display:flex;flex-direction:column;gap:16px}
+header.testa{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.occhiello{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.occhiello em{font-style:normal;font-weight:600;letter-spacing:.02em;text-transform:none;margin-left:10px}
+h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.01em}
+.dx{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{font:700 12.5px Manrope,sans-serif;height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--ln);background:var(--sf);color:var(--ink2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.btn:hover{border-color:var(--ac);color:var(--ac)}
+.btn.pri{background:#0891B2;border-color:#0891B2;color:#fff;box-shadow:0 2px 6px rgba(8,145,178,.30)}
+.btn.pri:hover{background:#0E9AC0;color:#fff}
+.btn[disabled]{opacity:.55;cursor:not-allowed;box-shadow:none}
+.btn.sm{height:28px;font-size:11.5px;padding:0 9px;border-radius:8px}
+.btn.gr{height:42px;font-size:14px;padding:0 18px;border-radius:11px}
+.fl{font:700 12px Manrope,sans-serif;height:26px;padding:0 10px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);color:var(--ink2);cursor:pointer;white-space:nowrap}
+.fl.su{border-color:#0891B2;background:var(--acw);color:var(--ac)}
+.fl b{font-weight:800;margin-left:4px;color:var(--ink3)}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ct{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ct .tt{display:flex;flex-direction:column;flex:1;min-width:0}
+.ct h3{margin:0;font-size:15px;font-weight:700}
+.ct .fx{font-size:12px;color:var(--ink3)}
+.pill{font-size:12px;font-weight:800;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.p-ac{color:var(--ac);background:var(--acw)}.p-gr{color:var(--gr);background:var(--grw)}.p-rd{color:var(--rd);background:var(--rdw)}.p-am{color:var(--am);background:var(--amw)}.p-vi{color:var(--vi);background:var(--viw)}.p-gy{color:var(--ink3);background:var(--sf2);border:1px solid var(--ln)}
+.chip{font-size:10.5px;font-weight:800;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.lbl{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.avviso{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);font-size:13px;line-height:1.45;color:var(--ink2)}
+.avviso .ic{flex:0 0 24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.avviso.am .ic{background:var(--amw);color:var(--am)}.avviso.ac .ic{background:var(--acw);color:var(--ac)}.avviso.rd .ic{background:var(--rdw);color:var(--rd)}
+.avviso.rd{border-color:color-mix(in srgb,var(--rd) 35%,var(--ln))}
+.avviso b{color:var(--ink)}
+.vuoto{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:36px 18px;color:var(--ink2);font-size:13.5px;line-height:1.5}
+.vuoto .ic{width:44px;height:44px;border-radius:50%;background:var(--acw);color:var(--ac);display:flex;align-items:center;justify-content:center}
+.vuoto h3{margin:0;font-size:16px;color:var(--ink)}
+/* impaginazione: elenco a sinistra, scheda a destra */
+.lavoro{display:grid;grid-template-columns:360px minmax(0,1fr);gap:16px;align-items:start}
+.elenco{position:sticky;top:16px;max-height:calc(100vh - 32px);padding:14px 12px 10px}
+.cerca{display:flex;align-items:center;gap:8px;height:38px;border:1px solid var(--ln);border-radius:10px;padding:0 10px;background:var(--sf2);color:var(--ink3)}
+.cerca input{flex:1;border:0;background:transparent;outline:0;font:500 13.5px 'IBM Plex Sans',sans-serif;color:var(--ink);min-width:0}
+.filtri{display:flex;gap:6px;flex-wrap:wrap}
+.righe{display:flex;flex-direction:column;gap:2px;overflow-y:auto;margin:0 -4px;padding:0 4px;min-height:120px}
+.riga{display:flex;flex-direction:column;gap:3px;padding:9px 10px;border-radius:10px;border:1px solid transparent;background:none;cursor:pointer;text-align:left;color:var(--ink);width:100%}
+.riga:hover{background:var(--sf2)}
+.riga.su{background:var(--acw);border-color:#0891B2}
+.riga .r1{display:flex;align-items:center;gap:6px;min-width:0}
+.riga .r1 b{font-size:13.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.riga .r1 .kw{font:600 12px 'IBM Plex Mono',monospace;color:var(--ink2)}
+.riga .r2{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink3);flex-wrap:wrap}
+.ok{color:var(--gr);background:var(--grw)}.no{color:var(--rd);background:var(--rdw)}.tp{color:var(--vi);background:var(--viw)}
+.contatore{font-size:11.5px;color:var(--ink3);padding:2px 4px}
+/* scheda */
+.scheda{display:flex;flex-direction:column;gap:16px;min-width:0}
+.testa-scheda{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.testa-scheda .nm{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.testa-scheda h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em}
+.testa-scheda .sub{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--ink3)}
+.dati{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.blocco{border:1px solid var(--ln);border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:7px;min-width:0;background:var(--sf)}
+.blocco h4{margin:0;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);display:flex;gap:6px;align-items:center}
+.blocco .tit{font-size:14px;font-weight:700;line-height:1.3}
+.blocco .tit small{display:block;font:500 11.5px 'IBM Plex Mono',monospace;color:var(--ink3);margin-top:2px}
+.kv{display:grid;grid-template-columns:auto 1fr;column-gap:10px;row-gap:3px;font-size:12.5px}
+.kv dt{color:var(--ink3)}
+.kv dd{margin:0;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink);text-align:right;overflow-wrap:anywhere}
+.kv dd.manca{color:var(--rd);font-family:Manrope,sans-serif;font-weight:700}
+.blocco a{color:var(--ac);font-weight:700;font-size:12.5px;text-decoration:none}
+.blocco .nota-p{font-size:11.5px;color:var(--ink3)}
+.blocco a:hover{text-decoration:underline}
+/* configura */
+.conf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+.campo{display:flex;flex-direction:column;gap:6px;min-width:0}
+.campo.largo{grid-column:1/-1}
+.scelte{display:flex;gap:6px;flex-wrap:wrap}
+.sc{font:700 12.5px Manrope,sans-serif;min-height:34px;padding:5px 12px;border-radius:9px;border:1px solid var(--ln);background:var(--sf);color:var(--ink2);cursor:pointer;display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;text-align:left}
+.sc small{font-weight:600;font-size:10.5px;color:var(--ink3)}
+.sc.su{border-color:#0891B2;background:var(--acw);color:var(--ac)}
+.sc.su small{color:var(--ac)}
+input.num,select.sel,textarea.nota{border:1px solid var(--ln);border-radius:9px;background:var(--sf);color:var(--ink);font:500 13px 'IBM Plex Sans',sans-serif;padding:0 10px;height:34px}
+input.num{width:90px;font-family:'IBM Plex Mono',monospace}
+textarea.nota{height:70px;padding:8px 10px;resize:vertical;width:100%;line-height:1.45}
+.spunta{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink2);cursor:pointer;line-height:1.4}
+.spunta input{margin-top:2px;accent-color:#0891B2}
+.mppt{display:flex;flex-direction:column;gap:8px;border:1px dashed var(--ln);border-radius:12px;padding:10px 12px}
+.mppt-riga{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mppt-riga .nm{font:800 12px 'IBM Plex Mono',monospace;color:var(--blu);min-width:58px}
+.str{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);border:1px solid var(--ln);border-radius:9px;padding:3px 6px 3px 9px;background:var(--sf2)}
+.str input{width:52px;height:28px;border:1px solid var(--ln);border-radius:7px;background:var(--sf);color:var(--ink);font:600 13px 'IBM Plex Mono',monospace;text-align:center}
+.str select{height:28px;border:1px solid var(--ln);border-radius:7px;background:var(--sf);color:var(--ink);font:600 11.5px Manrope,sans-serif}
+.str .x{border:0;background:none;color:var(--ink3);cursor:pointer;font-size:15px;line-height:1;padding:0 2px}
+.str .v{font:600 11px 'IBM Plex Mono',monospace;color:var(--ink3)}
+.str .v.alto{color:var(--rd)}
+.somma{font-size:12.5px;color:var(--ink2)}
+.somma b{font-family:'IBM Plex Mono',monospace}
+.piede-conf{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--ln);padding-top:12px}
+.piede-conf .msg{font-size:13px;color:var(--ink2);flex:1;min-width:200px}
+.piede-conf .msg.err{color:var(--rd);font-weight:700}
+/* revisioni */
+.attesa{display:flex;align-items:center;gap:14px;background:#0B1119;color:#E6EDF5;border-radius:14px;padding:13px 16px;font-family:'IBM Plex Sans',Arial,sans-serif}
+[data-tema="notte"] .attesa{border:1px solid var(--ln)}
+.attesa .ruota{flex:0 0 26px;width:26px;height:26px;border-radius:50%;border:3px solid rgba(34,211,238,.25);border-top-color:#22D3EE;animation:gira 1s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.attesa .cx{flex:1;display:flex;flex-direction:column;gap:2px}
+.attesa b{font-size:14px}.attesa small{color:#A3B1C2;font-size:12px}
+.attesa .ab{font:700 12.5px Manrope,sans-serif;border:1px solid #31435F;border-radius:9px;height:32px;padding:0 12px;background:transparent;color:#C9D3DF;cursor:pointer}
+.rev{border:1px solid var(--ln);border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:9px}
+.rev.prima{border-color:#0891B2;box-shadow:0 0 0 3px var(--acw)}
+.rev .r1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rev .r1 .n{font:800 15px 'IBM Plex Mono',monospace;color:var(--blu)}
+.rev .r1 .q{font-size:12px;color:var(--ink3)}
+.rev .r1 .bb{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.tavole{display:flex;gap:6px;flex-wrap:wrap}
+.tavola{display:inline-flex;align-items:center;gap:6px;font:600 12px Manrope,sans-serif;height:28px;padding:0 10px;border-radius:8px;border:1px solid var(--ln);background:var(--sf2);color:var(--ink2);text-decoration:none}
+.tavola:hover{border-color:var(--ac);color:var(--ac)}
+.tavola .mono{font-size:10.5px;color:var(--ink3)}
+.barra-tel{display:none}
+.porta{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;background:#0B1119;font-family:'IBM Plex Sans',Arial,sans-serif}
+.porta .box{width:100%;max-width:380px;background:#121B27;border:1px solid #1F2B3A;border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:14px;color:#E6EDF5}
+.porta h2{margin:0;font:800 19px Manrope,sans-serif}
+.porta p{margin:0;font-size:13px;line-height:1.5;color:#A3B1C2}
+.porta input{height:44px;border-radius:10px;border:1px solid #2A3A50;background:#0B1119;color:#E6EDF5;padding:0 12px;font:500 15px 'IBM Plex Sans',sans-serif}
+.porta .err{color:#F87171;font-size:12.5px;min-height:16px}
+.nascosto{display:none!important}
+@media (max-width:1280px){ .dati{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:1050px){
+ .lavoro{grid-template-columns:1fr}
+ .elenco{position:static;max-height:none}
+ .righe{max-height:46vh}
+ .conf{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+ nav.menu{display:none}
+ nav.menu.aperto{display:flex;position:fixed;inset:0 auto 0 0;z-index:60;width:260px;height:100vh;box-shadow:0 0 0 100vmax rgba(0,0,0,.5)}
+ .barra-tel{display:flex;position:sticky;top:0;z-index:20;align-items:center;gap:10px;padding:10px 16px;background:#0B1119;color:#E6EDF5;font-family:'IBM Plex Sans',Arial,sans-serif}
+ .barra-tel i{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#22D3EE,#0891B2);display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#0E141D;font-style:normal}
+ .barra-tel b{font-size:14px}.barra-tel small{color:#8D9BAD;font-size:11px;display:block}
+ .barra-tel .bt{width:34px;height:34px;border-radius:9px;border:1px solid #1F2B3A;background:transparent;color:#A3B1C2;display:flex;align-items:center;justify-content:center}
+ .barra-tel .bt:first-of-type{margin-left:auto}
+ .app{flex-direction:column;background:var(--sf2)}
+ main{padding:14px 16px 28px;gap:14px}
+ h1{font-size:21px}
+ header.testa .dx{display:none}
+ .dati{grid-template-columns:1fr}
+ .card{padding:14px 14px 12px}
+ .rev .r1 .bb{margin-left:0;width:100%}
+}
+@media print{ nav.menu,.barra-tel,.elenco,.dx,#cardConf,.attesa{display:none!important} .app{background:#fff} main{padding:0} }
+</style>
+</head>
+<body>
+<div id="radice"></div>
+<script>
+(function () {
+'use strict';
+var API = 'https://pnxhthrheqeucoisifjw.supabase.co/functions/v1/';
+var EDGE = API + 'progettazione';
+var PORTALE = 'https://nextsrl-sim.github.io/';
+var ATTESA_MAX_MIN = 25;      /* oltre, si dice che ci mette più del solito (l'attività cloud di solito chiude in pochi minuti) */
+var OGNI_S = 20;              /* ogni quanti secondi si rilegge lo storage mentre lo schema è in preparazione */
+var radice = document.getElementById('radice');
+var D = null, PASS = null, CHI = null, S = null, REV = null;
+var stato = { tema: 'giorno', filtro: 'tutte', q: '', scelto: null, tipo: null, conf: null, revErr: '' };
+var timer = null, orologio = null;
+try { var tm = localStorage.getItem('pg_tema'); if (tm === 'notte') stato.tema = 'notte'; } catch (e) {}
+(function () { var m = location.search.match(/[?&]id=([0-9a-f-]{36})/i), t = location.search.match(/[?&]tipo=(pratica|preventivo)/); if (m) { stato.scelto = m[1].toLowerCase(); stato.tipo = t ? t[1] : 'pratica'; } })();
+
+/* ---------- utilità ---------- */
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+function num(n, dec) { if (n == null || n === '' || isNaN(Number(n))) return '—'; return Number(n).toLocaleString('it-IT', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec == null ? 2 : dec }); }
+function ora(s) { if (!s) return '—'; var d = new Date(s); if (isNaN(d)) return '—'; return d.toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' }); }
+function peso(b) { if (!b) return ''; return b > 1048576 ? num(b / 1048576, 1) + ' MB' : num(Math.max(1, Math.round(b / 1024)), 0) + ' kB'; }
+function due(n) { return String(n).padStart(2, '0'); }
+var STATI = { new: 'nuova', contract_sent: 'contratto inviato', contract_signed: 'contratto firmato', signed: 'firmata', in_progress: 'in corso', completed: 'completata', closed: 'chiusa', draft: 'bozza', sent: 'inviato', bozza: 'bozza', inviato: 'inviato' };
+function statoTxt(s) { return STATI[s] || s || '—'; }
+var ICO = {
+  pano: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>',
+  regia: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
+  area: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>',
+  posta: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+  mk: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></svg>',
+  prog: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4M17 12h4M7 8v8M17 9v6M7 12h3l2-4 2 8 2-4h1"/></svg>',
+  prev: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M12 12v6M9 15h6"/></svg>',
+  cli: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  bon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/></svg>',
+  merce: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"/></svg>',
+  luna: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+  menu: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  cerca: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+  info: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>',
+  att: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/></svg>',
+  stop: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 8l8 8M16 8l-8 8"/></svg>',
+  pdf: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>',
+  stampa: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>',
+  giu: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg>',
+  gira: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg>',
+  fulmine: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',
+  mappa: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>'
+};
+
+/* ---------- accesso: lo stesso lasciapassare di Marketing e dell'Area di lavoro (regia_pass), dato da regia-entra ---------- */
+function leggiPass() {
+  try {
+    var ps = sessionStorage.getItem('regia_pass');
+    if (ps) { localStorage.setItem('next_regia_pass', ps); var ch = sessionStorage.getItem('regia_chi'); if (ch) localStorage.setItem('next_regia_chi', ch); }
+    else { var pl = localStorage.getItem('next_regia_pass'); if (pl) { sessionStorage.setItem('regia_pass', pl); var cl = localStorage.getItem('next_regia_chi'); if (cl) sessionStorage.setItem('regia_chi', cl); } }
+    PASS = sessionStorage.getItem('regia_pass'); CHI = sessionStorage.getItem('regia_chi');
+  } catch (e) { PASS = null; }
+}
+function dimentica() { try { sessionStorage.removeItem('regia_pass'); localStorage.removeItem('next_regia_pass'); } catch (e) {} PASS = null; D = null; }
+function porta(msg) {
+  document.title = 'Progettazione – Next';
+  radice.innerHTML = '<div class="porta"><form class="box" id="f-porta" autocomplete="off">' +
+    '<div class="logo" style="padding:0"><i>N</i><span><b>Next S.r.l.</b><small>portale gestione · Progettazione</small></span></div>' +
+    '<h2>Entra con la tua parola</h2><p>La stessa della Regia e dell’Area di lavoro. Se sei già entrato dal portale su questo computer, la pagina si apre da sola.</p>' +
+    '<input id="parola" type="password" placeholder="Parola d’ordine" aria-label="Parola d’ordine" autofocus>' +
+    '<div class="err" id="err">' + esc(msg || '') + '</div>' +
+    '<button class="btn pri" style="height:42px;justify-content:center" type="submit">Entra</button></form></div>';
+  document.getElementById('f-porta').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var p = document.getElementById('parola').value; var er = document.getElementById('err'); er.textContent = 'Controllo…';
+    fetch(API + 'regia-entra', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ parola: p }) })
+      .then(function (r) { return r.json(); }).then(function (j) {
+        if (!j || !j.ok || !j.pass) { er.textContent = 'Parola non riconosciuta.'; return; }
+        try { sessionStorage.setItem('regia_pass', j.pass); sessionStorage.setItem('regia_chi', j.chi || ''); localStorage.setItem('next_regia_pass', j.pass); localStorage.setItem('next_regia_chi', j.chi || ''); } catch (x) {}
+        PASS = j.pass; CHI = j.chi; carica();
+      }).catch(function () { er.textContent = 'Non riesco a raggiungere il portale. Riprova.'; });
+  });
+}
+function chiama(corpo) {
+  corpo.t = PASS;
+  return fetch(EDGE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) })
+    .then(function (r) { if (r.status === 401) { dimentica(); porta('Il lasciapassare non vale più: entra di nuovo.'); throw new Error('401'); } return r.json(); });
+}
+function carica() {
+  if (!PASS) { porta(); return; }
+  if (!D) radice.innerHTML = '<div class="porta"><div class="box"><h2>Progettazione</h2><p>Carico pratiche e preventivi…</p></div></div>';
+  chiama({ azione: 'elenco' }).then(function (j) {
+    if (!j || !j.ok) throw new Error((j && j.errore) || 'dati');
+    D = j; disegna();
+    if (stato.scelto) apri(stato.tipo, stato.scelto, true);
+  }).catch(function (e) { if (String(e.message) !== '401') porta('Non riesco a leggere i dati: ' + e.message); });
+}
+
+/* ---------- impalcatura ---------- */
+function menu() {
+  var a = function (url, ico, t, extra) { return '<a class="mv' + (extra || '') + '" href="' + url + '">' + ico + t + '</a>'; };
+  return '<nav class="menu" id="menu" aria-label="Menu Next">' +
+    '<div class="logo"><i>N</i><span><b>Next S.r.l.</b><small>portale gestione</small></span></div>' +
+    a(PORTALE + 'percorso/', ICO.pano, 'Panoramica') +
+    '<div class="mg">Lavoro</div>' + a(PORTALE + 'area-lavoro/', ICO.area, 'Scrivania') + a(PORTALE + 'area-posta/', ICO.posta, 'Posta') +
+    '<div class="mg">Marketing</div>' + a(PORTALE + 'area-lavoro/marketing.html', ICO.mk, 'Marketing') +
+    '<div class="mg">Tecnico</div><a class="mv su" href="#" data-azione="cima">' + ICO.prog + 'Progettazione</a>' +
+    a(PORTALE + 'regia/', ICO.regia, 'Regia') +
+    '<div class="mg">Preventivi e clienti</div>' + a(PORTALE + 'nuovo-preventivo/', ICO.prev, 'Nuovo preventivo') + a(PORTALE + 'nuovo-cliente/', ICO.cli, 'Nuovo cliente') +
+    '<div class="mg">Pagamenti</div>' + a(PORTALE + 'verifica-bonifici/', ICO.bon, 'Verifica bonifici') + a(PORTALE + 'avvisi-merce/', ICO.merce, 'Avvisi merce pronta') +
+    '<div class="mpie"><span class="av">' + esc((CHI || 'N').slice(0, 2).toUpperCase()) + '</span><b>' + esc(CHI || '') + '</b><button class="btema" data-azione="tema" aria-label="Cambia tema" title="Giorno / notte">' + ICO.luna + '</button></div>' +
+    '</nav>';
+}
+function disegna() {
+  var oggi = new Date();
+  radice.innerHTML = '<div class="app" id="app" data-tema="' + stato.tema + '">' + menu() +
+    '<div class="barra-tel"><i>N</i><span><b>Progettazione</b><small>Next S.r.l. · portale</small></span>' +
+    '<button class="bt" data-azione="tema" aria-label="Tema">' + ICO.luna + '</button><button class="bt" data-azione="menu" aria-label="Menu">' + ICO.menu + '</button></div>' +
+    '<main><header class="testa"><div style="display:flex;flex-direction:column;gap:4px"><span class="occhiello">' +
+    esc(oggi.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })) + '<em id="letti">dati letti alle ' + esc(ora(D.generato_at).split(', ').pop()) + '</em></span><h1>Progettazione</h1></div>' +
+    '<div class="dx"><button class="btn" data-azione="ricarica" title="Rileggi pratiche e preventivi">' + ICO.gira + 'Aggiorna</button></div></header>' +
+    '<div class="lavoro"><section class="card elenco" aria-label="Pratiche e preventivi">' +
+    '<label class="cerca">' + ICO.cerca + '<input id="q" type="search" placeholder="Cerca cliente, comune, codice…" value="' + esc(stato.q) + '" aria-label="Cerca"></label>' +
+    '<div class="filtri" id="filtri"></div><div class="contatore" id="conta"></div><div class="righe" id="righe"></div></section>' +
+    '<section class="scheda" id="scheda" aria-live="polite">' + schedaVuota() + '</section></div>' +
+    '</main></div>';
+  disegnaElenco();
+  document.getElementById('q').addEventListener('input', function (e) { stato.q = e.target.value; disegnaElenco(); });
+}
+function schedaVuota() {
+  return '<div class="card"><div class="vuoto"><div class="ic">' + ICO.prog + '</div><h3>Scegli una pratica o un preventivo</h3>' +
+    '<div>Dall’elenco a sinistra. Vedrai i dati dell’impianto, cosa manca, le opzioni dello schema e le revisioni già generate.</div></div></div>';
+}
+
+/* ---------- elenco ---------- */
+function tutte() { return (D.pratiche || []).concat(D.preventivi || []); }
+function pronta(x) { return x.tipo === 'pratica' ? (x.ha_inverter && x.ha_modulo) : true; }
+function passaFiltro(x) {
+  if (stato.filtro === 'pratiche' && x.tipo !== 'pratica') return false;
+  if (stato.filtro === 'preventivi' && x.tipo !== 'preventivo') return false;
+  if (stato.filtro === 'pronte' && !(x.tipo === 'pratica' && pronta(x))) return false;
+  if (stato.filtro === 'fv' && x.tipo === 'pratica' && !(x.kwp || x.prodotto === 'fotovoltaico')) return false;
+  var q = stato.q.trim().toLowerCase();
+  if (!q) return true;
+  return [x.nome, x.comune, x.provincia, x.codice, x.id].join(' ').toLowerCase().indexOf(q) >= 0;
+}
+function disegnaElenco() {
+  var tt = tutte();
+  var conta = { tutte: tt.length, fv: tt.filter(function (x) { return x.tipo !== 'pratica' || x.kwp || x.prodotto === 'fotovoltaico'; }).length, pronte: (D.pratiche || []).filter(pronta).length, pratiche: (D.pratiche || []).length, preventivi: (D.preventivi || []).length };
+  document.getElementById('filtri').innerHTML = [['tutte', 'Tutte'], ['fv', 'Fotovoltaico'], ['pronte', 'Pronte'], ['pratiche', 'Pratiche'], ['preventivi', 'Preventivi con layout']].map(function (f) {
+    return '<button class="fl' + (stato.filtro === f[0] ? ' su' : '') + '" data-filtro="' + f[0] + '">' + f[1] + '<b>' + conta[f[0]] + '</b></button>';
+  }).join('');
+  var l = tt.filter(passaFiltro).sort(function (a, b) {
+    var pa = pronta(a) ? 1 : 0, pb = pronta(b) ? 1 : 0;
+    if (pa !== pb) return pb - pa;
+    return String(b.aggiornata || '').localeCompare(String(a.aggiornata || ''));
+  });
+  document.getElementById('conta').textContent = l.length === tt.length ? l.length + ' in elenco' : l.length + ' su ' + tt.length;
+  document.getElementById('righe').innerHTML = l.length ? l.map(rigaElenco).join('') :
+    '<div class="vuoto" style="padding:24px 8px"><div>Nessun risultato' + (stato.q ? ' per «' + esc(stato.q) + '»' : '') + '.</div></div>';
+}
+function rigaElenco(x) {
+  var su = stato.scelto === x.id ? ' su' : '';
+  var chips = [];
+  if (x.tipo === 'preventivo') {
+    chips.push('<span class="chip tp">preventivo</span>');
+    chips.push('<span class="chip ok">layout rev ' + due(x.layout_rev || 0) + (x.layout_variante === 'B' ? ' B' : '') + '</span>');
+  } else {
+    chips.push('<span class="chip ' + (x.ha_inverter ? 'ok' : 'no') + '">inverter</span>');
+    chips.push('<span class="chip ' + (x.ha_modulo ? 'ok' : 'no') + '">modulo</span>');
+    chips.push('<span class="chip ' + (x.ha_pod ? 'ok' : 'no') + '">POD</span>');
+    if (x.ha_schema) chips.push('<span class="chip p-ac">schema</span>');
+  }
+  return '<button class="riga' + su + '" data-apri="' + esc(x.id) + '" data-tipo="' + x.tipo + '">' +
+    '<span class="r1"><b>' + esc(x.nome) + '</b><span class="kw">' + (x.kwp ? num(x.kwp, 2) + ' kWp' : '') + '</span></span>' +
+    '<span class="r2">' + esc([x.comune, x.codice].filter(Boolean).join(' · ') || statoTxt(x.stato)) + '</span>' +
+    '<span class="r2">' + chips.join('') + '</span></button>';
+}
+
+/* ---------- scheda ---------- */
+function apri(tipo, id, primaVolta) {
+  stato.scelto = id; stato.tipo = tipo; S = null; REV = null; stato.conf = null; stato.revErr = '';
+  ferma();
+  try { history.replaceState(null, '', '?tipo=' + tipo + '&id=' + id); } catch (e) {}
+  if (document.getElementById('righe')) disegnaElenco();
+  var el = document.getElementById('scheda');
+  el.innerHTML = '<div class="card"><div class="vuoto"><div class="ruota" style="width:26px;height:26px;border-radius:50%;border:3px solid var(--acw);border-top-color:var(--ac);animation:gira 1s linear infinite"></div><div>Leggo i dati…</div></div></div>';
+  chiama({ azione: 'scheda', tipo: tipo, id: id }).then(function (j) {
+    if (stato.scelto !== id) return;
+    if (!j || !j.ok) { el.innerHTML = '<div class="card"><div class="vuoto"><h3>Non trovata</h3><div>' + esc((j && j.errore) || 'errore') + '</div></div></div>'; return; }
+    S = j.scheda; stato.conf = confIniziale(S);
+    disegnaScheda();
+    leggiRevisioni();
+    if (!primaVolta && window.innerWidth <= 1050) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }).catch(function (e) { if (String(e.message) !== '401') el.innerHTML = '<div class="card"><div class="vuoto"><h3>Errore</h3><div>' + esc(e.message) + '</div></div></div>'; });
+}
+function confIniziale(s) {
+  var inv = s.inverter || {}, n = Number(inv.n_mppt) || 2;
+  return {
+    marchio: 'next', stile: 'normale', posa: s.impianto && s.impianto.integrato ? 'integrato' : 'falda',
+    ottimizzatori: s.impianto && s.impianto.ottimizzatori ? 'TS4-A-O' : 'nessuno',
+    aMano: false, mppt: Array.apply(null, Array(Math.max(1, Math.min(n, 6)))).map(function () { return [{ moduli: '', ott: 'nessuno' }]; }),
+    revisione: s.prossima_revisione == null ? 0 : s.prossima_revisione, note: '', conPreventivo: !!(s.tipo === 'pratica' && s.preventivo)
+  };
+}
+function kv(righe) {
+  return '<dl class="kv">' + righe.map(function (r) {
+    var v = r[1], manca = v == null || v === '' || v === '—';
+    return '<dt>' + esc(r[0]) + '</dt><dd' + (manca && r[2] ? ' class="manca"' : '') + '>' + (manca ? (r[2] ? 'manca' : '—') : (r[3] ? v : esc(v))) + '</dd>';
+  }).join('') + '</dl>';
+}
+function avvisiHtml(av) {
+  if (!av || !av.length) return '<div class="avviso ac"><span class="ic">' + ICO.info + '</span><div><b>Nessun dato mancante.</b> Si può generare.</div></div>';
+  var ord = { blocca: 0, attenzione: 1, info: 2 };
+  return av.slice().sort(function (a, b) { return ord[a.livello] - ord[b.livello]; }).map(function (a) {
+    var c = a.livello === 'blocca' ? 'rd' : a.livello === 'attenzione' ? 'am' : 'ac';
+    var ic = a.livello === 'blocca' ? ICO.stop : a.livello === 'attenzione' ? ICO.att : ICO.info;
+    return '<div class="avviso ' + c + '"><span class="ic">' + ic + '</span><div>' + (a.livello === 'blocca' ? '<b>Blocca. </b>' : '') + esc(a.testo) + '</div></div>';
+  }).join('');
+}
+function disegnaScheda() {
+  var s = S, im = s.impianto || {}, inv = s.inverter, mod = s.modulo, bat = s.batterie || {}, fo = s.fornitura || {}, lu = s.luogo || {}, pv = s.preventivo, lv = s.layout;
+  var blocchi = (s.avvisi || []).filter(function (a) { return a.livello === 'blocca'; }).length;
+  var co = lu.coordinate;
+  var mappa = co ? '<a href="https://www.google.com/maps?q=' + co.lat + ',' + co.lon + '" target="_blank" rel="noopener">' + ICO.mappa + ' ' + num(co.lat, 5) + ', ' + num(co.lon, 5) + '</a>' : null;
+  var batTxt = bat.catalogo ? bat.catalogo.brand + ' ' + bat.catalogo.modello : (bat.marca || (bat.dal_preventivo && bat.dal_preventivo.tipo && bat.dal_preventivo.tipo !== 'nessuna' ? bat.dal_preventivo.tipo : null));
+  var html = '<div class="card"><div class="testa-scheda"><div class="nm">' +
+    '<span class="occhiello">' + (s.tipo === 'pratica' ? 'Pratica' : 'Preventivo') + (s.codice ? ' · ' + esc(s.codice) : '') + '</span>' +
+    '<h2>' + esc(s.nome) + '</h2>' +
+    '<span class="sub"><span class="pill p-gy">' + esc(statoTxt(s.stato)) + '</span>' +
+    (im.kwp ? '<span class="mono">' + num(im.kwp, 2) + ' kWp</span>' : '') + (im.moduli ? '<span>· ' + im.moduli + ' moduli</span>' : '') +
+    (im.kwh ? '<span>· accumulo ' + num(im.kwh, 2) + ' kWh</span>' : '') + (lu.comune ? '<span>· ' + esc(lu.comune) + '</span>' : '') +
+    (s.intestatario && s.intestatario !== s.nome ? '<span>· intestata a ' + esc(s.intestatario) + '</span>' : '') + '</span></div>' +
+    '<span class="pill ' + (blocchi ? 'p-rd' : 'p-gr') + '">' + (blocchi ? blocchi + ' dati bloccanti' : 'dati sufficienti') + '</span></div>' +
+    '<div style="display:flex;flex-direction:column;gap:6px">' + avvisiHtml(s.avvisi) + '</div></div>';
+
+  html += '<div class="dati">' +
+    '<div class="blocco"><h4>Impianto</h4>' + kv([
+      ['Potenza', im.kwp ? num(im.kwp, 2) + ' kWp' : null, true], ['Moduli', im.moduli], ['Fase', im.trifase == null ? null : (im.trifase ? 'trifase' : 'monofase')],
+      ['Posa', im.integrato ? 'integrato' : (im.tipo_impianto || null)], ['Ottimizzatori', im.ottimizzatori ? 'previsti' : 'no'], ['Backup', im.backup ? 'sì' : null],
+      ['Cavo DC / AC', (im.cavo_dc_m || im.cavo_ac_m) ? (im.cavo_dc_m || '—') + ' / ' + (im.cavo_ac_m || '—') + ' m' : null], ['Esistente', im.esistente]
+    ]) + '</div>' +
+    '<div class="blocco"><h4>Inverter</h4>' + (inv ? '<div class="tit">' + esc(inv.brand + ' ' + inv.modello) + '<small>' + esc(inv.codice || '') + ' · id ' + inv.id + '</small></div>' + kv([
+      ['MPPT', inv.n_mppt != null ? inv.n_mppt + ' × ' + (inv.stringhe_per_mppt || 1) + ' str.' : null, true], ['Finestra MPPT', inv.vmppt_min != null ? num(inv.vmppt_min, 0) + '–' + num(inv.vmppt_max, 0) + ' V' : null, true],
+      ['Voc max', inv.voc_max != null ? num(inv.voc_max, 0) + ' V' : null, true], ['I max ingresso', (inv.idc_max || inv.isc_max_input) != null ? num(inv.idc_max || inv.isc_max_input, 1) + ' A' : null, true],
+      ['FV max', inv.pmax_pv_kw != null ? num(inv.pmax_pv_kw, 1) + ' kW' : null]
+    ]) + (inv.datasheet_url ? '<a href="' + esc(inv.datasheet_url) + '" target="_blank" rel="noopener">Scheda tecnica</a>' : '') : '<div class="tit" style="color:var(--rd)">Non indicato</div>' + (pv && pv.inverter ? '<div class="nota-p">nel preventivo: ' + esc(pv.inverter) + '</div>' : '')) + '</div>' +
+    '<div class="blocco"><h4>Modulo</h4>' + (mod ? '<div class="tit">' + esc(mod.brand + ' ' + mod.modello) + '<small>' + esc(mod.codice || '') + ' · id ' + mod.id + '</small></div>' + kv([
+      ['Potenza', mod.potenza_wp != null ? num(mod.potenza_wp, 0) + ' Wp' : null, true], ['Voc / Vmp', mod.voc != null ? num(mod.voc, 2) + ' / ' + num(mod.vmp, 2) + ' V' : null, true],
+      ['Isc / Imp', mod.isc != null ? num(mod.isc, 2) + ' / ' + num(mod.imp, 2) + ' A' : null, true], ['β Voc', mod.beta_voc_pct != null ? num(mod.beta_voc_pct, 3) + ' %/°C' : null, true]
+    ]) + (mod.datasheet_url ? '<a href="' + esc(mod.datasheet_url) + '" target="_blank" rel="noopener">Scheda tecnica</a>' : '') : '<div class="tit" style="color:var(--rd)">Non indicato</div>' + (pv && pv.pannello ? '<div class="nota-p">nel preventivo: ' + esc(pv.pannello) + '</div>' : '')) + '</div>' +
+    '<div class="blocco"><h4>Batterie</h4>' + kv([
+      ['Capacità', bat.kwh ? num(bat.kwh, 2) + ' kWh' : null], ['Modello', batTxt, !!bat.kwh],
+      ['A catalogo', bat.catalogo && bat.catalogo.capacita_kwh ? num(bat.catalogo.capacita_kwh, 2) + ' kWh · id ' + bat.catalogo.id : null]
+    ]) + '</div>' +
+    '<div class="blocco"><h4>Fornitura</h4>' + kv([
+      ['POD', fo.pod, s.tipo === 'pratica'], ['Distributore', fo.distributore], ['Impegnata', fo.potenza_impegnata_kw != null ? num(fo.potenza_impegnata_kw, 1) + ' kW' : null],
+      ['Disponibile', fo.potenza_disponibile_kw != null ? num(fo.potenza_disponibile_kw, 1) + ' kW' : null], ['Tensione', fo.tensione_v ? fo.tensione_v + ' V' : null]
+    ]) + '</div>' +
+    '<div class="blocco"><h4>Luogo</h4>' + kv([
+      ['Indirizzo', lu.indirizzo, true], ['Comune', [lu.comune, lu.provincia && '(' + lu.provincia + ')', lu.cap].filter(Boolean).join(' ') || null, true],
+      ['Catasto', lu.catasto], ['Coordinate', mappa, true, true], ['Da', co ? co.fonte : null]
+    ]) + '</div>' +
+    '</div>';
+
+  if (s.tipo === 'pratica') {
+    html += '<div class="card"><div class="ct"><div class="tt"><h3>Preventivo e layout del tetto</h3><span class="fx">Dal preventivo collegato arrivano la tavola del tetto (Layout veloce) e, se la pratica non le ha, le coordinate.</span></div></div>' +
+      (pv ? '<div class="dati" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="blocco"><h4>Preventivo collegato</h4>' + kv([
+        ['Numero', pv.numero], ['Trovato per', pv.perche], ['kWp', pv.kwp != null ? num(pv.kwp, 2) : null], ['Pannello', pv.pannello], ['Inverter', pv.inverter]
+      ]) + '<a href="?tipo=preventivo&id=' + esc(pv.id) + '" data-apri="' + esc(pv.id) + '" data-tipo="preventivo">Apri il preventivo</a>' +
+        ((s.altri_preventivi || []).length ? '<div class="nota-p">Altri possibili: ' + s.altri_preventivi.map(function (a) { return '<a href="?tipo=preventivo&id=' + esc(a.id) + '" data-apri="' + esc(a.id) + '" data-tipo="preventivo">' + esc(a.id.slice(0, 8)) + '</a> (' + esc(a.perche) + ')'; }).join(', ') + '</div>' : '') +
+        '</div>' + blocLayout(lv) + '</div>' : '<div class="avviso am"><span class="ic">' + ICO.att + '</span><div>Nessun preventivo collegato trovato (né per lead, né per email o telefono del cliente, né per nome nello stesso comune).</div></div>') +
+      (s.schema_solaris ? '<div class="avviso ac"><span class="ic">' + ICO.info + '</span><div>Schema Solaris in archivio: <b>' + esc(s.schema_solaris.codice_progetto || '') + '</b> rev. ' + esc(s.schema_solaris.revisione || '—') + (s.schema_solaris.data_schema ? ' del ' + esc(s.schema_solaris.data_schema) : '') + '. Utile per confronto.</div></div>' : '') +
+      '</div>';
+  } else if (lv) {
+    html += '<div class="card"><div class="ct"><div class="tt"><h3>Layout del tetto</h3><span class="fx">Ultima revisione del Layout veloce di questo preventivo.</span></div></div><div class="dati" style="grid-template-columns:minmax(0,1fr)">' + blocLayout(lv) + '</div></div>';
+  }
+
+  html += '<div class="card" id="cardConf">' + pannelloConf() + '</div>';
+  html += '<div class="card" id="cardRev"><div class="ct"><div class="tt"><h3>Revisioni dello schema</h3><span class="fx">Dallo storage, cartella schemi_qet/' + esc(s.id.slice(0, 8)) + '…/. I link valgono un’ora: se scadono, «Rileggi».</span></div>' +
+    '<button class="btn sm" data-azione="rileggi">' + ICO.gira + 'Rileggi</button></div><div id="attesa"></div><div id="revisioni"><div class="contatore">Leggo le revisioni…</div></div></div>';
+  document.getElementById('scheda').innerHTML = html;
+  aggiornaSomma();
+}
+function blocLayout(lv) {
+  if (!lv) return '<div class="blocco"><h4>Layout veloce</h4><div class="tit" style="color:var(--am)">Nessuno</div><div class="lbl" style="text-transform:none;letter-spacing:0">Si disegna in Nuovo preventivo → Mappa tetto.</div></div>';
+  return '<div class="blocco"><h4>Layout veloce</h4>' + kv([
+    ['Revisione', due(lv.rev) + (lv.variante === 'B' ? ' (offerta B)' : '')], ['Moduli', lv.moduli], ['kWp', lv.kwp != null ? num(lv.kwp, 2) : null], ['Modulo', lv.modulo], ['Falde', lv.falde], ['Salvato', ora(lv.aggiornato_at)]
+  ]) + (lv.pdf_url ? '<a href="' + esc(lv.pdf_url) + '" target="_blank" rel="noopener">PDF del layout</a>' : '') + '</div>';
+}
+
+/* ---------- configura ---------- */
+function sc(gruppo, val, tit, sotto) {
+  var su = stato.conf[gruppo] === val ? ' su' : '';
+  return '<button type="button" class="sc' + su + '" data-conf="' + gruppo + '" data-val="' + val + '">' + tit + (sotto ? '<small>' + sotto + '</small>' : '') + '</button>';
+}
+function pannelloConf() {
+  var c = stato.conf, s = S, blocchi = (s.avvisi || []).filter(function (a) { return a.livello === 'blocca'; }).length;
+  var parz = c.ottimizzatori === 'parziali';
+  return '<div class="ct"><div class="tt"><h3>Configura</h3><span class="fx">Le scelte vanno al «Generatore schemi Next» insieme ai dati qui sopra. Se non indichi le stringhe, le calcola il motore dalle schede tecniche.</span></div></div>' +
+    '<div class="conf">' +
+    '<div class="campo"><span class="lbl">Marchio nelle tavole</span><div class="scelte">' + sc('marchio', 'next', 'Next', 'cartiglio blu, logo bianco') + sc('marchio', 'solaris', 'Solaris', 'cartiglio Solaris') + '</div></div>' +
+    '<div class="campo"><span class="lbl">Stile del quadro DC</span><div class="scelte">' + sc('stile', 'normale', 'Normale', 'sezionatore e SPD') + sc('stile', 'solaris', 'Come Solaris', 'con portafusibili') + '</div></div>' +
+    '<div class="campo"><span class="lbl">Posa</span><div class="scelte">' + sc('posa', 'falda', 'Su falda') + sc('posa', 'integrato', 'Integrato') + sc('posa', 'zavorre', 'Su zavorre') + '</div></div>' +
+    '<div class="campo"><span class="lbl">Ottimizzatori (Tigo)</span><div class="scelte">' + sc('ottimizzatori', 'nessuno', 'Nessuno') + sc('ottimizzatori', 'TS4-A-O', 'TS4-A-O', '1 per modulo') + sc('ottimizzatori', 'TS4-A-2O', 'TS4-A-2O', '1 ogni 2 moduli') + sc('ottimizzatori', 'parziali', 'Parziali', 'per stringa') + '</div></div>' +
+    '<div class="campo largo"><label class="spunta"><input type="checkbox" id="aMano"' + (c.aMano || parz ? ' checked' : '') + (parz ? ' disabled' : '') + '> <span><b>Indico io le stringhe</b> (numero di moduli per stringa, MPPT per MPPT)' + (parz ? ' — necessario con ottimizzatori parziali' : '') + '</span></label>' +
+    '<div id="stringhe" class="mppt' + (c.aMano || parz ? '' : ' nascosto') + '">' + righeMppt() + '<div class="somma" id="somma"></div></div></div>' +
+    '<div class="campo"><span class="lbl">Revisione</span><div style="display:flex;align-items:center;gap:8px"><input class="num" id="revisione" type="number" min="0" max="99" value="' + esc(c.revisione) + '"><span class="fx" style="font-size:12px;color:var(--ink3)">proposta: ' + due(s.prossima_revisione || 0) + ' (la prossima libera)</span></div></div>' +
+    (s.tipo === 'pratica' && s.preventivo ? '<div class="campo"><span class="lbl">Preventivo collegato</span><label class="spunta"><input type="checkbox" id="conPrev"' + (c.conPreventivo ? ' checked' : '') + '> <span>Passa anche il preventivo ' + esc(s.preventivo.numero || s.preventivo.id.slice(0, 8)) + ' (layout del tetto e coordinate)</span></label></div>' : '<div class="campo"></div>') +
+    '<div class="campo largo"><span class="lbl">Note per il generatore</span><textarea class="nota" id="note" placeholder="Es. quadro AC esistente da mantenere, interruttore generale 32 A, stringa 2 sulla falda est…">' + esc(c.note) + '</textarea></div>' +
+    '</div>' +
+    '<div class="piede-conf"><button class="btn pri gr" data-azione="genera"' + (blocchi ? ' disabled title="Prima vanno sistemati i dati bloccanti"' : '') + '>' + ICO.fulmine + 'Genera schema</button>' +
+    '<div class="msg' + (blocchi ? ' err' : '') + '" id="msgGenera">' + (blocchi ? 'Ci sono ' + blocchi + ' dati bloccanti: sistemali nella pratica (inverter e modulo dal consegnato), poi «Aggiorna».' : 'Lo schema si prepara nel cloud: PDF unico, PDF per tavola e file .qet compaiono qui sotto quando sono pronti.') + '</div></div>';
+}
+function righeMppt() {
+  var c = stato.conf, inv = S.inverter || {}, max = Number(inv.stringhe_per_mppt) || 1, parz = c.ottimizzatori === 'parziali';
+  return c.mppt.map(function (lista, i) {
+    return '<div class="mppt-riga"><span class="nm">MPPT ' + (i + 1) + '</span>' + lista.map(function (st, j) {
+      return '<span class="str"><input type="number" min="1" max="40" inputmode="numeric" data-m="' + i + '" data-s="' + j + '" value="' + esc(st.moduli) + '" aria-label="Moduli stringa ' + (j + 1) + ' MPPT ' + (i + 1) + '"> mod.' +
+        (parz ? '<select data-om="' + i + '" data-os="' + j + '" aria-label="Ottimizzatori">' + ['nessuno', 'TS4-A-O', 'TS4-A-2O'].map(function (o) { return '<option' + (st.ott === o ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select>' : '') +
+        '<span class="v" id="voc-' + i + '-' + j + '"></span>' +
+        (lista.length > 1 ? '<button type="button" class="x" data-togli="' + i + '-' + j + '" aria-label="Togli stringa">×</button>' : '') + '</span>';
+    }).join('') + (lista.length < max ? '<button type="button" class="btn sm" data-aggiungi="' + i + '">+ stringa</button>' : '') + '</div>';
+  }).join('');
+}
+/* controllo indicativo: Voc a −10 °C contro la Voc max dell'inverter. Il calcolo che vale lo fa il motore. */
+function vocFredda(n) {
+  var m = S.modulo; if (!m || m.voc == null || !n) return null;
+  var beta = m.beta_voc_pct != null ? Number(m.beta_voc_pct) : -0.27;
+  return n * Number(m.voc) * (1 + (beta / 100) * (-10 - 25));
+}
+function aggiornaSomma() {
+  var el = document.getElementById('somma'); if (!el) return;
+  var c = stato.conf, tot = 0, inv = S.inverter || {}, alto = false;
+  c.mppt.forEach(function (lista, i) { lista.forEach(function (st, j) {
+    var n = parseInt(st.moduli, 10) || 0; tot += n;
+    var v = vocFredda(n), sp = document.getElementById('voc-' + i + '-' + j);
+    if (sp) { sp.textContent = v ? '≈' + Math.round(v) + ' V' : ''; var a = v && inv.voc_max && v > Number(inv.voc_max); sp.classList.toggle('alto', !!a); if (a) alto = true; }
+  }); });
+  var att = S.impianto && S.impianto.moduli;
+  el.innerHTML = 'Totale <b>' + tot + '</b> moduli' + (att ? ' su <b>' + att + '</b> previsti' + (tot && tot !== att ? ' — <span style="color:var(--am);font-weight:700">non coincide</span>' : '') : '') +
+    (alto ? ' · <span style="color:var(--rd);font-weight:700">Voc a −10 °C oltre i ' + num(inv.voc_max, 0) + ' V dell’inverter</span>' : '') +
+    (S.modulo && S.modulo.voc != null ? ' <span style="color:var(--ink3)">(Voc indicativa a −10 °C)</span>' : '');
+}
+function leggiConf() {
+  var c = stato.conf;
+  var r = document.getElementById('revisione'); if (r) c.revisione = r.value;
+  var n = document.getElementById('note'); if (n) c.note = n.value;
+  var p = document.getElementById('conPrev'); if (p) c.conPreventivo = p.checked;
+}
+function opzioniDaInviare() {
+  var c = stato.conf, o = { marchio: c.marchio, stile: c.stile, posa: c.posa, ottimizzatori: c.ottimizzatori };
+  if (c.revisione !== '' && c.revisione != null) o.revisione = parseInt(c.revisione, 10);
+  if (c.note.trim()) o.note = c.note.trim();
+  if (c.aMano || c.ottimizzatori === 'parziali') {
+    var st = [];
+    c.mppt.forEach(function (lista, i) { lista.forEach(function (x) { var m = parseInt(x.moduli, 10); if (m > 0) st.push(c.ottimizzatori === 'parziali' ? { mppt: i + 1, moduli: m, ottimizzatori: x.ott } : { mppt: i + 1, moduli: m }); }); });
+    o.stringhe = st;
+  }
+  return o;
+}
+function genera(b) {
+  leggiConf();
+  var o = opzioniDaInviare(), msg = document.getElementById('msgGenera');
+  if ((stato.conf.aMano || o.ottimizzatori === 'parziali') && !(o.stringhe || []).length) { msg.className = 'msg err'; msg.textContent = 'Hai scelto di indicare le stringhe: scrivi almeno il numero di moduli di una stringa.'; return; }
+  if (o.revisione != null && (isNaN(o.revisione) || o.revisione < 0 || o.revisione > 99)) { msg.className = 'msg err'; msg.textContent = 'Revisione: un numero da 0 a 99.'; return; }
+  var esiste = (REV || []).some(function (r) { return r.rev === o.revisione; });
+  if (esiste && !confirm('La revisione ' + due(o.revisione) + ' esiste già. La rigenero (i file di quella revisione verranno sostituiti)?')) return;
+  b.disabled = true; msg.className = 'msg'; msg.textContent = 'Avvio la generazione…';
+  var corpo = { azione: 'genera', tipo: S.tipo, id: S.id, opzioni: o };
+  if (S.tipo === 'pratica' && S.preventivo && stato.conf.conPreventivo) corpo.con_preventivo = S.preventivo.id;
+  chiama(corpo).then(function (j) {
+    if (!j || !j.ok) { b.disabled = false; msg.className = 'msg err'; msg.textContent = 'Non partito: ' + ((j && j.errore) || 'errore'); return; }
+    var att = { id: S.id, rev: o.revisione, da: Date.now(), revPrima: (REV || []).map(function (r) { return r.rev + '|' + (r.creata || ''); }) };
+    salvaAttesa(att);
+    msg.textContent = 'Partito alle ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + '. Puoi lasciare la pagina: quando torni, lo stato si riprende da qui.';
+    b.disabled = false;
+    mostraAttesa(); avviaControllo();
+  }).catch(function (e) { b.disabled = false; if (String(e.message) !== '401') { msg.className = 'msg err'; msg.textContent = 'Non partito: ' + e.message; } });
+}
+
+/* ---------- in preparazione: si ricorda nel browser (per comodità), la verità è lo storage ---------- */
+function chiaveAttesa(id) { return 'pg_attesa_' + id; }
+function leggiAttesa(id) { try { var a = JSON.parse(localStorage.getItem(chiaveAttesa(id)) || 'null'); return a && a.id === id ? a : null; } catch (e) { return null; } }
+function salvaAttesa(a) { try { localStorage.setItem(chiaveAttesa(a.id), JSON.stringify(a)); } catch (e) {} }
+function togliAttesa(id) { try { localStorage.removeItem(chiaveAttesa(id)); } catch (e) {} }
+function ferma() { if (timer) clearInterval(timer); if (orologio) clearInterval(orologio); timer = orologio = null; }
+function avviaControllo() { ferma(); timer = setInterval(leggiRevisioni, OGNI_S * 1000); orologio = setInterval(mostraAttesa, 1000); }
+function mostraAttesa() {
+  var el = document.getElementById('attesa'); if (!el || !S) return;
+  var a = leggiAttesa(S.id);
+  if (!a) { el.innerHTML = ''; return; }
+  var sec = Math.floor((Date.now() - a.da) / 1000), lungo = sec > ATTESA_MAX_MIN * 60;
+  el.innerHTML = '<div class="attesa"><span class="ruota"' + (lungo ? ' style="animation:none;border-top-color:#FBBF24"' : '') + '></span><span class="cx"><b>Schema in preparazione' + (a.rev != null ? ' · rev ' + due(a.rev) : '') + '</b>' +
+    '<small>' + (lungo ? 'Ci sta mettendo più del solito (' + Math.floor(sec / 60) + ' min). Controlla l’attività «Generatore schemi Next»; questa pagina continua a guardare lo storage.' : 'Avviato ' + (sec < 60 ? 'da ' + sec + ' s' : 'da ' + Math.floor(sec / 60) + ' min ' + due(sec % 60) + ' s') + '. Rileggo lo storage ogni ' + OGNI_S + ' secondi.') + '</small></span>' +
+    '<button class="ab" data-azione="smetti">Smetti di aspettare</button></div>';
+}
+function leggiRevisioni() {
+  if (!S) return;
+  var id = S.id, corpo = { azione: 'revisioni', tipo: S.tipo, id: id };
+  if (S.tipo === 'pratica' && S.preventivo) corpo.anche = S.preventivo.id;
+  chiama(corpo).then(function (j) {
+    if (!S || S.id !== id) return;
+    if (!j || !j.ok) { stato.revErr = (j && j.errore) || 'errore'; disegnaRevisioni(); return; }
+    REV = j.revisioni || []; stato.revErr = '';
+    var a = leggiAttesa(id);
+    if (a) {
+      var nuova = REV.filter(function (r) { return a.revPrima.indexOf(r.rev + '|' + (r.creata || '')) < 0 && (r.file || []).some(function (f) { return f.tipo === 'pdf' || f.tipo === 'qet'; }); });
+      var giusta = nuova.filter(function (r) { return a.rev == null || r.rev === a.rev; });
+      if (giusta.length) { togliAttesa(id); ferma(); stato.appena = giusta[0].rev; var m = document.getElementById('msgGenera'); if (m) { m.className = 'msg'; m.textContent = 'Pronta la revisione ' + due(giusta[0].rev) + '.'; } }
+      else if (!timer) avviaControllo();
+    }
+    mostraAttesa(); disegnaRevisioni();
+  }).catch(function (e) { if (String(e.message) !== '401') { stato.revErr = e.message; disegnaRevisioni(); } });
+}
+function disegnaRevisioni() {
+  var el = document.getElementById('revisioni'); if (!el) return;
+  if (stato.revErr) { el.innerHTML = '<div class="avviso rd"><span class="ic">' + ICO.stop + '</span><div>Non riesco a leggere lo storage: ' + esc(stato.revErr) + '</div></div>'; return; }
+  if (!REV || !REV.length) { el.innerHTML = '<div class="vuoto" style="padding:20px 10px"><div>Nessuna revisione ancora. Configura e premi <b>Genera schema</b>.</div></div>'; return; }
+  el.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px">' + REV.map(function (r) {
+    var f = r.file || [], pdf = f.filter(function (x) { return x.tipo === 'pdf'; })[0], tav = f.filter(function (x) { return x.tipo === 'tavola'; }), qet = f.filter(function (x) { return x.tipo === 'qet'; })[0];
+    var altrove = r.cartella_di && r.cartella_di !== S.id;
+    return '<div class="rev' + (stato.appena === r.rev ? ' prima' : '') + '"><div class="r1"><span class="n">rev ' + due(r.rev) + '</span><span class="q">' + esc(ora(r.creata)) + ' · ' + f.length + ' file' + (altrove ? ' · nella cartella del preventivo' : '') + '</span>' +
+      (stato.appena === r.rev ? '<span class="pill p-gr">nuova</span>' : '') + '<span class="bb">' +
+      (pdf && pdf.url ? '<a class="btn sm pri" href="' + esc(pdf.url) + '" target="_blank" rel="noopener">' + ICO.pdf + 'Apri PDF</a><button class="btn sm" data-stampa="' + esc(pdf.url) + '">' + ICO.stampa + 'Stampa</button>' : '<span class="pill p-am">PDF non ancora presente</span>') +
+      (qet && qet.scarica ? '<a class="btn sm" href="' + esc(qet.scarica) + '" download="' + esc(qet.nome) + '">' + ICO.giu + 'Scarica .qet</a>' : '') + '</span></div>' +
+      (tav.length ? '<div class="tavole">' + tav.map(function (t) { return '<a class="tavola" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + ICO.pdf + esc(t.nome) + ' <span class="mono">' + peso(t.byte) + '</span></a>'; }).join('') + '</div>' : '') +
+      '</div>';
+  }).join('') + '</div>';
+}
+/* stampa: il PDF si scarica come blob (stessa origine) e si stampa da un riquadro nascosto; se il browser non lo permette, si apre in una scheda */
+function stampa(url, b) {
+  b.disabled = true;
+  fetch(url).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); }).then(function (bl) {
+    var u = URL.createObjectURL(new Blob([bl], { type: 'application/pdf' }));
+    var f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; f.src = u;
+    f.onload = function () { try { f.contentWindow.focus(); f.contentWindow.print(); } catch (e) { window.open(u, '_blank'); } setTimeout(function () { b.disabled = false; }, 800); setTimeout(function () { f.remove(); URL.revokeObjectURL(u); }, 60000); };
+    document.body.appendChild(f);
+  }).catch(function () { b.disabled = false; window.open(url, '_blank'); });
+}
+
+/* ---------- gestori ---------- */
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('[data-apri],[data-filtro],[data-azione],[data-conf],[data-aggiungi],[data-togli],[data-stampa]');
+  if (!t) return;
+  if (t.dataset.apri) { e.preventDefault(); apri(t.dataset.tipo || 'pratica', t.dataset.apri); return; }
+  if (t.dataset.filtro) { stato.filtro = t.dataset.filtro; disegnaElenco(); return; }
+  if (t.dataset.stampa) { stampa(t.dataset.stampa, t); return; }
+  if (t.dataset.conf) { leggiConf(); stato.conf[t.dataset.conf] = t.dataset.val; document.getElementById('cardConf').innerHTML = pannelloConf(); aggiornaSomma(); return; }
+  if (t.dataset.aggiungi != null) { leggiConf(); stato.conf.mppt[Number(t.dataset.aggiungi)].push({ moduli: '', ott: 'nessuno' }); document.getElementById('stringhe').innerHTML = righeMppt() + '<div class="somma" id="somma"></div>'; aggiornaSomma(); return; }
+  if (t.dataset.togli) { var p = t.dataset.togli.split('-'); stato.conf.mppt[Number(p[0])].splice(Number(p[1]), 1); document.getElementById('stringhe').innerHTML = righeMppt() + '<div class="somma" id="somma"></div>'; aggiornaSomma(); return; }
+  var a = t.dataset.azione;
+  if (a === 'tema') { stato.tema = stato.tema === 'notte' ? 'giorno' : 'notte'; var ap = document.getElementById('app'); if (ap) ap.setAttribute('data-tema', stato.tema); try { localStorage.setItem('pg_tema', stato.tema); } catch (x) {} return; }
+  if (a === 'menu') { document.getElementById('menu').classList.toggle('aperto'); return; }
+  if (a === 'cima') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (a === 'ricarica') { carica(); return; }
+  if (a === 'rileggi') { leggiRevisioni(); return; }
+  if (a === 'genera') { genera(t); return; }
+  if (a === 'smetti') { if (S) togliAttesa(S.id); ferma(); mostraAttesa(); return; }
+});
+document.addEventListener('change', function (e) {
+  var t = e.target;
+  if (t.id === 'aMano') { stato.conf.aMano = t.checked; document.getElementById('stringhe').classList.toggle('nascosto', !t.checked); aggiornaSomma(); return; }
+  if (t.dataset && t.dataset.om != null) { stato.conf.mppt[Number(t.dataset.om)][Number(t.dataset.os)].ott = t.value; return; }
+});
+document.addEventListener('input', function (e) {
+  var t = e.target;
+  if (t.dataset && t.dataset.m != null) { stato.conf.mppt[Number(t.dataset.m)][Number(t.dataset.s)].moduli = t.value; aggiornaSomma(); }
+});
+document.addEventListener('click', function (e) { var m = document.getElementById('menu'); if (m && m.classList.contains('aperto') && !e.target.closest('#menu') && !e.target.closest('[data-azione="menu"]')) m.classList.remove('aperto'); });
+document.addEventListener('visibilitychange', function () { if (!document.hidden && S && leggiAttesa(S.id)) leggiRevisioni(); });
+
+leggiPass();
+carica();
+})();
+</script>
+</body>
+</html>

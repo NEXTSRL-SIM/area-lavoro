@@ -188,7 +188,7 @@ var PORTALE = 'https://nextsrl-sim.github.io/';
 var ATTESA_MAX_MIN = 25;      /* oltre, si dice che ci mette più del solito (l'attività cloud di solito chiude in pochi minuti) */
 var OGNI_S = 20;              /* ogni quanti secondi si rilegge lo storage mentre lo schema è in preparazione */
 var radice = document.getElementById('radice');
-var D = null, PASS = null, CHI = null, S = null, REV = null;
+var D = null, PASS = null, CHI = null, S = null, REV = null, PT = null;
 var stato = { tema: 'giorno', filtro: 'tutte', q: '', scelto: null, tipo: null, conf: null, revErr: '' };
 var timer = null, orologio = null;
 try { var tm = localStorage.getItem('pg_tema'); if (tm === 'notte') stato.tema = 'notte'; } catch (e) {}
@@ -233,10 +233,10 @@ function leggiPass() {
     var ps = sessionStorage.getItem('regia_pass');
     if (ps) { localStorage.setItem('next_regia_pass', ps); var ch = sessionStorage.getItem('regia_chi'); if (ch) localStorage.setItem('next_regia_chi', ch); }
     else { var pl = localStorage.getItem('next_regia_pass'); if (pl) { sessionStorage.setItem('regia_pass', pl); var cl = localStorage.getItem('next_regia_chi'); if (cl) sessionStorage.setItem('regia_chi', cl); } }
-    PASS = sessionStorage.getItem('regia_pass'); CHI = sessionStorage.getItem('regia_chi');
+    PASS = sessionStorage.getItem('regia_pass'); CHI = sessionStorage.getItem('regia_chi'); PT = sessionStorage.getItem('portale_token') || localStorage.getItem('portale_token') || null;
   } catch (e) { PASS = null; }
 }
-function dimentica() { try { sessionStorage.removeItem('regia_pass'); localStorage.removeItem('next_regia_pass'); } catch (e) {} PASS = null; D = null; }
+function dimentica() { try { sessionStorage.removeItem('regia_pass'); localStorage.removeItem('next_regia_pass'); } catch (e) {} PASS = null; PT = null; D = null; }
 function porta(msg) {
   document.title = 'Progettazione – Next';
   radice.innerHTML = '<div class="porta"><form class="box" id="f-porta" autocomplete="off">' +
@@ -257,12 +257,12 @@ function porta(msg) {
   });
 }
 function chiama(corpo) {
-  corpo.t = PASS;
+  corpo.t = PASS; if (PT) corpo.pt = PT;
   return fetch(EDGE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) })
     .then(function (r) { if (r.status === 401) { dimentica(); porta('Il lasciapassare non vale più: entra di nuovo.'); throw new Error('401'); } return r.json(); });
 }
 function carica() {
-  if (!PASS) { porta(); return; }
+  if (!PASS && !PT) { porta(); return; }
   if (!D) radice.innerHTML = '<div class="porta"><div class="box"><h2>Progettazione</h2><p>Carico pratiche e preventivi…</p></div></div>';
   chiama({ azione: 'elenco' }).then(function (j) {
     if (!j || !j.ok) throw new Error((j && j.errore) || 'dati');
